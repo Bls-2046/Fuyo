@@ -17,3 +17,7 @@ buildNumber.properties
 .classpath
 
 .idea
+.venv
+
+logs
+.log
