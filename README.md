@@ -1,5 +1,5 @@
 # Fuyo
-Spring-Boot、Swing
+Spring Boot 框架、Swing GUI, C/S 架构, 前后端分离项目
 
 星辅天衢阔，泽佑百卉生。云移千嶂暗，露结一灯明。
 
