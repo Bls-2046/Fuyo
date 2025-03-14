@@ -1,10 +1,12 @@
 package com.github.backend.utils;
 
 import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 public class PythonScript {
     private PythonScript() {}
 
@@ -55,7 +57,7 @@ public class PythonScript {
 
     // 停止 Python 进程
     @PreDestroy
-    public static void stopPythonProcess() {
+    public void stopPythonProcess() {
         try {
             if (writer != null) {
                 writer.close();
@@ -64,10 +66,15 @@ public class PythonScript {
                 reader.close();
             }
             if (pythonProcess != null) {
+                log.info("Python process stopped");
                 pythonProcess.destroy();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+        } finally {
+            pythonProcess = null;
+            reader = null;
+            writer = null;
         }
     }
 }

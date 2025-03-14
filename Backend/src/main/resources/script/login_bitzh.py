@@ -109,15 +109,15 @@ def is_correct_username(username):
             # print("validation: ", validation)
             # 判断validation的值
             if validation == "0":
-                return {'message': '用户名错误', 'data': None}
+                return { 'message': '用户名错误', 'data': {} }
             elif validation == "1" or validation == "3":
-                return {'message': '本月第一次登录, 请前往 https://cas.bitzh.edu.cn/cas3/login?service=https://s.bitzh.edu.cn 进行验证', 'data': None}
+                return { 'message': '本月第一次登录, 请前往 https://cas.bitzh.edu.cn/cas3/login?service=https://s.bitzh.edu.cn 进行验证', 'data': None}
         else:
-            return {'message': f"请求失败，状态码: {response.status_code}", 'data': None}
+            return { 'message': f"请求失败，状态码: {response.status_code}", 'data': {} }
     except requests.exceptions.SSLError as e:
-        return {'message': f"SSL错误: {str(e)}", 'data': None}
+        return { 'message': f"SSL错误: {str(e)}", 'data': {} }
     except requests.exceptions.RequestException as e:
-        return {'message': f"请求异常: {str(e)}", 'data': None}
+        return { 'message': f"请求异常: {str(e)}", 'data': {} }
 # endregion
 
 # region # 处理验证码图片
@@ -133,7 +133,7 @@ def process_captcha(image_path):
     enhancer = ImageEnhance.Contrast(image) # 增强对比度
     image = enhancer.enhance(2.0)
 
-    processed_image_path = "src/main/resources/script/processed_captcha.png"
+    processed_image_path = "Backend/src/main/resources/script/processed_captcha.png"
     # 创建目录（如果不存在）
     os.makedirs(os.path.dirname(processed_image_path), exist_ok=True)
 
@@ -153,7 +153,7 @@ def process_captcha(image_path):
 # region # 验证码截图并进行识别
 def retry_captcha(driver):
     """ 截取并识别验证码 """
-    captcha_raw_path = "src/main/resources/script/captcha_raw.png"
+    captcha_raw_path = "Backend/src/main/resources/script/captcha_raw.png"
 
     captcha_element = driver.find_element(By.ID, 'verifycode')
     captcha_element.screenshot(captcha_raw_path)  # 截取验证码图片
@@ -193,50 +193,11 @@ def get_student_info(driver):
         return None
 
     return info
-# endregion
 
-# region # 获取课表信息 ( 已删 )
-# def get_course_schedule(driver):
-#     """
-#     从网页中提取课表信息。
-#
-#     :param driver: 已初始化的 Selenium WebDriver 对象
-#     :return: 包含课表信息的列表，每个元素为一个字典，表示一天的课程
-#     """
-#     # 等待表格内容完全加载
-#     # 获取表格元素
-#     table_element = driver.find_element(By.ID, "datatable")
-#     rows = table_element.find_elements(By.TAG_NAME, "tr")
-#     # 提取表头（星期几）
-#     headers = [header.text for header in rows[0].find_elements(By.TAG_NAME, "td")]
-#     # 提取课程信息
-#     course_schedule = []
-#     for row in rows[1:]:
-#         # 获取每一行的所有单元格
-#         cells = row.find_elements(By.TAG_NAME, "td")
-#         if not cells:
-#             continue
-#         # 获取时间段（第一列）
-#         time_slot = cells[0].text
-#         # 获取每天的课程信息
-#         for i in range(1, len(cells)):
-#             day = headers[i]  # 星期几
-#             course_info = cells[i].text  # 课程信息
-#             # 如果课程信息不为空，添加到课表中
-#             if course_info.strip():
-#                 course_schedule.append({
-#                     "time_slot": time_slot,  # 时间段
-#                     "day": day,  # 星期几
-#                     "course_info": course_info  # 课程信息
-#                 })
-#     return course_schedule
-#endregion
-
-# region ===== 开始登录 =====
 def login_bitzh(username, password):
     result = {
         'message': '',
-        'data': None
+        'data': {}
     } # 返回 Java 的结果 ( 包含登录状态和抓包数据 )
 
     log_to_file("浏览器启动完成")
@@ -261,8 +222,6 @@ def login_bitzh(username, password):
                         # 验证码处理（带重试）
                         for _ in range(10):
                             captcha_text = retry_captcha(driver)
-
-                            # print("识别验证码为：", captcha_text)
 
                             if len(captcha_text) == 4 and captcha_text.isdigit():
                                 driver.find_element(By.ID, 'authcode').clear()
@@ -306,16 +265,6 @@ def login_bitzh(username, password):
                         result['message'] = str(e)
                         break
 
-                # 检测Ticket重定向
-                # elif 'ticket=' in current_url:
-                #     print(f"处理Ticket重定向: {current_url.split('ticket=')[1][:15]}...")
-                #     # 必须重新加载以完成验证
-                #     driver.get(current_url)
-                #     redirect_count += 1
-                #     if redirect_count > 5:
-                #         result['message'] = '登录异常'
-                #         break
-
                 elif 'manage/index' in current_url:
                     start_time = time.time()
                     while True:
@@ -329,17 +278,14 @@ def login_bitzh(username, password):
                             """)
                             if is_request_complete:
                                 student_info = get_student_info(driver)
-                                # course_schedule = get_course_schedule(driver)
                                 result['message'] = '登录成功'
                                 result['data'] = student_info
-                                # result["data"]["课表"] = course_schedule
                                 log_to_file("Over")
                                 return result
                         if time.time() - start_time > 30:
                             result['message'] = "运行超时"
                             return result
                         time.sleep(0.5)
-
                 # 其他情况处理
                 else:
                     result['message'] = '登录异常'
@@ -350,20 +296,21 @@ def login_bitzh(username, password):
         # 尝试 100 次 (约计 2 s) 无法通过验证就退出
         result['message'] = '登录异常'
         return result
-
-
     except Exception as e:
         result['message'] = f"系统错误: {str(e)}"
         return result
     finally:
         if 'manage/index' not in driver.current_url:
-            driver.quit()
+            pass
 # endregion ===== 登录结束 =====
 
 def check_username():
     result = is_correct_username(username)
     if result:
         print(json.dumps(result, ensure_ascii=False))
+        sys.stdout.flush()
+        return True
+    return False
 
 if __name__ == "__main__":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -373,7 +320,7 @@ if __name__ == "__main__":
     edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])  # 禁用日志
     edge_options.add_argument("--log-level=3")  # 关闭所有日志（FATAL 级别）
     edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    edge_options.add_argument("--headless=new")  # 启用无头模式
+    # edge_options.add_argument("--headless=new")  # 启用无头模式
     # endregion
     service = Service(edge_driver_path)
     driver = webdriver.Edge(service=service, options=edge_options)
@@ -385,10 +332,14 @@ if __name__ == "__main__":
             log_to_file(f"Received username: {username}, password: {password}")
             log_to_file("脚本启动")
 
-            check_username()
+            if check_username():
+                continue
 
             result = login_bitzh(username, password)
             print(json.dumps(result, ensure_ascii=False))
+            sys.stdout.flush()
 
         except Exception as e:
-            print(json.dumps({"message": f"程序异常错误: {str(e)}", "data": None}))
+            print(json.dumps({ "message": f"程序异常错误: {str(e)}", "data": {} }))
+            sys.stdout.flush()
+    driver.quit()

@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.model.User;
+import com.github.backend.entity.User;
 
 public interface UserService {
     // 登录验证

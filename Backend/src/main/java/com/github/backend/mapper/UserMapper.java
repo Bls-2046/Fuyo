@@ -1,6 +1,6 @@
 package com.github.backend.mapper;
 
-import com.github.backend.model.User;
+import com.github.backend.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper {
     // 查
-    @Select("select username, password, id, name, department, email, phone, cookie from user where username = #{username}")
+    @Select("select username, password, id, name, department, email, phone, cookie from user where id = #{id}")
     User getUserInfoByUser(String username);
 
     // 增
