@@ -61,7 +61,6 @@ class TLSAdapter(HTTPAdapter):
 def is_correct_username(username):
     # 请求URL
     url = "https://cas.bitzh.edu.cn/isuserlogin"
-
     # 请求头
     headers = {
         "Accept": "*/*",
@@ -189,6 +188,9 @@ def get_student_info(driver):
                 key, value = line.split('：', 1)  # 只分割第一个冒号
                 info[key.strip()] = value.strip()
 
+        cookie = driver.get_cookies()
+        info['cookie'] = cookie
+
     except Exception as e:
         return None
 
@@ -280,7 +282,6 @@ def login_bitzh(username, password):
                                 student_info = get_student_info(driver)
                                 result['message'] = '登录成功'
                                 result['data'] = student_info
-                                log_to_file("Over")
                                 return result
                         if time.time() - start_time > 30:
                             result['message'] = "运行超时"

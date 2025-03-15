@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", unique = true, nullable = false, length = 255)
+    private String id;
 
     private String username;
     private String password;
@@ -24,6 +25,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     @JsonManagedReference
+    @OrderBy("id ASC, x ASC, y ASC")
     private List<Tabletime> tabletimelist;
 
     @Override
@@ -45,10 +47,12 @@ public class User {
     @Table(name = "tabletime")
     public static class Tabletime {
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-
+        @Column(name = "keyid", unique = true, nullable = false, length = 36) // UUID is 36 characters long
         private String keyid;
+
+        @Column(name = "id", unique = false, nullable = false, length = 255)
+        private String id;
+
         private int x;
         private int y;
         private String value;
@@ -58,11 +62,15 @@ public class User {
         @JsonBackReference
         private User user;
 
+        public Tabletime() {
+            this.keyid = UUID.randomUUID().toString();
+        }
+
         @Override
         public String toString() {
             return "Tabletime{" +
+                    "key_id=" + keyid +
                     "id=" + id +
-                    ", keyid='" + keyid + '\'' +
                     ", x=" + x +
                     ", y=" + y +
                     ", value='" + value + '\'' +

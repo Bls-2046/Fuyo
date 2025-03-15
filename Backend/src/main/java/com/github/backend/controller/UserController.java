@@ -1,9 +1,9 @@
 package com.github.backend.controller;
 
-import com.github.backend.dto.GenericRequest;
-import com.github.backend.dto.GenericResponse;
-import com.github.backend.entity.User;
+import com.github.backend.dto.LoginRequest;
+import com.github.backend.dto.LoginResponse;
 import com.github.backend.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -24,23 +23,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse> login(@RequestBody GenericRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 
-        GenericResponse response = new GenericResponse();
+        LoginResponse response = new LoginResponse();
 
         try {
             Map<String, Object> data = request.getData();
             String username = (String) data.get("username");
             String password = (String) data.get("password");
 
-            User user = userService.login(username, password);
-
-            Map<String, Object> responseData = new HashMap<>();
-            responseData.put("user", user);
+            userService.loginVerification(username, password);
 
             response.setStatus(200);
             response.setMessage("登录成功");
-            response.setData(responseData);
+            response.setId(username);
 
         } catch (Exception e) {
             response.setStatus(500);

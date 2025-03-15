@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class GenericRequest {
+public class LoginRequest {
     private Map<String, Object> data;
 }
