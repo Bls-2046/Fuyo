@@ -21,11 +21,11 @@ public class User {
     private String department;
     private String email;
     private String phone;
+    private String avatarUrl;
     private String cookie;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     @JsonManagedReference
-    @OrderBy("id ASC, x ASC, y ASC")
     private List<Tabletime> tabletimelist;
 
     @Override
@@ -38,6 +38,7 @@ public class User {
                 ", department='" + department + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
                 ", cookie='" + cookie + '\'' +
                 '}';
     }
@@ -50,7 +51,7 @@ public class User {
         @Column(name = "keyid", unique = true, nullable = false, length = 36) // UUID is 36 characters long
         private String keyid;
 
-        @Column(name = "id", unique = false, nullable = false, length = 255)
+        @Column(name = "id", nullable = false)
         private String id;
 
         private int x;

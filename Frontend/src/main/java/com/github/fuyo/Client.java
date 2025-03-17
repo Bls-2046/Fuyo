@@ -1,7 +1,11 @@
 package com.github.fuyo;
 
+import com.github.fuyo.controller.LoginController;
+import com.github.fuyo.model.LoginModel;
+import com.github.fuyo.view.LoginView;
+
 public class Client {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        new LoginController(new LoginView(), new LoginModel()).getView().setVisible(true);
     }
 }

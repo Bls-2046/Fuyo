@@ -1,7 +1,6 @@
 package com.github.backend.controller;
 
-import com.github.backend.dto.LoginRequest;
-import com.github.backend.dto.LoginResponse;
+import com.github.backend.dto.*;
 import com.github.backend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // 登录验证
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 
@@ -43,5 +43,17 @@ public class UserController {
             response.setMessage(e.getMessage());
         }
         return ResponseEntity.ok(response);
+    }
+
+    // 获取用户基本信息
+    @PostMapping("/info")
+    public ResponseEntity<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest request) {
+        return null;
+    }
+
+    // 获取课表信息
+    @PostMapping("/tabletime")
+    public ResponseEntity<TabletimeResponse> getTabletime(@RequestBody TabletimeRequest request) {
+        return null;
     }
 }
