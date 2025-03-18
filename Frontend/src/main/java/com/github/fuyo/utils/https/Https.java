@@ -15,8 +15,8 @@ public class Https {
 
     static {
         client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30,TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
     }
@@ -43,10 +43,15 @@ public class Https {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
+                throw new IOException("Unexpected code " + response.code());
             }
-            String responseBody = response.body().string();
-            return gson.fromJson(responseBody, clazz);
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                String responseBodyString = responseBody.string();
+                return gson.fromJson(responseBodyString, clazz);
+            } else {
+                throw new IOException("Response body is null");
+            }
         }
     }
 }

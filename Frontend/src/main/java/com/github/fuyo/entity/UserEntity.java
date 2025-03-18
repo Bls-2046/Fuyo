@@ -2,13 +2,30 @@ package com.github.fuyo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Collections;
+
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserEntity {
+    private static volatile UserEntity userInformation;
+
+    public UserEntity() {
+        this.tabletimelist = Collections.emptyList(); // 或者初始化为一个新的 ArrayList<>()
+    }
+
+    // 公共静态方法，提供全局访问点
+    public static UserEntity getUser() {
+        if (userInformation == null) {
+            synchronized (UserEntity.class) {
+                if (userInformation == null) {
+                    userInformation = new UserEntity();
+                }
+            }
+        }
+        return userInformation;
+    }
+
     private String id;
     private String username;
     private String name;
@@ -19,20 +36,6 @@ public class UserEntity {
     private String cookie;
     private List<Tabletime> tabletimelist;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", name='" + name + '\'' +
-                ", department='" + department + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", avatarUrl='" + avatarUrl + '\'' +
-                ", cookie='" + cookie + '\'' +
-                '}';
-    }
-
     @Data
     @AllArgsConstructor
     public static class Tabletime {
@@ -41,16 +44,10 @@ public class UserEntity {
         private int x;
         private int y;
         private String value;
+    }
 
-        @Override
-        public String toString() {
-            return "Tabletime{" +
-                    "key_id=" + keyid +
-                    "id=" + id +
-                    ", x=" + x +
-                    ", y=" + y +
-                    ", value='" + value + '\'' +
-                    '}';
-        }
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException("Singleton class, cloning not allowed");
     }
 }

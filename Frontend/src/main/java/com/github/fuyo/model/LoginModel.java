@@ -25,7 +25,7 @@ public class LoginModel {
         LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
         try {
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, LoginResponse.class);
-
+            System.out.println("登录完成");
             message = loginResponse.getMessage(); // 获得登录信息
 
             if (loginResponse.getStatus() == 200) {

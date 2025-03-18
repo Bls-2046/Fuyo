@@ -9,7 +9,7 @@ import javax.swing.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginEntity {
+public class LoginViewEntity {
     private JTextField usernameObject;
     private JPasswordField passwordObject;
     private JButton loginButtonObject;

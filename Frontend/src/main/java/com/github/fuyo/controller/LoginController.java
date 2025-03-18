@@ -5,7 +5,6 @@ import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.navigation.NavigationView;
 import lombok.Getter;
 
-import javax.swing.*;
 import java.util.Objects;
 
 public class LoginController {
@@ -83,10 +82,8 @@ public class LoginController {
         String message = model.LoginVerification(username, password);
         // 验证
         if (Objects.equals(message, "登录成功")) {
-            SwingUtilities.invokeLater(() -> {
-                view.dispose();
-                new NavigationController(new NavigationView(), new LoginModel()).getView().setVisible(true);
-            });
+            view.dispose();
+            new NavigationController(new NavigationView(), new LoginModel()).getView().setVisible(true);
         } else {
             view.showErrorFrame(message);
             view.clearInputs();

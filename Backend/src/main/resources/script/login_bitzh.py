@@ -44,8 +44,8 @@ edge_options = None
 
 # 配置参数
 os.environ["CUDA_VISIBLE_DEVICES"] = "" # 禁用 GPU
-# edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
-edge_driver_path = r'C:\DevelopDependences\msedgedriver\msedgedriver.exe'
+edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
+# edge_driver_path = r'C:\DevelopDependences\msedgedriver\msedgedriver.exe'
 reader = easyocr.Reader(['en']) # 初始化 EasyOCR 阅读器（支持英文）
 max_retries = 100 # 尝试登录的最大次数
 

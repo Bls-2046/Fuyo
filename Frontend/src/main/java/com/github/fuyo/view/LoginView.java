@@ -1,6 +1,6 @@
 package com.github.fuyo.view;
 
-import com.github.fuyo.entity.LoginEntity;
+import com.github.fuyo.entity.LoginViewEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import java.awt.*;
 @AllArgsConstructor
 public class LoginView extends JFrame {
 
-    private LoginEntity loginEntity;
+    private LoginViewEntity loginEntity;
 
     public LoginView() {
         initComponents();
@@ -72,7 +72,7 @@ public class LoginView extends JFrame {
         errorFrameDisp[0].setVisible(false);
         errorFrameDisp[1].setVisible(false);
 
-        loginEntity = new LoginEntity(usernameInput, passwordInput, loginButton, exitProgramButton, errorFrameDisp);
+        loginEntity = new LoginViewEntity(usernameInput, passwordInput, loginButton, exitProgramButton, errorFrameDisp);
     }
 
     public String getUsername() {
