@@ -16,8 +16,19 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+# IDEA 缓存
 .idea
+
+# 虚拟环境
 .venv
 
+# 日志
 logs
 .log
+
+# 脚本生成的图片
+captcha_raw.png
+processed_captcha.png
+
+# 暂时忽略 py 脚本
+login_bitzh.py
