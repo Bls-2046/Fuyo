@@ -24,7 +24,6 @@ public class LoginModel {
         String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址
         LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
         try {
-            System.out.println("开始请求");
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, LoginResponse.class);
 
             message = loginResponse.getMessage(); // 获得登录信息
@@ -33,7 +32,7 @@ public class LoginModel {
                 new Thread(() -> {
 //                     UserRequest userResponse = new UserRequest(username);
 //                    try {
-//                        String getUserInfoUrl = "http://localhost:8080/user/info";
+//                        String getUserInfoUrl = "http://localhost:8080/api/user/info";
 //                        UserResponse userResponse = Https.<UserResponse>post(getUserInfoUrl, UserRequest, UserResponse.class);
 //                    } catch (IOException e) {
 //                        e.printStackTrace();

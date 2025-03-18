@@ -1,7 +1,7 @@
 package com.github.fuyo.view;
 
 import com.github.fuyo.entity.LoginEntity;
-import com.github.fuyo.utils.layout.RUILogin;
+import com.github.fuyo.utils.layout.RUILabel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Data;
@@ -33,31 +33,31 @@ public class LoginView extends JFrame {
         JLayeredPane lp = getLayeredPane();
 
         // 添加内容面板 (BaseFrame)
-        RUILogin labelBaseFrame = new RUILogin("login", "baseFrame.png");
+        RUILabel labelBaseFrame = new RUILabel("loginFrame", "baseFrame.png");
         lp.add(labelBaseFrame.imageLabel(0,0), JLayeredPane.DEFAULT_LAYER);
 
         // 添加图片预览组件
-        RUILogin labelLeftImage = new RUILogin("login","leftImageDisp.png");
+        RUILabel labelLeftImage = new RUILabel("loginFrame","leftImageDisp.png");
         lp.add(labelLeftImage.imageLabel(61,56), JLayeredPane.PALETTE_LAYER);
 
         // Logo
-        RUILogin labelLogo = new RUILogin("login","logo.png");
+        RUILabel labelLogo = new RUILabel("loginFrame","logo.png");
         lp.add(labelLogo.imageLabel(643,161), JLayeredPane.PALETTE_LAYER);
 
         // JText
-        RUILogin labelInputArea = new RUILogin("login","textInput.png");
+        RUILabel labelInputArea = new RUILabel("loginFrame","textInput.png");
         lp.add(labelInputArea.imageLabel(591,219), JLayeredPane.PALETTE_LAYER);
         lp.add(labelInputArea.imageLabel(591,219 + 50), JLayeredPane.PALETTE_LAYER);
 
-        JTextField usernameInput = labelInputArea.textLabel(591,219,"",Color.GRAY,13,"Agency FB");
+        JTextField usernameInput = labelInputArea.getTextLabel(591,219,"",Color.GRAY,13,"Agency FB");
         JPasswordField passwordInput = labelInputArea.passwordLabel(591,219 + 50,"",Color.GRAY,13,"Agency FB");
 
         lp.add(usernameInput, JLayeredPane.PALETTE_LAYER);
         lp.add(passwordInput, JLayeredPane.PALETTE_LAYER);
 
         // Button
-        RUILogin buttonLogin = new RUILogin("login","loginButton.png");
-        RUILogin buttonExitProgram = new RUILogin("login","exitProgramButton.png");
+        RUILabel buttonLogin = new RUILabel("loginFrame","loginButton.png");
+        RUILabel buttonExitProgram = new RUILabel("loginFrame","exitProgramButton.png");
 
         JButton loginButton = buttonLogin.buttonLabel(591,353);
         JButton exitProgramButton = buttonExitProgram.buttonLabel(591,393);
@@ -65,7 +65,7 @@ public class LoginView extends JFrame {
         lp.add(loginButton, JLayeredPane.PALETTE_LAYER);
         lp.add(exitProgramButton, JLayeredPane.PALETTE_LAYER);
 
-        RUILogin errorFrame = new RUILogin("login","notifyFrameError.png");
+        RUILabel errorFrame = new RUILabel("loginFrame","notifyFrameError.png");
         JLabel[] errorFrameDisp = errorFrame.errorLabel(550,40,"Test",Color.WHITE,14,"微软雅黑");
         lp.add(errorFrameDisp[0], JLayeredPane.PALETTE_LAYER);
         lp.add(errorFrameDisp[1], JLayeredPane.POPUP_LAYER);

@@ -1,7 +1,7 @@
 package com.github.fuyo.controller;
 
 import com.github.fuyo.model.LoginModel;
-import com.github.fuyo.view.NavigationView;
+import com.github.fuyo.view.navigation.NavigationView;
 import lombok.Getter;
 
 public class NavigationController {
@@ -12,5 +12,11 @@ public class NavigationController {
     public NavigationController(NavigationView view, LoginModel model) {
         this.view = view;
         this.model = model;
+    }
+
+    public String getName(){
+
+
+        return "";
     }
 }
