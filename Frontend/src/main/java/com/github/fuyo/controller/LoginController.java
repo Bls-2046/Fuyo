@@ -2,7 +2,7 @@ package com.github.fuyo.controller;
 
 import com.github.fuyo.model.LoginModel;
 import com.github.fuyo.view.LoginView;
-import com.github.fuyo.view.NavigationView;
+import com.github.fuyo.view.navigation.NavigationView;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -84,7 +84,6 @@ public class LoginController {
         // 验证
         if (Objects.equals(message, "登录成功")) {
             SwingUtilities.invokeLater(() -> {
-                System.out.println("登录成功");
                 view.dispose();
                 new NavigationController(new NavigationView(), new LoginModel()).getView().setVisible(true);
             });

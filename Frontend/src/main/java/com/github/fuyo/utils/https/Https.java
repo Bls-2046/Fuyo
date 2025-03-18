@@ -4,13 +4,22 @@ import com.google.gson.Gson;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Https {
     private Https() {}
 
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client;
     private static final Gson gson = new Gson();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+    static {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30,TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+    }
 
     /**
      * 发送通用的 POST 请求
@@ -29,6 +38,7 @@ public class Https {
                 .url(url)
                 .post(body)
                 .addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/json")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
