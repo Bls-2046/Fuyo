@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @Validated
 public class UserController {
 
@@ -28,9 +28,8 @@ public class UserController {
         LoginResponse response = new LoginResponse();
 
         try {
-            Map<String, Object> data = request.getData();
-            String username = (String) data.get("username");
-            String password = (String) data.get("password");
+            String username = request.getUsername();
+            String password = request.getPassword();
 
             userService.loginVerification(username, password);
 
@@ -48,7 +47,20 @@ public class UserController {
     // 获取用户基本信息
     @PostMapping("/info")
     public ResponseEntity<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest request) {
-        return null;
+
+        UserInfoResponse response = new UserInfoResponse();
+
+        try {
+            String username = request.getUsername();
+
+            response.setStatus(200);
+            response.setMessage("find is success");
+            response.setData(userService.getUserInfo(username));
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.setMessage(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
     }
 
     // 获取课表信息

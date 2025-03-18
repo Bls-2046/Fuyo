@@ -1,31 +1,15 @@
-package com.github.backend.entity;
+package com.github.fuyo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.Data;
 import java.util.List;
-import java.util.UUID;
-
-@Data
-@Entity
-@Table(name = "user")
-public class User {
-    @Id
-    @Column(name = "id", unique = true, nullable = false, length = 255)
+public class UserEntity {
     private String id;
-
     private String username;
-    private String password;
     private String name;
     private String department;
     private String email;
     private String phone;
     private String avatarUrl;
     private String cookie;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    @JsonManagedReference
     private List<Tabletime> tabletimelist;
 
     @Override
@@ -33,7 +17,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", department='" + department + '\'' +
                 ", email='" + email + '\'' +
@@ -43,29 +26,12 @@ public class User {
                 '}';
     }
 
-    @Data
-    @Entity
-    @Table(name = "tabletime")
     public static class Tabletime {
-        @Id
-        @Column(name = "keyid", unique = true, nullable = false, length = 36) // UUID is 36 characters long
         private String keyid;
-
-        @Column(name = "id", nullable = false)
         private String id;
-
         private int x;
         private int y;
         private String value;
-
-        @ManyToOne
-        @JoinColumn(name = "user_id")
-        @JsonBackReference
-        private User user;
-
-        public Tabletime() {
-            this.keyid = UUID.randomUUID().toString();
-        }
 
         @Override
         public String toString() {

@@ -1,17 +1,17 @@
 package com.github.backend.utils;
 
-import com.github.backend.entity.User;
+import com.github.backend.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CurrentUserHolder {
-    private User currentUser;
+    private UserEntity currentUserEntity;
 
-    public User getCurrentUser() {
-        return currentUser;
+    public UserEntity getCurrentUser() {
+        return currentUserEntity;
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void setCurrentUser(UserEntity currentUserEntity) {
+        this.currentUserEntity = currentUserEntity;
     }
 }

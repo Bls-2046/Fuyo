@@ -1,6 +1,7 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.entity.User;
+import com.github.backend.dto.UserInfoResponse;
+import com.github.backend.entity.UserEntity;
 import com.github.backend.repository.TabletimeRepository;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.service.UserService;
@@ -13,7 +14,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -31,12 +31,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void loginVerification(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+        if (userEntity == null) {
             try {
                 // 运行 Python 脚本进行验证并获取用户信息
                 String loginScriptResult = PythonScript.executePythonScript(username, password);
-                log.info("Run Python script");
 
                 // 解析 Python 脚本返回的 JSON 字符串
                 JSONObject jsonObject = new JSONObject(loginScriptResult);
@@ -60,26 +59,50 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException(e);
             }
         } else {
-            if (!Password.matches(password, user.getPassword())) {
+            if (!Password.matches(password, userEntity.getPassword())) {
                 throw new RuntimeException("密码错误");
             }
         }
     }
 
+    @Override
+    public UserInfoResponse.UserInfo getUserInfo(String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+        if (userEntity == null) {
+            return null;
+        }
+
+        UserInfoResponse.UserInfo userInfo = new UserInfoResponse.UserInfo();
+
+        userInfo.setUsername(userEntity.getUsername());
+        userInfo.setName(userEntity.getName());
+        userInfo.setDepartment(userEntity.getDepartment());
+        userInfo.setEmail(userEntity.getEmail());
+        userInfo.setPhone(userEntity.getPhone());
+
+        return userInfo;
+    }
+
+    /**
+     * 保存用户数据到数据库
+     * @param data 返回的数据
+     * @param username 用户名
+     * @param password 密码
+     */
     public void saveUser(JSONObject data, String username, String password) {
-        User user = new User();
+        UserEntity userEntity = new UserEntity();
         try {
-            user.setId(username);
-            user.setUsername(username);
-            user.setPassword(Password.encodePassword(password));
-            user.setName(data.getString("姓名"));
-            user.setEmail(data.getString("邮箱"));
-            user.setDepartment(data.getString("部门"));
+            userEntity.setId(username);
+            userEntity.setUsername(username);
+            userEntity.setPassword(Password.encodePassword(password));
+            userEntity.setName(data.getString("姓名"));
+            userEntity.setEmail(data.getString("邮箱"));
+            userEntity.setDepartment(data.getString("部门"));
 
             // 提取手机号码中的数字部分
             String phoneFromData = data.getString("手机");
             String phone = phoneFromData.replaceAll("[^0-9]", ""); // 只保留数字
-            user.setPhone(phone);
+            userEntity.setPhone(phone);
 
             // 解析并设置 cookie
             JSONArray cookieArray = data.getJSONArray("cookie");
@@ -92,17 +115,17 @@ public class UserServiceImpl implements UserService {
                 cookieBuilder.append(name).append("=").append(value);
             }
             String cookie = cookieBuilder.toString();
-            user.setCookie(cookie);
-            userRepository.save(user);
+            userEntity.setCookie(cookie);
+            userRepository.save(userEntity);
 
             // 使用 cookie 发起请求，获取课表信息并存入数据库
-            fetchAndSaveTabletime(user, cookie);
+            fetchAndSaveTabletime(userEntity, cookie);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
-    private void fetchAndSaveTabletime(User user, String cookie) {
+    private void fetchAndSaveTabletime(UserEntity userEntity, String cookie) {
         try {
             // 设置请求头
             HttpHeaders headers = new HttpHeaders();
@@ -123,16 +146,16 @@ public class UserServiceImpl implements UserService {
                 JSONObject course = rawResponse.getJSONObject(i);
 
                 // 创建并保存课表信息
-                User.Tabletime tabletime = new User.Tabletime();
-                tabletime.setId(user.getId());
+                UserEntity.Tabletime tabletime = new UserEntity.Tabletime();
+                tabletime.setId(userEntity.getId());
                 tabletime.setX(course.optInt("x", 0));
                 tabletime.setY(course.optInt("y", 0));
                 tabletime.setValue(course.optString("value", ""));
-                tabletime.setUser(user);
+                tabletime.setUserEntity(userEntity);
 
                 tabletimeRepository.save(tabletime);
             }
-            log.info("用户 {} 的课表信息已成功保存", user.getUsername());
+            log.info("用户 {} 的课表信息已成功保存", userEntity.getUsername());
         } catch (Exception e) {
             log.error("获取或保存课表信息失败: {}", e.getMessage());
         }

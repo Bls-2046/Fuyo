@@ -6,5 +6,5 @@ import java.util.Map;
 
 @Data
 public class UserInfoRequest {
-    private Map<String, Object> data;
+    private String username;
 }

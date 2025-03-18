@@ -21,25 +21,27 @@ public class LoginModel {
     public String LoginVerification(String username, String password) {
         String message = null;
 
-        String loginUrl = "http://localhost:8080/user/login"; // 验证请求地址
+        String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址
         LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
         try {
+            System.out.println("开始请求");
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, LoginResponse.class);
 
             message = loginResponse.getMessage(); // 获得登录信息
 
             if (loginResponse.getStatus() == 200) {
                 new Thread(() -> {
-                    // UserRequest userResponse = new UserRequest(username);
-                    try {
-                        String getUserInfoUrl = "http://localhost:8080/user/info";
-                        UserResponse userResponse = Https.<UserResponse>post(getUserInfoUrl, UserRequest, UserResponse.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                     UserRequest userResponse = new UserRequest(username);
+//                    try {
+//                        String getUserInfoUrl = "http://localhost:8080/user/info";
+//                        UserResponse userResponse = Https.<UserResponse>post(getUserInfoUrl, UserRequest, UserResponse.class);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }).start();
             }
         } catch (IOException e) {
+            e.printStackTrace();
             return "登录异常";
         }
         return message;

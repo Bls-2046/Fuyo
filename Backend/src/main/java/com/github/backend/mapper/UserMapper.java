@@ -1,6 +1,6 @@
 package com.github.backend.mapper;
 
-import com.github.backend.entity.User;
+import com.github.backend.entity.UserEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -9,10 +9,10 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
     // 查
     @Select("select username, password, id, name, department, email, phone, cookie from user where id = #{id}")
-    User getUserInfoByUser(String username);
+    UserEntity getUserInfoByUser(String username);
 
     // 增
     @Insert("insert into user(username, password, id, name, department, email, phone, cookie)" +
     " values(#{username}, #{password}, #{id}, #{name}, #{department}, #{email}, #{phone}, #{cookie})")
-    User addUser(User user);
+    UserEntity addUser(UserEntity userEntity);
 }

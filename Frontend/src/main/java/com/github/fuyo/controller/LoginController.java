@@ -46,6 +46,7 @@ public class LoginController {
                 isSuccessfulLogin(username, password);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             view.showErrorFrame("登录异常");
             view.clearInputs();
         } finally {
@@ -83,6 +84,7 @@ public class LoginController {
         // 验证
         if (Objects.equals(message, "登录成功")) {
             SwingUtilities.invokeLater(() -> {
+                System.out.println("登录成功");
                 view.dispose();
                 new NavigationController(new NavigationView(), new LoginModel()).getView().setVisible(true);
             });

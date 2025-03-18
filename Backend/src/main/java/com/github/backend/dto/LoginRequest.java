@@ -6,5 +6,6 @@ import java.util.Map;
 
 @Data
 public class LoginRequest {
-    private Map<String, Object> data;
+    private String username;
+    private String password;
 }
