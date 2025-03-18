@@ -32,3 +32,6 @@ processed_captcha.png
 
 # 暂时忽略 py 脚本
 login_bitzh.py
+
+# 忽略 application.yml
+application.yml
