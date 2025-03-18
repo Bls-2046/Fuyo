@@ -27,11 +27,8 @@ logs
 .log
 
 # 脚本生成的图片
-captcha_raw.png
-processed_captcha.png
-
-# 暂时忽略 py 脚本
-login_bitzh.py
+Backend/src/main/resources/script/captcha_raw.png
+Backend/src/main/resources/script/processed_captcha.png
 
 # 忽略 application.yml
 application.yml
