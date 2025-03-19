@@ -2,7 +2,11 @@ package com.github.fuyo.model;
 
 import com.github.fuyo.dto.LoginRequest;
 import com.github.fuyo.dto.LoginResponse;
+import com.github.fuyo.dto.UserInformationRequest;
+import com.github.fuyo.dto.UserInformationResponse;
+import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.https.Https;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -12,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
+@Slf4j
 public class LoginModel {
     public LoginModel() {}
 
@@ -25,18 +30,27 @@ public class LoginModel {
         LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
         try {
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, LoginResponse.class);
-            System.out.println("登录完成");
-            message = loginResponse.getMessage(); // 获得登录信息
+            message = loginResponse.getMessage();
+            log.info(message);
 
             if (loginResponse.getStatus() == 200) {
                 new Thread(() -> {
-//                     UserRequest userResponse = new UserRequest(username);
-//                    try {
-//                        String getUserInfoUrl = "http://localhost:8080/api/user/info";
-//                        UserResponse userResponse = Https.<UserResponse>post(getUserInfoUrl, UserRequest, UserResponse.class);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
+                    UserInformationRequest userInformationRequest = new UserInformationRequest();
+                    userInformationRequest.setUsername(username);
+                    try {
+                        String getUserInfoUrl = "http://localhost:8080/api/user/information"; // 请求地址
+                        // 发送请求并获得用户信息响应
+                        UserInformationResponse userInformationResponse = Https.<UserInformationResponse>post(getUserInfoUrl, userInformationRequest, UserInformationResponse.class);
+
+                        UserEntity.getUserInformation().setUsername(userInformationResponse.getData().get("username"));
+                        UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("name"));
+                        UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
+                        UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("email"));
+                        UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }).start();
             }
         } catch (IOException e) {

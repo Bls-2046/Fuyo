@@ -11,11 +11,11 @@ public class UserEntity {
     private static volatile UserEntity userInformation;
 
     public UserEntity() {
-        this.tabletimelist = Collections.emptyList(); // 或者初始化为一个新的 ArrayList<>()
+        this.tabletimelist = Collections.emptyList();
     }
 
     // 公共静态方法，提供全局访问点
-    public static UserEntity getUser() {
+    public static UserEntity getUserInformation() {
         if (userInformation == null) {
             synchronized (UserEntity.class) {
                 if (userInformation == null) {

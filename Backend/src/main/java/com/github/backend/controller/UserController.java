@@ -3,6 +3,7 @@ package com.github.backend.controller;
 import com.github.backend.dto.*;
 import com.github.backend.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/user")
 @Validated
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -23,49 +23,71 @@ public class UserController {
 
     // 登录验证
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 
-        LoginResponse response = new LoginResponse();
+        LoginResponse loginResponse = new LoginResponse();
 
         try {
-            String username = request.getUsername();
-            String password = request.getPassword();
+            String username = loginRequest.getUsername();
+            String password = loginRequest.getPassword();
 
+            // 用户名密码验证
             userService.loginVerification(username, password);
 
-            response.setStatus(200);
-            response.setMessage("登录成功");
-            response.setId(username);
+            loginResponse.setStatus(200);
+            loginResponse.setMessage("登录成功");
+            loginResponse.setId(username);
 
         } catch (Exception e) {
-            response.setStatus(500);
-            response.setMessage(e.getMessage());
+            loginResponse.setStatus(500);
+            loginResponse.setMessage(e.getMessage());
         }
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(loginResponse);
     }
 
-    // 获取用户基本信息
-    @PostMapping("/info")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest request) {
+    /**
+     * 获取用户基本信息
+     * URL: localhost:8080/api/user/information
+     */
+    @PostMapping("/information")
+    public ResponseEntity<UserInformationResponse> getUserInformation(@RequestBody UserInformationRequest userInformationRequest) {
 
-        UserInfoResponse response = new UserInfoResponse();
+        UserInformationResponse userInformationResponse = new UserInformationResponse();
 
         try {
-            String username = request.getUsername();
+            // 获取前端用户输入数据
+            String username = userInformationRequest.getUsername();
 
-            response.setStatus(200);
-            response.setMessage("find is success");
-            response.setData(userService.getUserInfo(username));
+            // 获取成功放回响应
+            userInformationResponse.setStatus(200);
+            userInformationResponse.setMessage("success");
+            userInformationResponse.setData(userService.getUserInformation(username));
+
         } catch (Exception e) {
-            response.setStatus(500);
-            response.setMessage(e.getMessage());
+            userInformationResponse.setStatus(500);
+            userInformationResponse.setMessage(e.getMessage());
         }
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(userInformationResponse);
     }
 
-    // 获取课表信息
+    /**
+     * 获取课表信息
+     * @param tabletimeRequest 请求
+     * @return TabletimeResponse
+     */
     @PostMapping("/tabletime")
-    public ResponseEntity<TabletimeResponse> getTabletime(@RequestBody TabletimeRequest request) {
+    public ResponseEntity<TabletimeResponse> getTabletime(@RequestBody TabletimeRequest tabletimeRequest) {
+
+        TabletimeResponse tabletimeResponse = new TabletimeResponse();
+
+        try {
+            String username = tabletimeRequest.getUsername();
+
+
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+
         return null;
     }
 }

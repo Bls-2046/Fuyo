@@ -2,9 +2,7 @@ package com.github.backend.dto;
 
 import lombok.Data;
 
-import java.util.Map;
-
 @Data
-public class UserInfoRequest {
+public class UserInformationRequest {
     private String username;
 }

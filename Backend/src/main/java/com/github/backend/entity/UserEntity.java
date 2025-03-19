@@ -29,7 +29,7 @@ public class UserEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "userEntity")
     @JsonManagedReference
-    private List<Tabletime> tabletimelist;
+    private List<Tabletime> tabletime;
 
     @Override
     public String toString() {
@@ -51,15 +51,18 @@ public class UserEntity {
     @Table(name = "tabletime")
     public static class Tabletime {
         @Id
-        @Column(name = "keyid", unique = true, nullable = false, length = 36) // UUID is 36 characters long
-        private String keyid;
+        @Column(name = "keyID", unique = true, nullable = false, length = 36)
+        private String keyID;
 
-        @Column(name = "id", nullable = false)
-        private String id;
-
+        private String clazz; // 课程名
         private int x;
         private int y;
-        private String value;
+        private int beginDay; // 当天课程开始时间
+        private int endDay; // 当天课程结束时间
+        private String weekType; // 是否分单双周
+        private String place; // 上课地点
+        private int startWeek; // 本学期开始本课程上课时间
+        private int finishWeek; // 本学期结束本课程上课时间
 
         @ManyToOne
         @JoinColumn(name = "user_id")
@@ -67,17 +70,22 @@ public class UserEntity {
         private UserEntity userEntity;
 
         public Tabletime() {
-            this.keyid = UUID.randomUUID().toString();
+            this.keyID = UUID.randomUUID().toString();
         }
 
         @Override
         public String toString() {
             return "Tabletime{" +
-                    "key_id=" + keyid +
-                    "id=" + id +
+                    "keyDID=" + keyID +
+                    ", clazz='" + clazz +
                     ", x=" + x +
                     ", y=" + y +
-                    ", value='" + value + '\'' +
+                    ", beginDay='" + beginDay + '\'' +
+                    ", endDay='" + endDay + '\'' +
+                    ", weekType='" + weekType + '\'' +
+                    ", place='" + place + '\'' +
+                    ", startWeek='" + startWeek + '\'' +
+                    ", finishWeek='" + finishWeek + '\'' +
                     '}';
         }
     }

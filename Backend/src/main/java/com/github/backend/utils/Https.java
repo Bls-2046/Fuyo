@@ -2,10 +2,9 @@ package com.github.backend.utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -81,7 +80,7 @@ public class Https {
      * @param headers 请求头（可选）
      * @return JSON 格式的响应数据
      */
-    public static Object  post(String url, JSONObject body, HttpHeaders headers) {
+    public static Object post(String url, JSONObject body, HttpHeaders headers) {
         // 创建 HTTP 实体
         HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
 
@@ -109,6 +108,51 @@ public class Https {
         } else {
             // 返回原始字符串
             return rawResponse;
+        }
+    }
+
+    /**
+     * 发送 POST 请求，支持 multipart/form-data 格式
+     *
+     * @param url     请求 URL
+     * @param formData 表单数据（键值对）
+     * @param headers  请求头（可选）
+     * @return JSON 格式的响应数据
+     */
+    public static Object post(String url, Map<String, String> formData, HttpHeaders headers) {
+        // 创建 MultiValueMap 用于存储表单数据
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        for (Map.Entry<String, String> entry : formData.entrySet()) {
+            body.add(entry.getKey(), entry.getValue());
+        }
+
+        // 设置请求头为 multipart/form-data
+        if (headers == null) {
+            headers = new HttpHeaders();
+        }
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // 创建 HTTP 实体
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
+
+        // 发送 POST 请求
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+
+        // 将响应体转换为 JSONObject 或 JSONArray
+        String rawResponse = response.getBody();
+        if (rawResponse == null || rawResponse.trim().isEmpty()) {
+            return null; // 空响应
+        } else if (rawResponse.startsWith("{")) {
+            return new JSONObject(rawResponse); // 解析为 JSONObject
+        } else if (rawResponse.startsWith("[")) {
+            return new JSONArray(rawResponse); // 解析为 JSONArray
+        } else {
+            return rawResponse; // 返回原始字符串
         }
     }
 }

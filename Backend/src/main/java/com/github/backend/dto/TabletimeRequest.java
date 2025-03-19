@@ -6,5 +6,5 @@ import java.util.Map;
 
 @Data
 public class TabletimeRequest {
-    public Map<String, Object> data;
+    public String username;
 }

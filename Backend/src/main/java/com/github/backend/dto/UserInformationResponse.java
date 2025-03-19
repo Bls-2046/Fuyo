@@ -3,14 +3,13 @@ package com.github.backend.dto;
 import lombok.Data;
 
 @Data
-public class UserInfoResponse {
+public class UserInformationResponse {
     private int status;
     private String message;
-    private UserInfo data;
+    private UserInformation data;
 
     @Data
-    public static class UserInfo {
-        private String id;
+    public static class UserInformation {
         private String username;
         private String name;
         private String department;
