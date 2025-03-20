@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
         // 计算当前是第几周的第几天（1到7）
         int dayOfWeek = (int) (daysBetween % 7) + 1;
 
-        List<UserEntity.Tabletime> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, 1);
+        List<UserEntity.Tabletime> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, dayOfWeek);
 
         // 创建 tabletime 列表
         List<TabletimeResponse.Tabletime> tabletime = new ArrayList<>();
