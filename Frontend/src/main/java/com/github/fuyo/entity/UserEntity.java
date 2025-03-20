@@ -27,13 +27,11 @@ public class UserEntity {
         return userInformation;
     }
 
-    private String id;
     private String username;
     private String name;
     private String department;
     private String email;
     private String phone;
-    private String avatarUrl;
     private String cookie;
     private List<Tabletime> tabletime;
 
@@ -55,5 +53,9 @@ public class UserEntity {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Singleton class, cloning not allowed");
+    }
+
+    public static void clearUserInformation() {
+        userInformation = null;
     }
 }

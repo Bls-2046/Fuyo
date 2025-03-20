@@ -32,12 +32,11 @@ public class UserController {
             String password = loginRequest.getPassword();
 
             // 用户名密码验证
-            userService.loginVerification(username, password);
-
-            loginResponse.setStatus(200);
-            loginResponse.setMessage("登录成功");
-            loginResponse.setId(username);
-
+            if (userService.loginVerification(username, password)) {
+                loginResponse.setStatus(200);
+                loginResponse.setMessage("登录成功");
+                loginResponse.setId(username);
+            }
         } catch (Exception e) {
             loginResponse.setStatus(500);
             loginResponse.setMessage(e.getMessage());

@@ -16,6 +16,10 @@ public class LoginController {
     private final LoginView view;
     private final LoginModel model;
 
+    // 用于创建导航栏和关闭导航栏
+    @Getter
+    private NavigationController navigationController;
+
     public LoginController(LoginView view, LoginModel model) throws Exception {
         this.view = view;
         this.model = model;
@@ -59,7 +63,7 @@ public class LoginController {
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            view.showErrorFrame("登录异常");
+            view.showErrorFrame("登录异常, 请稍后重试");
             view.clearInputs();
             view.setInputEnabled(true);
             view.setLoginButtonEnabled(true);
@@ -89,7 +93,7 @@ public class LoginController {
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            view.showErrorFrame("登录异常");
+            view.showErrorFrame("登录异常, 请稍后重试");
             view.clearInputs();
             view.setInputEnabled(true);
             view.setLoginButtonEnabled(true);
@@ -105,8 +109,9 @@ public class LoginController {
             model.saveCredentials(username, password);
 
             // 使用 Timer 延迟 5 秒后关闭窗口
-            Timer timer = new Timer(5000, e -> {
+            Timer timer = new Timer(3000, e -> {
                 view.dispose(); // 关闭当前窗口
+                // 创建 NavigationController 实例
                 new NavigationController(new NavigationView(), new NavigationModel()).getView().setVisible(true);
             });
             timer.setRepeats(false);

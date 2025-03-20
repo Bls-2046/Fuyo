@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
     // 登录验证
-    void loginVerification(String username, String password);
+    Boolean loginVerification(String username, String password);
     // 获得学生信息
     UserInformationResponse.UserInformation getUserInformation(String username);
     // 获得学生课表

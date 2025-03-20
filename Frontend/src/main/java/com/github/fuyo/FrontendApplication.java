@@ -8,6 +8,5 @@ import com.github.fuyo.view.navigation.NavigationView;
 public class FrontendApplication {
     public static void main(String[] args) throws Exception {
         new LoginController(new LoginView(), new LoginModel()).getView().setVisible(true);
-        //new NavigationView().setVisible(true);
     }
 }

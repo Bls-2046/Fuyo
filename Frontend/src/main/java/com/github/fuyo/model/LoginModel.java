@@ -45,6 +45,7 @@ public class LoginModel {
                             UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
                             UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("email"));
                             UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
+                            log.info(UserEntity.getUserInformation().toString());
                         }
                     } catch (IOException e) {
                         log.error(e.getMessage());
@@ -87,7 +88,7 @@ public class LoginModel {
             }
         } catch (IOException e) {
             log.error(e.getMessage());
-            return "登录异常";
+            return "登录异常, 请稍后重试";
         }
         return message;
     }

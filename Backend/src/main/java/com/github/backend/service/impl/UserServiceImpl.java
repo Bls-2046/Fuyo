@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
      * @param password 用于登录的密码
      */
     @Override
-    public void loginVerification(String username, String password) {
+    public Boolean loginVerification(String username, String password) {
         UserEntity userEntity = userRepository.findByUsername(username);
         if (userEntity == null) {
             try {
@@ -91,6 +91,8 @@ public class UserServiceImpl implements UserService {
 
                 // 将数据保持到数据库
                 saveUserInformation(data, username, password);
+
+                return true;
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
@@ -98,7 +100,9 @@ public class UserServiceImpl implements UserService {
             if (!Password.matches(password, userEntity.getPassword())) {
                 throw new RuntimeException("密码错误");
             }
+            return true;
         }
+        return false;
     }
 
     /**

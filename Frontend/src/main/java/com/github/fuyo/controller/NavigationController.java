@@ -2,9 +2,11 @@ package com.github.fuyo.controller;
 
 import com.github.fuyo.entity.NaviFunctionButtonEnum;
 import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.listener.NavigationCloseListener;
 import com.github.fuyo.model.LoginModel;
 import com.github.fuyo.model.NavigationModel;
 import com.github.fuyo.model.UserViewModel;
+import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
 import com.github.fuyo.view.navigation.user.UserView;
@@ -15,7 +17,7 @@ import javax.swing.*;
 import java.util.List;
 
 @Slf4j
-public class NavigationController {
+public class NavigationController implements NavigationCloseListener {
     @Getter
     private final NavigationView view;
     private final NavigationModel model;
@@ -50,15 +52,34 @@ public class NavigationController {
         JButton userButton = naviButtonList.get(NaviFunctionButtonEnum.USERLAYER.ordinal());
         userButton.addActionListener(e -> {
 
-            UserViewController userViewController = new UserViewController(new UserView(user), new UserViewModel());
+            UserViewController userViewController = new UserViewController(new UserView(user), new UserViewModel(), this);
 
             SwingUtilities.invokeLater(() -> {
                 SwingUtilities.invokeLater(() -> {
                     view.renderRouterView(userViewController.getView());
                 });
             });
-
         });
-
     }
+
+    @Override
+    public void onClose() {
+        closeView();
+    }
+
+    public void closeView() {
+        if (view != null) {
+            SwingUtilities.invokeLater(() -> {
+                view.dispose();
+                try {
+                    new LoginController(new LoginView(), new LoginModel()).getView().setVisible(true);
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            });
+        } else {
+            log.error("NavigationView is null!");
+        }
+    }
+
 }
