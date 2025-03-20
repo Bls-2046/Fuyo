@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
         // 计算当前是第几周的第几天（1到7）
         int dayOfWeek = (int) (daysBetween % 7) + 1;
 
-        List<UserEntity.Tabletime> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, 1);
+        List<UserEntity.Tabletime> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, dayOfWeek);
 
         // 创建 tabletime 列表
         List<TabletimeResponse.Tabletime> tabletime = new ArrayList<>();
@@ -139,22 +139,26 @@ public class UserServiceImpl implements UserService {
                     continue;
                 }
             }
-            tabletimeResponse.setKeyID(userTime.getKeyID());
-            tabletimeResponse.setClazz(userTime.getClazz());
-            tabletimeResponse.setX(userTime.getX());
-            tabletimeResponse.setY(userTime.getY());
-            tabletimeResponse.setBeginDay(userTime.getBeginDay());
-            tabletimeResponse.setEndDay(userTime.getEndDay());
-            tabletimeResponse.setWeekType(userTime.getWeekType());
-            tabletimeResponse.setPlace(userTime.getPlace());
-            tabletimeResponse.setStartWeek(userTime.getStartWeek());
-            tabletimeResponse.setFinishWeek(userTime.getFinishWeek());
+            if (userTime.getStartWeek() <= currentWeek && userTime.getFinishWeek() >= currentWeek) {
+                tabletimeResponse.setKeyID(userTime.getKeyID());
+                tabletimeResponse.setClazz(userTime.getClazz());
+                tabletimeResponse.setX(userTime.getX());
+                tabletimeResponse.setY(userTime.getY());
+                tabletimeResponse.setBeginDay(userTime.getBeginDay());
+                tabletimeResponse.setEndDay(userTime.getEndDay());
+                tabletimeResponse.setWeekType(userTime.getWeekType());
+                tabletimeResponse.setPlace(userTime.getPlace());
+                tabletimeResponse.setStartWeek(userTime.getStartWeek());
+                tabletimeResponse.setFinishWeek(userTime.getFinishWeek());
 
-            // 添加到 tabletime 列表
-            tabletime.add(tabletimeResponse);
+                // 添加到 tabletime 列表
+                tabletime.add(tabletimeResponse);
+            }
         }
 
         log.info(tabletime.toString());
+
+        tabletime.sort(Comparator.comparingInt(TabletimeResponse.Tabletime::getY));
 
         return tabletime;
     }
