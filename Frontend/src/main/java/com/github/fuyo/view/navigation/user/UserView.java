@@ -33,8 +33,9 @@ public class UserView extends JLayeredPane {
         // Time
         String message = "";
         if (LocalTime.now().isAfter(LocalTime.of(18,0))) message = "晚上好";
-        else if (LocalTime.now().isAfter(LocalTime.of(12,0))) message = "下午好";
-        else if (LocalTime.now().isAfter(LocalTime.of(7, 0))) message = "中午好";
+        if (LocalTime.now().isAfter(LocalTime.of(14,0))) message = "下午好";
+        else if (LocalTime.now().isAfter(LocalTime.of(12,0))) message = "中午好";
+        else if (LocalTime.now().isAfter(LocalTime.of(6, 0))) message = "早上好";
         else if (LocalTime.now().isAfter(LocalTime.of(0,0))) message = "夜深啦";
 
         // Layer
