@@ -5,5 +5,5 @@ public enum NaviFunctionButtonEnum {
     NOTIFY,
     DEEPSEEK,
     EXIT,
-    USERLAYER
+    USE
 }
