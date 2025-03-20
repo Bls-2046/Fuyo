@@ -1,14 +1,9 @@
 package com.github.fuyo.view.navigation;
 
 import com.github.fuyo.entity.NaviFunctionEntity;
-import com.github.fuyo.service.NaviServices;
-import com.github.fuyo.service.impl.NaviServicesImpl;
 import com.github.fuyo.utils.layout.RUILabel;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -22,13 +17,15 @@ import java.util.List;
 public class NavigationView extends JFrame {
 
     private List<NaviFunctionEntity> naviFuncObjs = new ArrayList<NaviFunctionEntity>();
+
+    @Getter
     private JLayeredPane viewLayerPanel;
+
+    @Getter
     private JLayeredPane lp;
 
-    // Services
-    private NaviServices naviServices = new NaviServicesImpl();
-
     // List for button
+    @Getter
     List<JButton> naviButtonList = new ArrayList<>();
 
     @Setter
@@ -66,13 +63,11 @@ public class NavigationView extends JFrame {
         lp.add(RUILabel.getTextLabel(79,709,"Username",20,"微软雅黑",Color.GRAY,Font.PLAIN), JLayeredPane.PALETTE_LAYER);
 
         // Function Navi Fixed
-        NaviFunctionEntity navi1 = new NaviFunctionEntity("课程表",true,lp,new int[]{17,101}, "demo.png");
+        NaviFunctionEntity navi1 = new NaviFunctionEntity("课程表",false,lp,new int[]{17,101}, "demo.png");
         naviFuncObjs.add(navi1);
         navi1.addToPanel();
         navi1.addActionListener(e -> actionPerformed(e,navi1));
         naviButtonList.add(navi1.getFunctionButton());
-        viewLayerPanel = new ClazzView(naviServices.getUserInformation(userId));
-        lp.add(viewLayerPanel, JLayeredPane.PALETTE_LAYER);
 
         NaviFunctionEntity navi2 = new NaviFunctionEntity("日期提醒",false,lp,new int[]{17,101 + 60}, "calendar.png");
         naviFuncObjs.add(navi2);
@@ -90,18 +85,12 @@ public class NavigationView extends JFrame {
         NaviFunctionEntity exitNavi = new NaviFunctionEntity("退出程序",false,lp,new int[]{17,101 + 60 * 9}, "exit.png");
         naviFuncObjs.add(exitNavi);
         exitNavi.addToPanel();
-        exitNavi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
         naviButtonList.add(exitNavi.getFunctionButton());
 
         setVisible(true);
     }
 
-    // Function like Vue-RouterView
+    // Render NaviBar
     private void actionPerformed(ActionEvent e, NaviFunctionEntity navi) {
         log.info("Button {} Pressed and set to activate", navi.getFunctionName());
 
@@ -109,19 +98,19 @@ public class NavigationView extends JFrame {
         naviFuncObjs.forEach(naviFuncObj -> {
             naviFuncObj.setDeActivate();
         });
+
         if (viewLayerPanel != null) {
             lp.remove(viewLayerPanel);
         }
-        viewLayerPanel = null;
-        navi.setActivate();
         lp.revalidate();
         lp.repaint();
 
-        // Create Panel
-        if (navi.getFunctionName().equals("课程表")) {
-            viewLayerPanel = new ClazzView(naviServices.getUserInformation(userId));
-            lp.add(viewLayerPanel, JLayeredPane.PALETTE_LAYER);
-        }
+        navi.setActivate();
     }
 
+    // Render Router-View
+    public void renderRouterView(JLayeredPane targetView) {
+        viewLayerPanel = targetView;
+        lp.add(viewLayerPanel, JLayeredPane.POPUP_LAYER);
+    }
 }

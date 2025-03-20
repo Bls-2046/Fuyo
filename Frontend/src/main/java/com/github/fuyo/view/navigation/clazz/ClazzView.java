@@ -1,9 +1,6 @@
 package com.github.fuyo.view.navigation.clazz;
 
-import com.github.fuyo.entity.ClazzEntity;
 import com.github.fuyo.entity.UserEntity;
-import com.github.fuyo.service.NaviServices;
-import com.github.fuyo.service.impl.NaviServicesImpl;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,75 +19,71 @@ public class ClazzView extends JLayeredPane {
 
     private final static int posYFix = 10;
     // ManuWired
-    private UserEntity userEntity;
+    private List<UserEntity.Tabletime> tabletime;
 
-    public ClazzView(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public ClazzView(List<UserEntity.Tabletime> tabletime) {
+        this.tabletime = tabletime;
         setBounds(260, 0, 1100, 768);
 
         RUILabel bgLabel = new RUILabel("mainFrame/views/clazz", "bg.png");
         add(bgLabel.imageLabel(65, 37), DEFAULT_LAYER);
 
         // Function Implement
-        List<ClazzEntity> clazzEntityList = new ArrayList<>();
-
-//        userEntity.getTabletimelist().forEach(clazzEntity -> {
-//            clazzEntityList.add(parseClazzInfo(clazzEntity.getValue()));
-//        });
-
-        Collections.sort(clazzEntityList, new Comparator<ClazzEntity>() {
+        Collections.sort(tabletime, new Comparator<UserEntity.Tabletime>() {
             @Override
-            public int compare(ClazzEntity o1, ClazzEntity o2) {
-                return o1.getCourseIdx()[0] - o2.getCourseIdx()[0];
+            public int compare(UserEntity.Tabletime o1, UserEntity.Tabletime o2) {
+                return o1.getBeginDay() - o2.getBeginDay();
             }
         });
 
-        log.info(clazzEntityList.toString());
+        log.info(tabletime.toString());
 
 
         // Current Time?
         LocalTime now = LocalTime.now();
 
-        ClazzEntity currentClazz = null;
-        ClazzEntity nextClazz = null;
+        UserEntity.Tabletime currentClazz = null;
+        UserEntity.Tabletime nextClazz = null;
 
         // Remaining Clazz
         int remainingClazzCount = 0;
-        for (ClazzEntity clazz : clazzEntityList) {
-            LocalTime startTime = CourseTime()[clazz.getCourseIdx()[0] * 2 - 2];
+        for (UserEntity.Tabletime clazz : tabletime) {
+            LocalTime startTime = CourseTime()[clazz.getBeginDay() * 2 - 2];
             if (now.isBefore(startTime)) {
                 remainingClazzCount++;
             }
         }
 
         // For next clazz
-        for (ClazzEntity clazz : clazzEntityList) {
-            int[] courseIdx = clazz.getCourseIdx();
+        for (UserEntity.Tabletime clazz : tabletime) {
+            int[] courseIdx = new int[2];
+            courseIdx[0] = clazz.getBeginDay();
+            courseIdx[1] = clazz.getEndDay();
             LocalTime startTime = CourseTime()[courseIdx[0] * 2 - 2];
             LocalTime endTime = CourseTime()[courseIdx[1] * 2 - 1];
 
             if (now.isAfter(startTime) && now.isBefore(endTime)) {
                 currentClazz = clazz;
             } else if (now.isBefore(startTime)) {
-                if (nextClazz == null || startTime.isBefore(CourseTime()[nextClazz.getCourseIdx()[0] * 2 - 2])) {
+                if (nextClazz == null || startTime.isBefore(CourseTime()[nextClazz.getBeginDay() * 2 - 2])) {
                     nextClazz = clazz;
                 }
             }
         }
 
         // Current Clazz
-        String currentClazzTime = currentClazz != null ? getTimeString(currentClazz.getCourseIdx()[0])[0] + " - " + getTimeString(currentClazz.getCourseIdx()[1])[1] : "";
-        String currentClazzName = currentClazz != null ? currentClazz.getCourseName() : (remainingClazzCount == 0) ? "~已经上完课啦~" : (remainingClazzCount == clazzEntityList.size()) ? "准备上课~" : "课间休息~";
-        String currentClazzPlace = currentClazz != null ? currentClazz.getCoursePlace() : "";
+        String currentClazzTime = currentClazz != null ? getTimeString(currentClazz.getBeginDay())[0] + " - " + getTimeString(currentClazz.getEndDay())[1] : "";
+        String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "~已经上完课啦~" : (remainingClazzCount == tabletime.size()) ? "准备上课~" : "课间休息~";
+        String currentClazzPlace = currentClazz != null ? currentClazz.getPlace() : "";
 
         add(RUILabel.getTextLabel(102, 152 - posYFix, currentClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getTextLabel(102, 192 - posYFix, currentClazzName, 48, "微软雅黑", Color.GRAY), POPUP_LAYER);
         add(RUILabel.getTextLabel(148, 315 - posYFix, currentClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Next Clazz
-        String nextClazzTime = nextClazz != null ? getTimeString(nextClazz.getCourseIdx()[0])[0] + " - " + getTimeString(nextClazz.getCourseIdx()[1])[1] : "";
-        String nextClazzName = nextClazz != null ? nextClazz.getCourseName() : "~已经上完课啦~";
-        String nextClazzPlace = nextClazz != null ? nextClazz.getCoursePlace() : "";
+        String nextClazzTime = nextClazz != null ? getTimeString(nextClazz.getBeginDay())[0] + " - " + getTimeString(nextClazz.getEndDay())[1] : "";
+        String nextClazzName = nextClazz != null ? nextClazz.getClazz() : "~已经上完课啦~";
+        String nextClazzPlace = nextClazz != null ? nextClazz.getPlace() : "";
 
         add(RUILabel.getTextLabel(102, 507 - posYFix, nextClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getTextLabel(102, 547 - posYFix, nextClazzName, 48, "微软雅黑", Color.GRAY), POPUP_LAYER);
@@ -100,25 +93,6 @@ public class ClazzView extends JLayeredPane {
         add(RUILabel.getTextLabel(629, 524, ""+remainingClazzCount, 60, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getTextLabel(629+30, 524, "节课", 40, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
-    }
-
-    private static ClazzEntity parseClazzInfo(String input) {
-        String regex = "(.*?)<br/>.*?<br/>(.*?)【(\\d+)-(\\d+)】";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-
-        if (matcher.find()) {
-            String clazzName = matcher.group(1).trim();
-            String clazzPlace = matcher.group(2).trim();
-            int startTime = Integer.parseInt(matcher.group(3));
-            int endTime = Integer.parseInt(matcher.group(4));
-            int[] clazzTime = {startTime, endTime};
-
-            // Parse Result
-            return new ClazzEntity(clazzName, clazzPlace, clazzTime);
-        } else {
-            throw new IllegalArgumentException("Parse Error in ClazzView/parseClazzInfo: Input format is incorrect");
-        }
     }
 
     // Stupid way lmaooooooo
