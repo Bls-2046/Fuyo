@@ -39,6 +39,27 @@ public class RUILabel {
         return label;
     };
 
+    /**
+     * 创建图片图层
+     * @param posX 坐标X
+     * @param posY 坐标Y
+     * @param overrideWidth 强制缩放大小
+     * @param overrideHeight 强制缩放大小
+     * @return 图片图层
+     */
+    public JLabel imageLabel(int posX, int posY, int overrideWidth, int overrideHeight) {
+
+        ImageIcon icon = new ImageIcon(
+                Objects.requireNonNull(getClass().getClassLoader().getResource(String.format("staticImage/%s/%s", fileType, fileName)))
+        );
+
+        JLabel label = new JLabel(icon);
+        label.setOpaque(false);
+        label.setBounds(posX, posY, icon.getIconWidth(), icon.getIconHeight());
+
+        return label;
+    };
+
     public ImageIcon getImageIcon() {
         return new ImageIcon(
                 Objects.requireNonNull(getClass().getClassLoader().getResource(String.format("staticImage/%s/%s", fileType, fileName)))

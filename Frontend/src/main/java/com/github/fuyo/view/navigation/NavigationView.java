@@ -1,6 +1,7 @@
 package com.github.fuyo.view.navigation;
 
 import com.github.fuyo.entity.NaviFunctionEntity;
+import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
 import lombok.*;
@@ -28,14 +29,14 @@ public class NavigationView extends JFrame {
     @Getter
     List<JButton> naviButtonList = new ArrayList<>();
 
-    @Setter
-    private int userId = 1;
+    private UserEntity userEntity = UserEntity.getUserInformation();
 
     public NavigationView() {
         initComponent();
     }
 
     private void initComponent() {
+        log.info("initComponent, userEntity = " + userEntity);
         setTitle("REACTION NETWORK UI DEMO");
         setUndecorated(true);
         setResizable(false);
@@ -57,10 +58,11 @@ public class NavigationView extends JFrame {
         RUILabel avatarLine = new RUILabel("mainFrame","line.png");
         lp.add(avatarLine.imageLabel(28,700), JLayeredPane.PALETTE_LAYER);
 
+        // AvatarDisp
         RUILabel avatarImage = new RUILabel("mainFrame/iconUserAvatar","default.png");
-        lp.add(avatarImage.imageLabel(28,717), JLayeredPane.PALETTE_LAYER);
+        lp.add(avatarImage.imageLabel(28,717,37,37), JLayeredPane.PALETTE_LAYER);
 
-        lp.add(RUILabel.getTextLabel(79,709,"Username",20,"微软雅黑",Color.GRAY,Font.PLAIN), JLayeredPane.PALETTE_LAYER);
+        lp.add(RUILabel.getTextLabel(79,709,userEntity.getName(),20,"微软雅黑",Color.GRAY,Font.PLAIN), JLayeredPane.PALETTE_LAYER);
 
         // Function Navi Fixed
         NaviFunctionEntity navi1 = new NaviFunctionEntity("课程表",false,lp,new int[]{17,101}, "demo.png");
@@ -87,7 +89,34 @@ public class NavigationView extends JFrame {
         exitNavi.addToPanel();
         naviButtonList.add(exitNavi.getFunctionButton());
 
+        // UserPanel Single Handle
+        JButton userButton = new JButton();
+        userButton.setOpaque(false);
+        userButton.setBackground(new Color(0,0,0,0));
+        userButton.setBorder(BorderFactory.createEmptyBorder());
+        userButton.setBounds(15, 707, 228, 54); // fixed
+        userButton.setFocusPainted(false);
+        userButton.setContentAreaFilled(false);
+        userButton.addActionListener(e -> deActivateAll());
+        naviButtonList.add(userButton);
+        lp.add(userButton, JLayeredPane.POPUP_LAYER);
+
         setVisible(true);
+    }
+
+    // Disable all navibar activate status when using userPanel
+    private void deActivateAll() {
+
+        naviFuncObjs.forEach(naviFuncObj -> {
+            naviFuncObj.setDeActivate();
+        });
+
+        if (viewLayerPanel != null) {
+            lp.remove(viewLayerPanel);
+        }
+        lp.revalidate();
+        lp.repaint();
+
     }
 
     // Render NaviBar

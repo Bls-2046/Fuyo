@@ -41,9 +41,9 @@ public class LoginModel {
                         // 使用同步块确保线程安全
                         synchronized (UserEntity.getUserInformation()) {
                             UserEntity.getUserInformation().setUsername(userInformationResponse.getData().get("username"));
-                            UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("name"));
+                            UserEntity.getUserInformation().setName(userInformationResponse.getData().get("name"));
                             UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
-                            UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("email"));
+                            UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("email"));
                             UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
                         }
                     } catch (IOException e) {

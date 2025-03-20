@@ -22,6 +22,9 @@ public class NavigationController {
         this.view = view;
         this.model = model;
 
+        // 获取用户
+        UserEntity user = UserEntity.getUserInformation();
+
         // 按钮对象
         List<JButton> naviButtonList = view.getNaviButtonList();
 
@@ -33,14 +36,7 @@ public class NavigationController {
         // Clazz层
         JButton clazzButton  = naviButtonList.get(NaviFunctionButtonEnum.CLAZZ.ordinal());
         clazzButton.addActionListener(e -> {
-            List<UserEntity.Tabletime> tabletime = UserEntity.getUserInformation().getTabletime();
-            // 模拟数据获取阻塞
-            log.warn("阻塞模拟 for 1000ms...");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
+            List<UserEntity.Tabletime> tabletime = user.getTabletime();
 
             // 按图层顺序渲染，优先渲染导航栏。
             SwingUtilities.invokeLater(() -> {
