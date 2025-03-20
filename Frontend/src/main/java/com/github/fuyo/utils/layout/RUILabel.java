@@ -53,9 +53,12 @@ public class RUILabel {
                 Objects.requireNonNull(getClass().getClassLoader().getResource(String.format("staticImage/%s/%s", fileType, fileName)))
         );
 
-        JLabel label = new JLabel(icon);
+        // Override
+        Image scaledInstance = icon.getImage().getScaledInstance(overrideWidth, overrideHeight, Image.SCALE_SMOOTH);
+
+        JLabel label = new JLabel(new ImageIcon(scaledInstance));
         label.setOpaque(false);
-        label.setBounds(posX, posY, icon.getIconWidth(), icon.getIconHeight());
+        label.setBounds(posX, posY, overrideWidth, overrideHeight);
 
         return label;
     };

@@ -4,8 +4,10 @@ import com.github.fuyo.entity.NaviFunctionButtonEnum;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.model.LoginModel;
 import com.github.fuyo.model.NavigationModel;
+import com.github.fuyo.model.UserViewModel;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
+import com.github.fuyo.view.navigation.user.UserView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,5 +45,20 @@ public class NavigationController {
                 view.renderRouterView(new ClazzView(tabletime));
             });
         });
+
+        // 用户信息层
+        JButton userButton = naviButtonList.get(NaviFunctionButtonEnum.USERLAYER.ordinal());
+        userButton.addActionListener(e -> {
+
+            UserViewController userViewController = new UserViewController(new UserView(user), new UserViewModel());
+
+            SwingUtilities.invokeLater(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    view.renderRouterView(userViewController.getView());
+                });
+            });
+
+        });
+
     }
 }

@@ -1,9 +1,11 @@
 package com.github.fuyo.view.navigation;
 
+import com.github.fuyo.entity.NaviFunctionButtonEnum;
 import com.github.fuyo.entity.NaviFunctionEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
+import com.github.fuyo.view.navigation.user.UserView;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +62,8 @@ public class NavigationView extends JFrame {
         lp.add(avatarLine.imageLabel(28,700), JLayeredPane.PALETTE_LAYER);
 
         // AvatarDisp
-        RUILabel avatarImage = new RUILabel("mainFrame/iconUserAvatar","default.png");
+        URL avatarIconFile = getClass().getClassLoader().getResource(String.format("staticImage/%s/%s", "mainFrame/iconUserAvatar", userEntity.getUsername() + ".png"));
+        RUILabel avatarImage = new RUILabel("mainFrame/iconUserAvatar", (avatarIconFile == null ? "default.png" : userEntity.getUsername() + ".png"));
         lp.add(avatarImage.imageLabel(28,717,37,37), JLayeredPane.PALETTE_LAYER);
 
         lp.add(RUILabel.getTextLabel(79,709,userEntity.getName(),20,"微软雅黑",Color.GRAY,Font.PLAIN), JLayeredPane.PALETTE_LAYER);
@@ -100,6 +104,13 @@ public class NavigationView extends JFrame {
         userButton.addActionListener(e -> deActivateAll());
         naviButtonList.add(userButton);
         lp.add(userButton, JLayeredPane.POPUP_LAYER);
+
+        // For debug usage, plz change this into controller layer
+        // userButton.addActionListener(e -> {
+        //     SwingUtilities.invokeLater(() -> {
+        //         renderRouterView(new UserView(userEntity));
+        //     });
+        // });
 
         setVisible(true);
     }
