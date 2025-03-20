@@ -2,6 +2,7 @@ package com.github.fuyo.entity;
 
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public class NaviFunctionEntity {
     private JLabel selector;
     private JLabel icon;
     private JLabel name;
+    @Getter
     private JButton functionButton;
 
     public NaviFunctionEntity(String functionName, boolean active, JLayeredPane targetPanel, int[] position, String iconName) {

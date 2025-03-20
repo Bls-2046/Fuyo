@@ -28,11 +28,17 @@ public class NavigationView extends JFrame {
     // Services
     private NaviServices naviServices = new NaviServicesImpl();
 
+    // List for button
+    List<JButton> naviButtonList = new ArrayList<>();
+
     @Setter
     private int userId = 1;
 
     public NavigationView() {
+        initComponent();
+    }
 
+    private void initComponent() {
         setTitle("REACTION NETWORK UI DEMO");
         setUndecorated(true);
         setResizable(false);
@@ -64,6 +70,7 @@ public class NavigationView extends JFrame {
         naviFuncObjs.add(navi1);
         navi1.addToPanel();
         navi1.addActionListener(e -> actionPerformed(e,navi1));
+        naviButtonList.add(navi1.getFunctionButton());
         viewLayerPanel = new ClazzView(naviServices.getUserInformation(userId));
         lp.add(viewLayerPanel, JLayeredPane.PALETTE_LAYER);
 
@@ -71,11 +78,13 @@ public class NavigationView extends JFrame {
         naviFuncObjs.add(navi2);
         navi2.addToPanel();
         navi2.addActionListener(e -> actionPerformed(e,navi2));
+        naviButtonList.add(navi2.getFunctionButton());
 
         NaviFunctionEntity navi3 = new NaviFunctionEntity("DeepSeek",false,lp,new int[]{17,101 + 60 * 2}, "deepseek.png");
         naviFuncObjs.add(navi3);
         navi3.addToPanel();
         navi3.addActionListener(e -> actionPerformed(e,navi3));
+        naviButtonList.add(navi3.getFunctionButton());
 
         // EXIT
         NaviFunctionEntity exitNavi = new NaviFunctionEntity("退出程序",false,lp,new int[]{17,101 + 60 * 9}, "exit.png");
@@ -87,6 +96,7 @@ public class NavigationView extends JFrame {
                 System.exit(0);
             }
         });
+        naviButtonList.add(exitNavi.getFunctionButton());
 
         setVisible(true);
     }

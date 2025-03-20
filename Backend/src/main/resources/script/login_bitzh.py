@@ -44,8 +44,8 @@ edge_options = None
 
 # 配置参数
 os.environ["CUDA_VISIBLE_DEVICES"] = "" # 禁用 GPU
-edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
-# edge_driver_path = r'C:\DevelopDependences\msedgedriver\msedgedriver.exe'
+# edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
+edge_driver_path = r'C:\DevelopDependences\msedgedriver\msedgedriver.exe'
 reader = easyocr.Reader(['en']) # 初始化 EasyOCR 阅读器（支持英文）
 max_retries = 100 # 尝试登录的最大次数
 
@@ -322,7 +322,7 @@ if __name__ == "__main__":
     edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])  # 禁用日志
     edge_options.add_argument("--log-level=3")  # 关闭所有日志（FATAL 级别）
     edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    # edge_options.add_argument("--headless=new")  # 启用无头模式
+    edge_options.add_argument("--headless=new")  # 启用无头模式
     # endregion
     service = Service(edge_driver_path)
     driver = webdriver.Edge(service=service, options=edge_options)
