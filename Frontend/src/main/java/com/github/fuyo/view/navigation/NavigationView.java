@@ -29,7 +29,7 @@ public class NavigationView extends JFrame {
     private NaviServices naviServices = new NaviServicesImpl();
 
     @Setter
-    private int userId = 1; // TODO: 请在登录成功后使用SET传入参数
+    private int userId = 1;
 
     public NavigationView() {
 

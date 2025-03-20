@@ -72,6 +72,9 @@ public class LoginController {
      */
     private void ManualLogin() throws Exception {
         try {
+            view.setInputEnabled(false); // 锁输入框
+            view.setLoginButtonEnabled(false); // 锁登录按钮
+
             // 获取用户输入的用户名和密码
             String username = view.getUsername();
             String password = view.getPassword();
