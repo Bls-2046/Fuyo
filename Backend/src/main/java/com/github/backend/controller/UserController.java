@@ -59,9 +59,9 @@ public class UserController {
             String username = userInformationRequest.getUsername();
 
             // 获取成功放回响应
+            userInformationResponse.setData(userService.getUserInformation(username));
             userInformationResponse.setStatus(200);
             userInformationResponse.setMessage("success");
-            userInformationResponse.setData(userService.getUserInformation(username));
 
         } catch (Exception e) {
             userInformationResponse.setStatus(500);
@@ -72,22 +72,24 @@ public class UserController {
 
     /**
      * 获取课表信息
+     *
      * @param tabletimeRequest 请求
      * @return TabletimeResponse
      */
     @PostMapping("/tabletime")
-    public ResponseEntity<TabletimeResponse> getTabletime(@RequestBody TabletimeRequest tabletimeRequest) {
+    public TabletimeResponse getTabletime(@RequestBody TabletimeRequest tabletimeRequest) {
 
         TabletimeResponse tabletimeResponse = new TabletimeResponse();
 
         try {
             String username = tabletimeRequest.getUsername();
 
+            tabletimeResponse.setTabletime(userService.getTabletime(username));
 
         } catch (Exception e) {
             log.info(e.getMessage());
         }
 
-        return null;
+        return tabletimeResponse;
     }
 }

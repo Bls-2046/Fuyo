@@ -18,11 +18,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiFunction;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,10 +108,55 @@ public class UserServiceImpl implements UserService {
      * @return 返回当天课表
      */
     @Override
-    public TabletimeResponse.Tabletime getTabletime(String username) {
-        // TabletimeResponse.Tabletime tabletime = tabletimeRepository.findTabletimeByUsername(username);
-        // return tabletime;
-        return null;
+    public List<TabletimeResponse.Tabletime> getTabletime(String username) {
+
+        // 计算是第几周的第几天
+        LocalDate firstDay = LocalDate.of(2025, 2, 24);
+        // 获取当前日期
+        LocalDate today = LocalDate.now();
+        // 计算从第一周到今天的天数
+        long daysBetween = ChronoUnit.DAYS.between(firstDay, today);
+        // 计算当前是第几周（向上取整）
+        int currentWeek = (int) Math.ceil((double) daysBetween / 7);
+
+        log.info("目前是第{}", currentWeek);
+
+        // 如果为双周
+        String weekType = (currentWeek % 2 == 0 ? "双周" : "单周");
+        // 计算当前是第几周的第几天（1到7）
+        int dayOfWeek = (int) (daysBetween % 7) + 1;
+
+        List<UserEntity.Tabletime> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, 1);
+
+        // 创建 tabletime 列表
+        List<TabletimeResponse.Tabletime> tabletime = new ArrayList<>();
+
+        // 遍历 userTabletime，将每个对象转换为 TabletimeResponse.Tabletime
+        for (UserEntity.Tabletime userTime : userTabletime) {
+            TabletimeResponse.Tabletime tabletimeResponse = new TabletimeResponse.Tabletime();
+            if (userTime.getWeekType() != null) {
+                if (!userTime.getWeekType().equals(weekType)) {
+                    continue;
+                }
+            }
+            tabletimeResponse.setKeyID(userTime.getKeyID());
+            tabletimeResponse.setClazz(userTime.getClazz());
+            tabletimeResponse.setX(userTime.getX());
+            tabletimeResponse.setY(userTime.getY());
+            tabletimeResponse.setBeginDay(userTime.getBeginDay());
+            tabletimeResponse.setEndDay(userTime.getEndDay());
+            tabletimeResponse.setWeekType(userTime.getWeekType());
+            tabletimeResponse.setPlace(userTime.getPlace());
+            tabletimeResponse.setStartWeek(userTime.getStartWeek());
+            tabletimeResponse.setFinishWeek(userTime.getFinishWeek());
+
+            // 添加到 tabletime 列表
+            tabletime.add(tabletimeResponse);
+        }
+
+        log.info(tabletime.toString());
+
+        return tabletime;
     }
 
     /**

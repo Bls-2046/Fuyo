@@ -34,9 +34,10 @@ public class ClazzView extends JLayeredPane {
         // Function Implement
         List<ClazzEntity> clazzEntityList = new ArrayList<>();
 
-        userEntity.getTabletimelist().forEach(clazzEntity -> {
-            clazzEntityList.add(parseClazzInfo(clazzEntity.getValue()));
-        });
+//        userEntity.getTabletimelist().forEach(clazzEntity -> {
+//            clazzEntityList.add(parseClazzInfo(clazzEntity.getValue()));
+//        });
+
         Collections.sort(clazzEntityList, new Comparator<ClazzEntity>() {
             @Override
             public int compare(ClazzEntity o1, ClazzEntity o2) {

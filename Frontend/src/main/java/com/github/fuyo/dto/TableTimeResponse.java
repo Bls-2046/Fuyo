@@ -1,11 +1,11 @@
-package com.github.backend.dto;
+package com.github.fuyo.dto;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class TabletimeResponse {
+public class TableTimeResponse {
     private String status;
     private String message;
     private List<Tabletime> tabletime;

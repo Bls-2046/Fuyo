@@ -1,5 +1,6 @@
 package com.github.fuyo.entity;
 
+import com.github.fuyo.dto.TableTimeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class UserEntity {
     private static volatile UserEntity userInformation;
 
     public UserEntity() {
-        this.tabletimelist = Collections.emptyList();
+        this.tabletime = Collections.emptyList();
     }
 
     // 公共静态方法，提供全局访问点
@@ -34,16 +35,21 @@ public class UserEntity {
     private String phone;
     private String avatarUrl;
     private String cookie;
-    private List<Tabletime> tabletimelist;
+    private List<Tabletime> tabletime;
 
     @Data
     @AllArgsConstructor
     public static class Tabletime {
-        private String keyid;
-        private String id;
+        private String keyID;
+        private String clazz;
         private int x;
         private int y;
-        private String value;
+        private int beginDay;
+        private int endDay;
+        private String WeekType;
+        private String place;
+        private int startWeek;
+        private int finishWeek;
     }
 
     @Override

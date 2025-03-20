@@ -1,10 +1,8 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.LoginRequest;
-import com.github.fuyo.dto.LoginResponse;
-import com.github.fuyo.dto.UserInformationRequest;
-import com.github.fuyo.dto.UserInformationResponse;
+import com.github.fuyo.dto.*;
 import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.Https;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class LoginModel {
@@ -24,7 +24,7 @@ public class LoginModel {
      * 登录
      */
     public String LoginVerification(String username, String password) {
-        String message = null;
+        String message;
 
         String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址
         LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
@@ -35,86 +35,130 @@ public class LoginModel {
 
             if (loginResponse.getStatus() == 200) {
                 new Thread(() -> {
+                    String url = "http://localhost:8080/api/user/information";
                     UserInformationRequest userInformationRequest = new UserInformationRequest();
                     userInformationRequest.setUsername(username);
                     try {
-                        String getUserInfoUrl = "http://localhost:8080/api/user/information"; // 请求地址
-                        // 发送请求并获得用户信息响应
-                        UserInformationResponse userInformationResponse = Https.<UserInformationResponse>post(getUserInfoUrl, userInformationRequest, UserInformationResponse.class);
+                        UserInformationResponse userInformationResponse = Https.<UserInformationResponse>post(url, userInformationRequest, UserInformationResponse.class);
 
-                        UserEntity.getUserInformation().setUsername(userInformationResponse.getData().get("username"));
-                        UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("name"));
-                        UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
-                        UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("email"));
-                        UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
-
+                        // 使用同步块确保线程安全
+                        synchronized (UserEntity.getUserInformation()) {
+                            UserEntity.getUserInformation().setUsername(userInformationResponse.getData().get("username"));
+                            UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("name"));
+                            UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
+                            UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("email"));
+                            UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
+                        }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage());
+                    }
+                }).start();
+
+                new Thread(() -> {
+                    String url = "http://localhost:8080/api/user/tabletime";
+                    TabletimeRequest tabletimeRequest = new TabletimeRequest();
+                    tabletimeRequest.setUsername(username);
+
+                    try {
+                        TableTimeResponse tableTimeResponse = Https.<TableTimeResponse>post(url, tabletimeRequest, TableTimeResponse.class);
+
+                        List<UserEntity.Tabletime> tabletime = tableTimeResponse.getTabletime().stream()
+                                .map(responseTabletime -> new UserEntity.Tabletime(
+                                        responseTabletime.getKeyID(),
+                                        responseTabletime.getClazz(),
+                                        responseTabletime.getX(),
+                                        responseTabletime.getY(),
+                                        responseTabletime.getBeginDay(),
+                                        responseTabletime.getEndDay(),
+                                        responseTabletime.getWeekType(),
+                                        responseTabletime.getPlace(),
+                                        responseTabletime.getStartWeek(),
+                                        responseTabletime.getFinishWeek()
+                                ))
+                                .collect(Collectors.toList());
+
+                        log.info(tabletime.toString());
+
+                        // 使用同步块确保线程安全
+                        synchronized (UserEntity.getUserInformation()) {
+                            UserEntity.getUserInformation().setTabletime(tabletime);
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
                     }
                 }).start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return "登录异常";
         }
         return message;
     }
 
     // 用户名密码存放位置
-    private static final String FILE_PATH =System.getenv("LOCALAPPDATA") + "\\Fuyo\\" + "loginData.txt";
+    private static final String DATA_DIR = System.getenv("LOCALAPPDATA") + "\\Fuyo";
+    private static final String LOGIN_DATA_FILE = DATA_DIR + "\\credentials.bin";
 
-    public boolean isExistLoginFile() throws IOException {
-        Path loginFile = Paths.get(FILE_PATH);
-        return Files.exists(loginFile) && Files.size(loginFile) > 0;
-    } // 查找登录文件是否存在
+    // 确保目录和文件存在
+    private void ensureFileExists() throws Exception {
+        Path dirPath = Paths.get(DATA_DIR);
+        Path filePath = Paths.get(LOGIN_DATA_FILE);
 
-    /**
-     * 读取账号和密码
-     */
-    public String[] readCredentials() {
-        String[] loginData = null;
-        try {
-            Path path = Paths.get(FILE_PATH);
-
-            // 读取文件内容
-            String content = new String(Files.readAllBytes(path));
-
-            // 解析文件内容
-            String username = content.split("\n")[0].split("=")[1];
-            String encryptedPassword = content.split("\n")[1].split("=")[1];
-
-            // 解密密码
-            String password = decrypt(encryptedPassword);
-
-            loginData = new String[]{username, password};
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 如果目录不存在，则创建目录
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
         }
-        return loginData;
+
+        // 如果文件不存在，则创建文件
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
+        }
     }
 
-    /**
-     * 加密
-     */
-    private static final String ENCRYPTION_KEY = "mySecretKey12345"; // 加密密钥（需妥善保管）
+    // 查找登录文件是否存在
+    public boolean isExistLoginFile() throws Exception {
+        Path loginFile = Paths.get(LOGIN_DATA_FILE);
 
-    private String encrypt(String data) throws Exception {
-        SecretKeySpec keySpec = new SecretKeySpec(ENCRYPTION_KEY.getBytes(), "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-        byte[] encryptedBytes = cipher.doFinal(data.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedBytes);
+        // 确保文件存在
+        ensureFileExists();
+
+        // 检查文件是否为空
+        return Files.exists(loginFile) && Files.size(loginFile) > 0;
     }
 
-    /**
-     * 解密
-     */
-    private String decrypt(String encryptedData) throws Exception {
-        SecretKeySpec keySpec = new SecretKeySpec(ENCRYPTION_KEY.getBytes(), "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec);
-        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
-        return new String(decryptedBytes);
+    // 保存加密后的用户名和密码
+    public void saveCredentials(String username, String password) throws Exception {
+        // 将用户名和密码拼接为一行
+        String data = username + ":" + password;
+
+        // 加密数据
+        String encryptedData = AESUtil.encrypt(data);
+
+        // 将加密后的数据存储到二进制文件
+        Files.write(Paths.get(LOGIN_DATA_FILE), encryptedData.getBytes());
+    }
+
+    // 读取并解密用户名和密码
+    public String[] readCredentials() throws Exception {
+        // 从二进制文件读取加密数据
+        byte[] encryptedBytes = Files.readAllBytes(Paths.get(LOGIN_DATA_FILE));
+        String encryptedData = new String(encryptedBytes);
+
+        // 解密数据
+        String decryptedData = AESUtil.decrypt(encryptedData);
+
+        // 解析用户名和密码
+        return decryptedData.split(":");
+    }
+
+    // 清空二进制文件的内容
+    public void clearFileContent() throws Exception {
+        Path filePath = Paths.get(LOGIN_DATA_FILE);
+
+        // 确保文件存在
+        ensureFileExists();
+
+        // 将文件内容截断为 0 字节
+        Files.write(filePath, new byte[0]);
     }
 }
