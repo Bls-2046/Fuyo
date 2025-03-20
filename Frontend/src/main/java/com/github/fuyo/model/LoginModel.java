@@ -20,7 +20,7 @@ public class LoginModel {
     /**
      * 登录
      */
-    public String LoginVerification(String username, String password) {
+    public String loginVerification(String username, String password) {
         String message;
 
         String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址

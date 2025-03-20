@@ -1,6 +1,7 @@
 package com.github.fuyo.controller;
 
 import com.github.fuyo.model.LoginModel;
+import com.github.fuyo.model.NavigationModel;
 import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.navigation.NavigationView;
 import lombok.Getter;
@@ -98,7 +99,7 @@ public class LoginController {
     }
 
     private void isSuccessfulLogin(String username, String password) throws Exception {
-        String message = model.LoginVerification(username, password);
+        String message = model.loginVerification(username, password);
         // 验证
         if (Objects.equals(message, "登录成功")) {
             model.saveCredentials(username, password);
@@ -106,13 +107,15 @@ public class LoginController {
             // 使用 Timer 延迟 5 秒后关闭窗口
             Timer timer = new Timer(5000, e -> {
                 view.dispose(); // 关闭当前窗口
-                new NavigationController(new NavigationView(), new LoginModel()).getView().setVisible(true);
+                new NavigationController(new NavigationView(), new NavigationModel()).getView().setVisible(true);
             });
             timer.setRepeats(false);
             timer.start();
         } else {
             view.showErrorFrame(message);
             view.clearInputs();
+            view.setInputEnabled(true);
+            view.setLoginButtonEnabled(true);
         }
     }
 }

@@ -1,25 +1,24 @@
 package com.github.fuyo.controller;
 
 import com.github.fuyo.entity.NaviFunctionButtonEnum;
-import com.github.fuyo.entity.NaviFunctionEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.model.LoginModel;
+import com.github.fuyo.model.NavigationModel;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.List;
 
 @Slf4j
 public class NavigationController {
     @Getter
-    private NavigationView view;
-    private LoginModel model;
+    private final NavigationView view;
+    private final NavigationModel model;
 
-    public NavigationController(NavigationView view, LoginModel model) {
+    public NavigationController(NavigationView view, NavigationModel model) {
         this.view = view;
         this.model = model;
 
@@ -48,14 +47,5 @@ public class NavigationController {
                 view.renderRouterView(new ClazzView(tabletime));
             });
         });
-
     }
-
-
-    public String getName(){
-
-
-        return "";
-    }
-
 }

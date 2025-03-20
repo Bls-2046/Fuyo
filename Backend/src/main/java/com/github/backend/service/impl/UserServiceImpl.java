@@ -93,7 +93,6 @@ public class UserServiceImpl implements UserService {
                 saveUserInformation(data, username, password);
             } catch (IOException e) {
                 log.error(e.getMessage());
-                throw new RuntimeException(e);
             }
         } else {
             if (!Password.matches(password, userEntity.getPassword())) {
