@@ -269,5 +269,16 @@ public class RUILabel {
         return text;
     }
 
+    public static JButton getStaticEmptyLayerButton(int posX, int posY, int sizeW, int sizeH) {
+        JButton button = new JButton();
+        button.setOpaque(false);
+        button.setBackground(new Color(0,0,0,0));
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setBounds(posX, posY, sizeW, sizeH);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        return button;
+    }
+
 
 }

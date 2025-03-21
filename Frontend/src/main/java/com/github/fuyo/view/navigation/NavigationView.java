@@ -40,7 +40,7 @@ public class NavigationView extends JFrame {
 
     private void initComponent() {
         log.info("initComponent, userEntity = " + userEntity);
-        setTitle("REACTION NETWORK UI DEMO");
+        setTitle("Fuyo Navigator");
         setUndecorated(true);
         setResizable(false);
         setSize(1360, 768);

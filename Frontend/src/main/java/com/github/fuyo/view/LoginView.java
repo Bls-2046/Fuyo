@@ -21,7 +21,7 @@ public class LoginView extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("REACTION NETWORK UI DEMO");
+        setTitle("Fuyo Login");
         setUndecorated(true);
         setResizable(false);
         setSize(1002, 513);

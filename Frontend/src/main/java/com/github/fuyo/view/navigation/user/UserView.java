@@ -52,12 +52,7 @@ public class UserView extends JLayeredPane {
         add(RUILabel.getTextLabel(607,660-12, user.getEmail(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
 
         // Button Layer
-        switchAccountButton.setOpaque(false);
-        switchAccountButton.setBackground(new Color(0,0,0,0));
-        switchAccountButton.setBorder(BorderFactory.createEmptyBorder());
-        switchAccountButton.setBounds(205-offset_x, 591-offset_y, 413, 284); // fixed
-        switchAccountButton.setFocusPainted(false);
-        switchAccountButton.setContentAreaFilled(false);
+        switchAccountButton = RUILabel.getStaticEmptyLayerButton(205-offset_x, 591-offset_y, 413, 284);
         add(switchAccountButton,POPUP_LAYER);
 
     }

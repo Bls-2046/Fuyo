@@ -1,8 +1,10 @@
 package com.github.fuyo.controller;
 
+import com.github.fuyo.model.LoadingModel;
 import com.github.fuyo.model.LoginModel;
 import com.github.fuyo.model.NavigationModel;
 import com.github.fuyo.view.LoginView;
+import com.github.fuyo.view.load.LoadingView;
 import com.github.fuyo.view.navigation.NavigationView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +114,10 @@ public class LoginController {
             Timer timer = new Timer(3000, e -> {
                 view.dispose(); // 关闭当前窗口
                 // 创建 NavigationController 实例
-                new NavigationController(new NavigationView(), new NavigationModel()).getView().setVisible(true);
+                // new NavigationController(new NavigationView(), new NavigationModel()).getView().setVisible(true);
+
+                // 创建加载窗口(LoadingController)实例
+                new LoadingController(new LoadingView(), new LoadingModel()).getView().setVisible(true);
             });
             timer.setRepeats(false);
             timer.start();
