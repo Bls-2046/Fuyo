@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 获取用户信息
+ */
 @RestController
 @RequestMapping("/api/user")
 @Validated
@@ -106,6 +109,7 @@ public class UserController {
         }
         return tabletimeResponse;
     }
+
 
     @PostMapping("/schedule")
     public ScheduleResponse getSchedule(@RequestBody ScheduleRequest scheduleRequest) {

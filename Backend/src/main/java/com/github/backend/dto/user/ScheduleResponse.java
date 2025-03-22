@@ -14,10 +14,9 @@ public class ScheduleResponse {
     @Data
     public static class Schedule {
         private String username;
-        private String eventTitle;
-        private LocalDateTime eventDateTime;
-        private int earlyTime;
-        private String earlyTimeType;
-        private String eventDescription;
+        private String title;
+        private LocalDateTime dateTime;
+        private int earlyDateTime;
+        private String description;
     }
 }

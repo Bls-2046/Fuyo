@@ -3,6 +3,7 @@ package com.github.backend.service.impl;
 import com.github.backend.dto.user.ScheduleResponse;
 import com.github.backend.dto.user.TabletimeResponse;
 import com.github.backend.dto.user.UserInformationResponse;
+import com.github.backend.entity.TabletimeEntity;
 import com.github.backend.entity.UserEntity;
 import com.github.backend.repository.TabletimeRepository;
 import com.github.backend.repository.UserRepository;
@@ -25,6 +26,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 对用户基本信息进行处理
+ */
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -88,9 +92,6 @@ public class UserServiceImpl implements UserService {
                     throw new RuntimeException(message);
                 }
 
-                log.info(message);
-                log.info(data.toString());
-
                 // 将数据保持到数据库
                 saveUserInformation(data, username, password);
 
@@ -123,21 +124,18 @@ public class UserServiceImpl implements UserService {
         long daysBetween = ChronoUnit.DAYS.between(firstDay, today);
         // 计算当前是第几周（向上取整）
         int currentWeek = (int) Math.ceil((double) daysBetween / 7);
-
-        log.info("目前是第{}", currentWeek);
-
         // 如果为双周
         String weekType = (currentWeek % 2 == 0 ? "双周" : "单周");
         // 计算当前是第几周的第几天（1到7）
         int dayOfWeek = (int) (daysBetween % 7) + 1;
 
-        List<UserEntity.Tabletime> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, dayOfWeek);
+        List<TabletimeEntity> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, dayOfWeek);
 
         // 创建 tabletime 列表
         List<TabletimeResponse.Tabletime> tabletime = new ArrayList<>();
 
         // 遍历 userTabletime，将每个对象转换为 TabletimeResponse.Tabletime
-        for (UserEntity.Tabletime userTime : userTabletime) {
+        for (TabletimeEntity userTime : userTabletime) {
             TabletimeResponse.Tabletime tabletimeResponse = new TabletimeResponse.Tabletime();
             if (userTime.getWeekType() != null) {
                 if (!userTime.getWeekType().equals(weekType)) {
@@ -245,7 +243,7 @@ public class UserServiceImpl implements UserService {
                 JSONObject clazz = mergedResponse.getJSONObject(i);
 
                 // 创建并保存课表信息
-                UserEntity.Tabletime tabletime = new UserEntity.Tabletime();
+                TabletimeEntity tabletime = new TabletimeEntity();
                 // 对课程信息字段进行拆分
                 ClazzInformation clazzInformation = ClazzInformation.handleClazzInformation(clazz.optString("value"));
 
