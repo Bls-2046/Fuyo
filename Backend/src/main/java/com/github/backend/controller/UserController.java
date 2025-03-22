@@ -1,6 +1,13 @@
+/**
+ * 包含用户获取信息的url, 仅支持 Post 请求
+ * localhost:8080/api/user/login 登录验证
+ * localhost:8080/api/user/information 获取个人基本信息
+ * localhost:8080/api/user/tabletime 获取课表信息
+ */
+
 package com.github.backend.controller;
 
-import com.github.backend.dto.*;
+import com.github.backend.dto.user.*;
 import com.github.backend.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 public class UserController {
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     // 登录验证
     @PostMapping("/login")
@@ -34,8 +44,10 @@ public class UserController {
             // 用户名密码验证
             if (userService.loginVerification(username, password)) {
                 loginResponse.setStatus(200);
-                loginResponse.setMessage("登录成功");
+                loginResponse.setMessage("login success");
                 loginResponse.setId(username);
+            } else {
+                loginResponse.setStatus(204);
             }
         } catch (Exception e) {
             loginResponse.setStatus(500);
@@ -59,9 +71,13 @@ public class UserController {
 
             // 获取成功放回响应
             userInformationResponse.setData(userService.getUserInformation(username));
-            userInformationResponse.setStatus(200);
-            userInformationResponse.setMessage("success");
-
+            if (userInformationResponse.getData() != null) {
+                userInformationResponse.setStatus(200);
+                userInformationResponse.setMessage("get user's information successful");
+            } else {
+                userInformationResponse.setStatus(204);
+                userInformationResponse.setMessage("get user's information failed");
+            }
         } catch (Exception e) {
             userInformationResponse.setStatus(500);
             userInformationResponse.setMessage(e.getMessage());
@@ -88,7 +104,23 @@ public class UserController {
         } catch (Exception e) {
             log.info(e.getMessage());
         }
-
         return tabletimeResponse;
+    }
+
+    @PostMapping("/schedule")
+    public ScheduleResponse getSchedule(@RequestBody ScheduleRequest scheduleRequest) {
+
+        ScheduleResponse scheduleResponse = new ScheduleResponse();
+
+        try {
+            String username = scheduleRequest.getUsername();
+
+
+
+        } catch(Exception e) {
+            log.info(e.getMessage());
+        }
+
+        return null;
     }
 }

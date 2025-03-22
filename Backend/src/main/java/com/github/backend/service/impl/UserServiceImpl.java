@@ -1,7 +1,8 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.TabletimeResponse;
-import com.github.backend.dto.UserInformationResponse;
+import com.github.backend.dto.user.ScheduleResponse;
+import com.github.backend.dto.user.TabletimeResponse;
+import com.github.backend.dto.user.UserInformationResponse;
 import com.github.backend.entity.UserEntity;
 import com.github.backend.repository.TabletimeRepository;
 import com.github.backend.repository.UserRepository;
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, TabletimeRepository tabletimeRepository) {
+        // 初始化数据库操作
         this.userRepository = userRepository;
         this.tabletimeRepository = tabletimeRepository;
     }
@@ -199,6 +201,7 @@ public class UserServiceImpl implements UserService {
             }
             String cookie = cookieBuilder.toString();
             userEntity.setCookie(cookie);
+
             userRepository.save(userEntity);
 
             // 使用 cookie 发起请求，获取课表信息并存入数据库
@@ -387,5 +390,10 @@ public class UserServiceImpl implements UserService {
             // 如果没有匹配到数据，抛出异常
             throw new IllegalArgumentException("未找到匹配的课程信息");
         }
+    }
+
+    @Override
+    public List<ScheduleResponse.Schedule> getSchedule(String username) {
+        return List.of();
     }
 }

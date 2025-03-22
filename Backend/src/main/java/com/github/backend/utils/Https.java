@@ -17,6 +17,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 
+/**
+ * Https 请求封装类
+ * 目前支持:
+ * 1、get 请求
+ * 2、Post 请求, 请求体支持 Json、Form-data 格式
+ */
+
 public class Https {
 
     private static final RestTemplate restTemplate;

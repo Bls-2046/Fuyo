@@ -2,10 +2,8 @@ package com.github.fuyo.controller;
 
 import com.github.fuyo.model.LoadingModel;
 import com.github.fuyo.model.LoginModel;
-import com.github.fuyo.model.NavigationModel;
 import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.load.LoadingView;
-import com.github.fuyo.view.navigation.NavigationView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,10 +16,6 @@ public class LoginController {
     private final LoginView view;
     private final LoginModel model;
 
-    // 用于创建导航栏和关闭导航栏
-    @Getter
-    private NavigationController navigationController;
-
     public LoginController(LoginView view, LoginModel model) throws Exception {
         this.view = view;
         this.model = model;
@@ -33,9 +27,9 @@ public class LoginController {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
-        });
+        }); // 手动登录
 
-        view.getExitProgramButton().addActionListener(e -> System.exit(0));
+        view.getExitProgramButton().addActionListener(e -> System.exit(0)); // 退出程序
 
         AutoLogin(); // 尝试自动登录
     }
@@ -107,12 +101,15 @@ public class LoginController {
     private void isSuccessfulLogin(String username, String password) throws Exception {
         String message = model.loginVerification(username, password);
         // 验证
-        if (Objects.equals(message, "登录成功")) {
+        if (Objects.equals(message, "login success")) {
             model.saveCredentials(username, password);
 
             // 使用 Timer 延迟 5 秒后关闭窗口
-            Timer timer = new Timer(3000, e -> {
+            Timer timer = new Timer(1000, e -> {
                 view.dispose(); // 关闭当前窗口
+
+                // 加载界面
+
                 // 创建 NavigationController 实例
                 // new NavigationController(new NavigationView(), new NavigationModel()).getView().setVisible(true);
 

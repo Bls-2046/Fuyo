@@ -55,18 +55,20 @@ public class NavigationController implements NavigationCloseListener {
             UserViewController userViewController = new UserViewController(new UserView(user), new UserViewModel(), this);
 
             SwingUtilities.invokeLater(() -> {
-                SwingUtilities.invokeLater(() -> {
-                    view.renderRouterView(userViewController.getView());
-                });
+                view.renderRouterView(userViewController.getView());
             });
         });
     }
 
+
+    /**
+     * 切换账号
+     */
     @Override
     public void onClose() {
         closeView();
     }
-
+    // 退出当前界面新建登录界面，清空当前用户数据和用户密码缓存
     public void closeView() {
         if (view != null) {
             SwingUtilities.invokeLater(() -> {

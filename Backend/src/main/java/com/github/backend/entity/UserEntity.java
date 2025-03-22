@@ -3,10 +3,9 @@ package com.github.backend.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +45,9 @@ public class UserEntity {
                 '}';
     }
 
+    /**
+     * 用户课表
+     */
     @Data
     @Entity
     @Table(name = "tabletime")
@@ -86,6 +88,45 @@ public class UserEntity {
                     ", place='" + place + '\'' +
                     ", startWeek='" + startWeek + '\'' +
                     ", finishWeek='" + finishWeek + '\'' +
+                    '}';
+        }
+    }
+
+    /**
+     * 日程安排
+     */
+    @Data
+    @Entity
+    @Table(name = "schedule")
+    public static class ScheduleEntity {
+        @Id
+        @Column(name = "id", unique = true, nullable = false, length = 36)
+        private String id;
+
+        private String eventTitle; // 事务标题
+        private LocalDateTime dateTime; // 事务提醒时间
+        private int earlyTime; // 提前提醒时间, 默认 15 分钟
+        private String earlyTimeType; // 提前提醒的时间类型, 默认 分钟
+        private String eventDescription; // 事务具体内容描述
+
+        public ScheduleEntity() {
+            this.id = UUID.randomUUID().toString();
+        }
+
+        @ManyToOne
+        @JoinColumn(name = "user_id")
+        @JsonBackReference
+        private UserEntity userEntity;
+
+        @Override
+        public String toString() {
+            return "Schedule{" +
+                    "id=" + id +
+                    ", eventTitle='" + eventTitle +
+                    ", dateTime=" + dateTime +
+                    ", earlyTime=" + earlyTime +
+                    ", earlyTimeType='" + earlyTimeType + '\'' +
+                    ", eventDescription='" + eventDescription + '\'' +
                     '}';
         }
     }

@@ -1,8 +1,6 @@
-package com.github.backend.dto;
+package com.github.backend.dto.user;
 
 import lombok.Data;
-
-import java.util.Map;
 
 @Data
 public class TabletimeRequest {

@@ -24,7 +24,6 @@ public class UserViewController {
         // Button Object
         JButton switchAccountBtn = view.getSwitchAccountButton();
         switchAccountBtn.addActionListener(e -> {
-            log.info("Switch Account Button clicked");
             switchAccount();
         });
     }

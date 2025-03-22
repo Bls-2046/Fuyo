@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,6 +32,9 @@ public class LoginModel {
             log.info(message);
 
             if (loginResponse.getStatus() == 200) {
+
+                CountDownLatch latch = new CountDownLatch(2);
+
                 new Thread(() -> {
                     String url = "http://localhost:8080/api/user/information";
                     UserInformationRequest userInformationRequest = new UserInformationRequest();
@@ -45,10 +49,14 @@ public class LoginModel {
                             UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
                             UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("email"));
                             UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
+                            UserEntity.getUserInformation().setCookie(userInformationResponse.getData().get("cookie"));
                             log.info(UserEntity.getUserInformation().toString());
                         }
                     } catch (IOException e) {
                         log.error(e.getMessage());
+                    }
+                    finally {
+                        latch.countDown();
                     }
                 }).start();
 
@@ -83,12 +91,22 @@ public class LoginModel {
                         }
                     } catch (Exception e) {
                         log.error(e.getMessage());
+                    } finally {
+                        latch.countDown();
                     }
                 }).start();
+
+                latch.await();
             }
+        } catch (java.net.ConnectException e) {
+            log.error(e.getMessage());
+            return "与服务器失去连接, 请重试";
         } catch (IOException e) {
             log.error(e.getMessage());
             return "登录异常, 请稍后重试";
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return message;
     }
