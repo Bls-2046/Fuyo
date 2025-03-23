@@ -1,0 +1,9 @@
+package com.github.backend.dto.user;
+
+import lombok.Data;
+
+@Data
+public class NicknameRequest {
+    private String username;
+    private String nickname;
+}

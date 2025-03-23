@@ -1,6 +1,7 @@
 package com.github.fuyo.controller;
 
 import com.github.fuyo.entity.NaviFunctionButtonEnum;
+import com.github.fuyo.entity.Tabletime;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.listener.NavigationCloseListener;
 import com.github.fuyo.model.LoginModel;
@@ -40,7 +41,7 @@ public class NavigationController implements NavigationCloseListener {
         // Clazz层
         JButton clazzButton  = naviButtonList.get(NaviFunctionButtonEnum.CLAZZ.ordinal());
         clazzButton.addActionListener(e -> {
-            List<UserEntity.Tabletime> tabletime = user.getTabletime();
+            List<Tabletime> tabletime = user.getTabletime();
 
             // 按图层顺序渲染，优先渲染导航栏。
             SwingUtilities.invokeLater(() -> {

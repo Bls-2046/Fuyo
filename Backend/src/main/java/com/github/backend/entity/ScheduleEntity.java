@@ -18,6 +18,7 @@ public class ScheduleEntity {
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
 
+    private String openid; // 微信公众号用户的唯一标识
     private String title; // 日程标题
     private LocalDateTime datetime; // 日程时间
     private LocalDateTime reminderDatetime; // 日程提醒时间 (处理完成计算后存入)

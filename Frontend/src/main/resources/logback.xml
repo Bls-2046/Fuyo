@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- 控制台输出 -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!--格式化输出：%d 表示日期，%thread 表示线程名，%-5level表示级别从左显示5个字符宽度，%msg表示日志消息，%n表示换行符 -->
-            <!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>-->
-            <pattern>%d{MM-dd HH:mm:ss} [%thread] | %-5level | -> %logger{50}-%msg%n</pattern>
+    <!-- INFO 级别的输出 -->
+    <appender name="INFO_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%highlight(%boldCyan(%d{YYYY-MM-dd HH:mm:ss})) [ %highlight(%boldMagenta(%thread)) ] %highlight(%boldGreen(%-5level))-> %logger{50} - %highlight(%green(%msg%n))</pattern>
         </encoder>
     </appender>
 
-    <!-- 日志输出级别 -->
+    <!-- WARN 级别的输出 -->
+    <appender name="WARN_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%highlight(%boldCyan(%d{YYYY-MM-dd HH:mm:ss})) [ %highlight(%boldMagenta(%thread)) ] %highlight(%boldYellow(%-5level)) -> %logger{50} - %highlight(%yellow(%msg%n))</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ERROR 级别的输出 -->
+    <appender name="ERROR_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%highlight(%boldCyan(%d{YYYY-MM-dd HH:mm:ss})) [ %highlight(%boldMagenta(%thread)) ] %highlight(%boldRed(%-5level)) -> %logger{50} - %highlight(%red(%msg%n))</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 为 com.github.fuyo 配置日志 -->
+    <logger name="com.github.fuyo" level="info" additivity="false">
+        <appender-ref ref="INFO_APPENDER" />
+        <appender-ref ref="WARN_APPENDER" />
+        <appender-ref ref="ERROR_APPENDER" />
+    </logger>
+
+    <!-- 根日志配置 -->
     <root level="info">
-        <appender-ref ref="STDOUT" />
+        <!-- 移除 appender-ref -->
     </root>
 </configuration>

@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface TabletimeRepository extends JpaRepository<TabletimeEntity, String> {
-    List<TabletimeEntity> findByUserEntityIdAndX(String userEntity_id, int x);
+    List<TabletimeEntity> findByUserEntityUsernameAndX(String userEntity_username, int x);
 }

@@ -1,5 +1,6 @@
 package com.github.fuyo.view.navigation.clazz;
 
+import com.github.fuyo.entity.Tabletime;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,9 @@ public class ClazzView extends JLayeredPane {
 
     private final static int posYFix = 10;
     // ManuWired
-    private List<UserEntity.Tabletime> tabletime;
+    private List<Tabletime> tabletime;
 
-    public ClazzView(List<UserEntity.Tabletime> tabletime) {
+    public ClazzView(List<Tabletime> tabletime) {
         this.tabletime = tabletime;
         setBounds(260, 0, 1100, 768);
 
@@ -29,9 +30,9 @@ public class ClazzView extends JLayeredPane {
         add(bgLabel.imageLabel(65, 37), DEFAULT_LAYER);
 
         // Function Implement
-        Collections.sort(tabletime, new Comparator<UserEntity.Tabletime>() {
+        tabletime.sort(new Comparator<Tabletime>() {
             @Override
-            public int compare(UserEntity.Tabletime o1, UserEntity.Tabletime o2) {
+            public int compare(Tabletime o1, Tabletime o2) {
                 return o1.getBeginDay() - o2.getBeginDay();
             }
         });
@@ -42,12 +43,12 @@ public class ClazzView extends JLayeredPane {
         // Current Time?
         LocalTime now = LocalTime.now();
 
-        UserEntity.Tabletime currentClazz = null;
-        UserEntity.Tabletime nextClazz = null;
+        Tabletime currentClazz = null;
+        Tabletime nextClazz = null;
 
         // Remaining Clazz
         int remainingClazzCount = 0;
-        for (UserEntity.Tabletime clazz : tabletime) {
+        for (Tabletime clazz : tabletime) {
             LocalTime startTime = CourseTime()[clazz.getBeginDay() * 2 - 2];
             if (now.isBefore(startTime)) {
                 remainingClazzCount++;
@@ -55,7 +56,7 @@ public class ClazzView extends JLayeredPane {
         }
 
         // For next clazz
-        for (UserEntity.Tabletime clazz : tabletime) {
+        for (Tabletime clazz : tabletime) {
             int[] courseIdx = new int[2];
             courseIdx[0] = clazz.getBeginDay();
             courseIdx[1] = clazz.getEndDay();

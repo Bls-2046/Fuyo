@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 获取用户信息
+ * 获取用户的各种信息
  */
 @RestController
 @RequestMapping("/api/user")
@@ -61,10 +61,10 @@ public class UserController {
 
     /**
      * 获取用户基本信息
-     * URL: localhost:8080/api/user/information
+     *
      */
     @PostMapping("/information")
-    public ResponseEntity<UserInformationResponse> getUserInformation(@RequestBody UserInformationRequest userInformationRequest) {
+    public UserInformationResponse getUserInformation(@RequestBody UserInformationRequest userInformationRequest) {
 
         UserInformationResponse userInformationResponse = new UserInformationResponse();
 
@@ -76,21 +76,20 @@ public class UserController {
             userInformationResponse.setData(userService.getUserInformation(username));
             if (userInformationResponse.getData() != null) {
                 userInformationResponse.setStatus(200);
-                userInformationResponse.setMessage("get user's information successful");
+                userInformationResponse.setMessage("get information successful");
             } else {
                 userInformationResponse.setStatus(204);
-                userInformationResponse.setMessage("get user's information failed");
+                userInformationResponse.setMessage("get information failed");
             }
         } catch (Exception e) {
             userInformationResponse.setStatus(500);
             userInformationResponse.setMessage(e.getMessage());
         }
-        return ResponseEntity.ok(userInformationResponse);
+        return userInformationResponse;
     }
 
     /**
      * 获取课表信息
-     *
      * @param tabletimeRequest 请求
      * @return TabletimeResponse
      */
@@ -104,13 +103,22 @@ public class UserController {
 
             tabletimeResponse.setTabletime(userService.getTabletime(username));
 
+            tabletimeResponse.setStatus(200);
+            tabletimeResponse.setMessage("get tabletime successful");
+
         } catch (Exception e) {
-            log.info(e.getMessage());
+            tabletimeResponse.setStatus(500);
+            tabletimeResponse.setMessage(e.getMessage());
         }
         return tabletimeResponse;
     }
 
 
+    /**
+     * 获取用户的日程安排信息
+     * @param scheduleRequest
+     * @return
+     */
     @PostMapping("/schedule")
     public ScheduleResponse getSchedule(@RequestBody ScheduleRequest scheduleRequest) {
 
@@ -119,12 +127,15 @@ public class UserController {
         try {
             String username = scheduleRequest.getUsername();
 
+            scheduleResponse.setSchedule(userService.getSchedule(username));
 
+            scheduleResponse.setStatus(200);
+            scheduleResponse.setMessage("get schedule successful");
 
         } catch(Exception e) {
-            log.info(e.getMessage());
+            scheduleResponse.setStatus(500);
+            scheduleResponse.setMessage(e.getMessage());
         }
-
-        return null;
+        return scheduleResponse;
     }
 }

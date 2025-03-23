@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class TabletimeResponse {
-    private String status;
+    private int status;
     private String message;
     private List<Tabletime> tabletime;
 

@@ -1,14 +1,12 @@
 package com.github.fuyo.entity;
 
-import com.github.fuyo.dto.TableTimeResponse;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Collections;
 
 /**
- * =======================================
+ * ==================================================
  * 用户类
  * 用于存放用户的个人基本信息包含以下参数:
  * {
@@ -31,7 +29,7 @@ import java.util.Collections;
  *         "finishWeek" 本学期该门课结课时间
  *     }
  * }
- * =======================================
+ * ==================================================
  */
 @Data
 public class UserEntity {
@@ -41,29 +39,16 @@ public class UserEntity {
         this.tabletime = Collections.emptyList();
     }
 
-    private String username;
-    private String name;
-    private String department;
-    private String email;
-    private String phone;
+    private String username;                // 用户名
+    private String name;                    // 姓名
+    private String department;              // 年级专业
+    private String email;                   // 邮箱
+    private String phone;                   // 手机号
     private String cookie;
-    private List<Tabletime> tabletime;
 
-    // 课表类
-    @Data
-    @AllArgsConstructor
-    public static class Tabletime {
-        private String keyID;
-        private String clazz;
-        private int x;
-        private int y;
-        private int beginDay;
-        private int endDay;
-        private String WeekType;
-        private String place;
-        private int startWeek;
-        private int finishWeek;
-    }
+    private List<Tabletime> tabletime;      // 课表
+    private List<ScheduleEntity> schedule;  // 日程安排
+    private WeChatEntity wechatUser;        // 微信用户基本信息
 
     /**
      * 公共静态方法，提供全局访问点

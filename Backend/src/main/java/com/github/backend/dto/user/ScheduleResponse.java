@@ -9,14 +9,13 @@ import java.util.List;
 public class ScheduleResponse {
     private int status;
     private String message;
-    private List<Schedule> schedulelist;
+    private List<Schedule> schedule;
 
     @Data
     public static class Schedule {
-        private String username;
         private String title;
         private LocalDateTime dateTime;
-        private int earlyDateTime;
+        private LocalDateTime reminderDatetime;
         private String description;
     }
 }

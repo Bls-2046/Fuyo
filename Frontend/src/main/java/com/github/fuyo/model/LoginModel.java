@@ -1,6 +1,7 @@
 package com.github.fuyo.model;
 
 import com.github.fuyo.dto.*;
+import com.github.fuyo.entity.Tabletime;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.Https;
@@ -29,7 +30,6 @@ public class LoginModel {
         try {
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, LoginResponse.class);
             message = loginResponse.getMessage();
-            log.info(message);
 
             if (loginResponse.getStatus() == 200) {
 
@@ -50,7 +50,9 @@ public class LoginModel {
                             UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("email"));
                             UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
                             UserEntity.getUserInformation().setCookie(userInformationResponse.getData().get("cookie"));
-                            log.info(UserEntity.getUserInformation().toString());
+
+                            log.info("成功保存数据 - {}", UserEntity.getUserInformation().toString());
+
                         }
                     } catch (IOException e) {
                         log.error(e.getMessage());
@@ -68,8 +70,8 @@ public class LoginModel {
                     try {
                         TableTimeResponse tableTimeResponse = Https.<TableTimeResponse>post(url, tabletimeRequest, TableTimeResponse.class);
 
-                        List<UserEntity.Tabletime> tabletime = tableTimeResponse.getTabletime().stream()
-                                .map(responseTabletime -> new UserEntity.Tabletime(
+                        List<Tabletime> tabletime = tableTimeResponse.getTabletime().stream()
+                                .map(responseTabletime -> new Tabletime(
                                         responseTabletime.getKeyID(),
                                         responseTabletime.getClazz(),
                                         responseTabletime.getX(),
@@ -82,8 +84,6 @@ public class LoginModel {
                                         responseTabletime.getFinishWeek()
                                 ))
                                 .collect(Collectors.toList());
-
-                        log.info(tabletime.toString());
 
                         // 使用同步块确保线程安全
                         synchronized (UserEntity.getUserInformation()) {

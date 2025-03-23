@@ -3,8 +3,10 @@ package com.github.backend.service.impl;
 import com.github.backend.dto.user.ScheduleResponse;
 import com.github.backend.dto.user.TabletimeResponse;
 import com.github.backend.dto.user.UserInformationResponse;
+import com.github.backend.entity.ScheduleEntity;
 import com.github.backend.entity.TabletimeEntity;
 import com.github.backend.entity.UserEntity;
+import com.github.backend.repository.ScheduleRepository;
 import com.github.backend.repository.TabletimeRepository;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.service.UserService;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -32,38 +35,15 @@ import java.util.regex.Pattern;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
     private final TabletimeRepository tabletimeRepository;
-
+    private final ScheduleRepository scheduleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, TabletimeRepository tabletimeRepository) {
-        // 初始化数据库操作
+    public UserServiceImpl(UserRepository userRepository, TabletimeRepository tabletimeRepository, ScheduleRepository scheduleRepository) {
         this.userRepository = userRepository;
         this.tabletimeRepository = tabletimeRepository;
-    }
-
-    /**
-     * 获取用户基本信息
-     * @param username 用户名用于查询
-     * @return 返回用户基本信息
-     */
-    @Override
-    public UserInformationResponse.UserInformation getUserInformation(String username) {
-        UserEntity userEntity = userRepository.findByUsername(username);
-        if (userEntity == null) {
-            return null;
-        }
-        UserInformationResponse.UserInformation userInfo = new UserInformationResponse.UserInformation();
-
-        userInfo.setUsername(userEntity.getUsername());
-        userInfo.setName(userEntity.getName());
-        userInfo.setDepartment(userEntity.getDepartment());
-        userInfo.setEmail(userEntity.getEmail());
-        userInfo.setPhone(userEntity.getPhone());
-
-        return userInfo;
+        this.scheduleRepository = scheduleRepository;
     }
 
     /**
@@ -109,6 +89,30 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 获取用户基本信息
+     * @param username 用户名用于查询
+     * @return 返回用户基本信息
+     */
+    @Override
+    public UserInformationResponse.UserInformation getUserInformation(String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+        if (userEntity == null) {
+            return null;
+        }
+        UserInformationResponse.UserInformation userInfo = new UserInformationResponse.UserInformation();
+
+        userInfo.setUsername(userEntity.getUsername());
+        userInfo.setName(userEntity.getName());
+        userInfo.setDepartment(userEntity.getDepartment());
+        userInfo.setEmail(userEntity.getEmail());
+        userInfo.setPhone(userEntity.getPhone());
+
+        return userInfo;
+    }
+
+
+
+    /**
      * 获取用户当天课表信息
      * @param username 用户名用于查询
      * @return 返回当天课表
@@ -129,41 +133,39 @@ public class UserServiceImpl implements UserService {
         // 计算当前是第几周的第几天（1到7）
         int dayOfWeek = (int) (daysBetween % 7) + 1;
 
-        List<TabletimeEntity> userTabletime = tabletimeRepository.findByUserEntityIdAndX(username, dayOfWeek);
+        List<TabletimeEntity> queryTabletime = tabletimeRepository.findByUserEntityUsernameAndX(username, dayOfWeek);
 
         // 创建 tabletime 列表
-        List<TabletimeResponse.Tabletime> tabletime = new ArrayList<>();
+        List<TabletimeResponse.Tabletime> tabletimeList = new ArrayList<>();
 
-        // 遍历 userTabletime，将每个对象转换为 TabletimeResponse.Tabletime
-        for (TabletimeEntity userTime : userTabletime) {
-            TabletimeResponse.Tabletime tabletimeResponse = new TabletimeResponse.Tabletime();
-            if (userTime.getWeekType() != null) {
-                if (!userTime.getWeekType().equals(weekType)) {
+        // 遍历 queryTabletime, 将每个对象转换为 TabletimeResponse.Tabletime
+        for (TabletimeEntity tabletime : queryTabletime) {
+            TabletimeResponse.Tabletime tabletimeResponseTabletime = new TabletimeResponse.Tabletime();
+            if (tabletime.getWeekType() != null) {
+                if (!tabletime.getWeekType().equals(weekType)) {
                     continue;
                 }
             }
-            if (userTime.getStartWeek() <= currentWeek && userTime.getFinishWeek() >= currentWeek) {
-                tabletimeResponse.setKeyID(userTime.getKeyID());
-                tabletimeResponse.setClazz(userTime.getClazz());
-                tabletimeResponse.setX(userTime.getX());
-                tabletimeResponse.setY(userTime.getY());
-                tabletimeResponse.setBeginDay(userTime.getBeginDay());
-                tabletimeResponse.setEndDay(userTime.getEndDay());
-                tabletimeResponse.setWeekType(userTime.getWeekType());
-                tabletimeResponse.setPlace(userTime.getPlace());
-                tabletimeResponse.setStartWeek(userTime.getStartWeek());
-                tabletimeResponse.setFinishWeek(userTime.getFinishWeek());
+            if (tabletime.getStartWeek() <= currentWeek && tabletime.getFinishWeek() >= currentWeek) {
+
+                tabletimeResponseTabletime.setKeyID(tabletime.getKeyID());
+                tabletimeResponseTabletime.setClazz(tabletime.getClazz());
+                tabletimeResponseTabletime.setX(tabletime.getX());
+                tabletimeResponseTabletime.setY(tabletime.getY());
+                tabletimeResponseTabletime.setBeginDay(tabletime.getBeginDay());
+                tabletimeResponseTabletime.setEndDay(tabletime.getEndDay());
+                tabletimeResponseTabletime.setWeekType(tabletime.getWeekType());
+                tabletimeResponseTabletime.setPlace(tabletime.getPlace());
+                tabletimeResponseTabletime.setStartWeek(tabletime.getStartWeek());
+                tabletimeResponseTabletime.setFinishWeek(tabletime.getFinishWeek());
 
                 // 添加到 tabletime 列表
-                tabletime.add(tabletimeResponse);
+                tabletimeList.add(tabletimeResponseTabletime);
             }
         }
+        tabletimeList.sort(Comparator.comparingInt(TabletimeResponse.Tabletime::getY));
 
-        log.info(tabletime.toString());
-
-        tabletime.sort(Comparator.comparingInt(TabletimeResponse.Tabletime::getY));
-
-        return tabletime;
+        return tabletimeList;
     }
 
     /**
@@ -307,7 +309,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据 x 和 value 生成唯一键
-     *
      * @param item JSONObject 对象
      * @return 唯一键
      */
@@ -317,7 +318,6 @@ public class UserServiceImpl implements UserService {
 
         return x + "|" + value;
     }
-
 
 
     @Data
@@ -390,8 +390,30 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 返回用户的日程安排信息
+     * @param username 用户名
+     * @return List<ScheduleResponse.Schedule>
+     */
     @Override
     public List<ScheduleResponse.Schedule> getSchedule(String username) {
-        return List.of();
+        List<ScheduleEntity> querySchedule =  scheduleRepository.findByUserEntityUsername(username);
+        List<ScheduleResponse.Schedule> scheduleList = new ArrayList<>();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (ScheduleEntity schedule : querySchedule) {
+            if (schedule.getReminderDatetime().isBefore(now)) {
+                ScheduleResponse.Schedule scheduleResponseSchedule = new ScheduleResponse.Schedule();
+
+                scheduleResponseSchedule.setTitle(schedule.getTitle());
+                scheduleResponseSchedule.setDateTime(schedule.getDatetime());
+                scheduleResponseSchedule.setReminderDatetime(schedule.getReminderDatetime());
+                scheduleResponseSchedule.setDescription(schedule.getDescription());
+
+                scheduleList.add(scheduleResponseSchedule);
+            }
+        }
+        return scheduleList;
     }
 }
