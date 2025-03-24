@@ -3,6 +3,7 @@ package com.github.backend.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "schedule")
 public class ScheduleEntity {
     @Id

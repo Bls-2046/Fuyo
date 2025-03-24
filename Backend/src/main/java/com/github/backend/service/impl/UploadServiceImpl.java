@@ -6,6 +6,7 @@ import com.github.backend.entity.UserEntity;
 import com.github.backend.repository.ScheduleRepository;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.repository.WeChatUserRepository;
+import com.github.backend.service.ScheduleService;
 import com.github.backend.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,13 @@ import java.util.Objects;
 public class UploadServiceImpl implements UploadService {
     private final WeChatUserRepository weChatUserRepository;
     private final UserRepository userRepository;
-    private final ScheduleRepository scheduleRepository;
+    private final ScheduleService scheduleService;
 
     @Autowired
-    public UploadServiceImpl(WeChatUserRepository weChatUserRepository, UserRepository userRepository, ScheduleRepository scheduleRepository) {
+    public UploadServiceImpl(WeChatUserRepository weChatUserRepository, UserRepository userRepository, ScheduleService scheduleService) {
         this.weChatUserRepository = weChatUserRepository;
         this.userRepository = userRepository;
-        this.scheduleRepository = scheduleRepository;
+        this.scheduleService = scheduleService;
     }
     /**
      * 根据用户提供的微信名 nickname 在 WeChatUser 表中查找对应的名字
@@ -57,17 +58,6 @@ public class UploadServiceImpl implements UploadService {
      */
     @Override
     public Boolean uploadSchedule(ScheduleRequest scheduleRequest) {
-
-        ScheduleEntity schedule = new ScheduleEntity();
-
-        schedule.setTitle(scheduleRequest.getSchedule().getTitle());
-        schedule.setDatetime(scheduleRequest.getSchedule().getDateTime());
-        schedule.setReminderDatetime(scheduleRequest.getSchedule().getReminderDatetime());
-        schedule.setDescription(scheduleRequest.getSchedule().getDescription());
-        schedule.setUserEntity(userRepository.findByUsername(scheduleRequest.getUsername()));
-
-        scheduleRepository.save(schedule);
-
-        return false;
+        return scheduleService.addScheduleInfo(scheduleRequest);
     }
 }
