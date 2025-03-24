@@ -1,7 +1,7 @@
 package com.github.fuyo.model;
 
 import com.github.fuyo.dto.*;
-import com.github.fuyo.entity.Tabletime;
+import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.Https;
@@ -70,8 +70,8 @@ public class LoginModel {
                     try {
                         TableTimeResponse tableTimeResponse = Https.<TableTimeResponse>post(url, tabletimeRequest, TableTimeResponse.class);
 
-                        List<Tabletime> tabletime = tableTimeResponse.getTabletime().stream()
-                                .map(responseTabletime -> new Tabletime(
+                        List<TabletimeEntity> tabletimeEntity = tableTimeResponse.getTabletime().stream()
+                                .map(responseTabletime -> new TabletimeEntity(
                                         responseTabletime.getKeyID(),
                                         responseTabletime.getClazz(),
                                         responseTabletime.getX(),
@@ -87,7 +87,7 @@ public class LoginModel {
 
                         // 使用同步块确保线程安全
                         synchronized (UserEntity.getUserInformation()) {
-                            UserEntity.getUserInformation().setTabletime(tabletime);
+                            UserEntity.getUserInformation().setTabletimeEntity(tabletimeEntity);
                         }
                     } catch (Exception e) {
                         log.error(e.getMessage());

@@ -2,7 +2,7 @@ package com.github.fuyo.controller;
 
 import com.github.fuyo.entity.NaviFunctionButtonEnum;
 import com.github.fuyo.entity.ScheduleEntity;
-import com.github.fuyo.entity.Tabletime;
+import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.listener.NavigationCloseListener;
 import com.github.fuyo.model.LoginModel;
@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +45,11 @@ public class NavigationController implements NavigationCloseListener {
         // Clazz层
         JButton clazzButton  = naviButtonList.get(NaviFunctionButtonEnum.CLAZZ.ordinal());
         clazzButton.addActionListener(e -> {
-            List<Tabletime> tabletime = user.getTabletime();
+            List<TabletimeEntity> tabletimeEntity = user.getTabletimeEntity();
 
             // 按图层顺序渲染，优先渲染导航栏。
             SwingUtilities.invokeLater(() -> {
-                view.renderRouterView(new ClazzView(tabletime));
+                view.renderRouterView(new ClazzView(tabletimeEntity));
             });
         });
 
@@ -65,16 +64,21 @@ public class NavigationController implements NavigationCloseListener {
             });
         });
 
-        // TODO: 当前为测试数据, 请在此处传入数据 List<ScheduleEntity>
-        List<ScheduleEntity> schedules = new ArrayList<>();
-        schedules.add(new ScheduleEntity("标题1", LocalDateTime.now(),null,"描述1......"));
-        schedules.add(new ScheduleEntity("标题2", LocalDateTime.now(),null,"描述2......"));
 
         // Schedule层
         JButton scheduleButton = naviButtonList.get(NaviFunctionButtonEnum.NOTIFY.ordinal());
         scheduleButton.addActionListener(e -> {
 
-            ScheduleController scheduleController = new ScheduleController(new ScheduleView(schedules), new ScheduleModel());
+            List<ScheduleEntity> scheduleEntities;
+
+            if (user.getSchedule() != null) {
+                scheduleEntities = user.getSchedule();
+            } else {
+                log.warn("user.getSchedule() is null!!!");
+                scheduleEntities = new ArrayList<>();
+            }
+
+            ScheduleController scheduleController = new ScheduleController(new ScheduleView(scheduleEntities), new ScheduleModel());
 
             SwingUtilities.invokeLater(() -> {
                 view.renderRouterView(scheduleController.getView());

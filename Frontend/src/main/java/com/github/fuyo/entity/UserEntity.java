@@ -36,7 +36,7 @@ public class UserEntity {
     private static volatile UserEntity userInformation;
 
     public UserEntity() {
-        this.tabletime = Collections.emptyList();
+        this.tabletimeEntity = Collections.emptyList();
     }
 
     private String username;                // 用户名
@@ -46,7 +46,7 @@ public class UserEntity {
     private String phone;                   // 手机号
     private String cookie;
 
-    private List<Tabletime> tabletime;      // 课表
+    private List<TabletimeEntity> tabletimeEntity;      // 课表
     private List<ScheduleEntity> schedule;  // 日程安排
     private WeChatEntity wechatUser;        // 微信用户基本信息
 

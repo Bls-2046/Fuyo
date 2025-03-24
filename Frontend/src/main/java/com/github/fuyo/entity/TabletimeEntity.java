@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Tabletime {
+public class TabletimeEntity {
     private String keyID;       // 课程唯一标识
     private String clazz;       // 课程名
     private int x;              // 星期几

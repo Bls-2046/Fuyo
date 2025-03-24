@@ -1,6 +1,6 @@
 package com.github.fuyo.view.navigation.clazz;
 
-import com.github.fuyo.entity.Tabletime;
+import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,35 +15,35 @@ public class ClazzView extends JLayeredPane {
 
     private final static int posYFix = 10;
     // ManuWired
-    private List<Tabletime> tabletime;
+    private List<TabletimeEntity> tabletimeEntity;
 
-    public ClazzView(List<Tabletime> tabletime) {
-        this.tabletime = tabletime;
+    public ClazzView(List<TabletimeEntity> tabletimeEntity) {
+        this.tabletimeEntity = tabletimeEntity;
         setBounds(260, 0, 1100, 768);
 
         RUILabel bgLabel = new RUILabel("mainFrame/views/clazz", "bg.png");
         add(bgLabel.imageLabel(65, 37), DEFAULT_LAYER);
 
         // Function Implement
-        tabletime.sort(new Comparator<Tabletime>() {
+        tabletimeEntity.sort(new Comparator<TabletimeEntity>() {
             @Override
-            public int compare(Tabletime o1, Tabletime o2) {
+            public int compare(TabletimeEntity o1, TabletimeEntity o2) {
                 return o1.getBeginDay() - o2.getBeginDay();
             }
         });
 
-        log.info(tabletime.toString());
+        log.info(tabletimeEntity.toString());
 
 
         // Current Time?
         LocalTime now = LocalTime.now();
 
-        Tabletime currentClazz = null;
-        Tabletime nextClazz = null;
+        TabletimeEntity currentClazz = null;
+        TabletimeEntity nextClazz = null;
 
         // Remaining Clazz
         int remainingClazzCount = 0;
-        for (Tabletime clazz : tabletime) {
+        for (TabletimeEntity clazz : tabletimeEntity) {
             LocalTime startTime = CourseTime()[clazz.getBeginDay() * 2 - 2];
             if (now.isBefore(startTime)) {
                 remainingClazzCount++;
@@ -51,7 +51,7 @@ public class ClazzView extends JLayeredPane {
         }
 
         // For next clazz
-        for (Tabletime clazz : tabletime) {
+        for (TabletimeEntity clazz : tabletimeEntity) {
             int[] courseIdx = new int[2];
             courseIdx[0] = clazz.getBeginDay();
             courseIdx[1] = clazz.getEndDay();
@@ -69,7 +69,7 @@ public class ClazzView extends JLayeredPane {
 
         // Current Clazz
         String currentClazzTime = currentClazz != null ? getTimeString(currentClazz.getBeginDay())[0] + " - " + getTimeString(currentClazz.getEndDay())[1] : "";
-        String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "~已经上完课啦~" : (remainingClazzCount == tabletime.size()) ? "准备上课~" : "课间休息~";
+        String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "~已经上完课啦~" : (remainingClazzCount == tabletimeEntity.size()) ? "准备上课~" : "课间休息~";
         String currentClazzPlace = currentClazz != null ? currentClazz.getPlace() : "";
 
         add(RUILabel.getEmptyTextLabel(102, 152 - posYFix, currentClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);

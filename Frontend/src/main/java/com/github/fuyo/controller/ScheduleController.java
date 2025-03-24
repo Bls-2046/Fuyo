@@ -28,7 +28,8 @@ public class ScheduleController {
 
         viewEntity = view.getViewEntity();
 
-        // 监听
+        // TODO: 监听
+
 
         // 提交按钮逻辑
         JButton submitButton = viewEntity.getSubmitButton();
@@ -38,8 +39,26 @@ public class ScheduleController {
             // 重取数据
             scheduleEntities = view.getScheduleEntities();
 
-            // 新增数据 (请改成需要的逻辑)
             try {
+
+                int second = 0;
+
+                // 提前提醒时间
+                switch (viewEntity.getRemindWidget().getType()) {
+                    case 1 -> {
+                        // Day
+                        second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 86400;
+                    }
+                    case 2 -> {
+                        // Hrs
+                        second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 3600;
+                    }
+                    case 3 -> {
+                        // Min
+                        second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 60;
+                    }
+                }
+
                 LocalDate date = LocalDate.of(
                         Integer.parseInt(viewEntity.getScheduleYear().getText()),
                         Integer.parseInt(viewEntity.getScheduleMonth().getText()),
@@ -50,13 +69,16 @@ public class ScheduleController {
                         Integer.parseInt(viewEntity.getScheduleHour().getText()),
                         Integer.parseInt(viewEntity.getScheduleMinute().getText()));
 
+                LocalDateTime result = LocalDateTime.of(date, time);
+
                 ScheduleEntity newScheduleEntity = new ScheduleEntity(
                         viewEntity.getTitle().getText(),
-                        LocalDateTime.of(date, time),
-                        null, // TODO: 请改成实际的逻辑
+                        result,
+                        result.minusSeconds(second),
                         viewEntity.getContent().getText()
                 );
 
+                // 添加newScheduleEntity到list中, TODO: 发送请求到后端?
                 scheduleEntities.add(newScheduleEntity);
 
                 // 刷新渲染

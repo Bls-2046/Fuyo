@@ -86,6 +86,7 @@ public class ScheduleView extends JLayeredPane {
         edw = new EventDashWidget(scheduleEntities);
         add(edw, POPUP_LAYER);
 
+
         // New Entity
         viewEntity = new ScheduleViewEntity(titleInput,reminderTextArea,reminderTimeInput,
                 rw,yearInput,monInput,dayInput,hrsInput,minInput,submitButton);
