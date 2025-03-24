@@ -121,17 +121,18 @@ public class UserServiceImpl implements UserService {
     public List<TabletimeResponse.Tabletime> getTabletime(String username) {
 
         // 计算是第几周的第几天
-        LocalDate firstDay = LocalDate.of(2025, 2, 24);
+        LocalDate firstDay = LocalDate.of(2025, 2, 23);
         // 获取当前日期
-        LocalDate today = LocalDate.now();
+         LocalDate today = LocalDate.now();
         // 计算从第一周到今天的天数
         long daysBetween = ChronoUnit.DAYS.between(firstDay, today);
         // 计算当前是第几周（向上取整）
+
         int currentWeek = (int) Math.ceil((double) daysBetween / 7);
         // 如果为双周
         String weekType = (currentWeek % 2 == 0 ? "双周" : "单周");
         // 计算当前是第几周的第几天（1到7）
-        int dayOfWeek = (int) (daysBetween % 7) + 1;
+        int dayOfWeek = (int) (daysBetween % 7 == 0 ?  7 : daysBetween % 7);
 
         List<TabletimeEntity> queryTabletime = tabletimeRepository.findByUserEntityUsernameAndX(username, dayOfWeek);
 
@@ -164,6 +165,8 @@ public class UserServiceImpl implements UserService {
             }
         }
         tabletimeList.sort(Comparator.comparingInt(TabletimeResponse.Tabletime::getY));
+
+        log.info(tabletimeList.toString());
 
         return tabletimeList;
     }
