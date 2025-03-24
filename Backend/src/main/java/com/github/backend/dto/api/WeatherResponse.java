@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class WeatherResponse {
-    private String status;
+    private int status;
     private String message;
-    private Live live;
+    private Live lives;
 
     @Data
-    private static class Live {
+    public static class Live {
         private String province;
         private String city;
         private String weather;

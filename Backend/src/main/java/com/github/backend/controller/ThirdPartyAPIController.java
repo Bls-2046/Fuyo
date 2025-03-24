@@ -1,6 +1,7 @@
 package com.github.backend.controller;
 
 import com.github.backend.dto.api.OneSentenceResponse;
+import com.github.backend.dto.api.WeatherResponse;
 import com.github.backend.service.ThirdPartyApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,23 @@ public class ThirdPartyAPIController {
     @Autowired
     public ThirdPartyAPIController(ThirdPartyApiService thirdPartyApiService) {
         this.thirdPartyApiService = thirdPartyApiService;
+    }
+    /**
+     * 获得珠海香洲区天气
+     */
+    @GetMapping("/weather")
+    public WeatherResponse getWeather() {
+        WeatherResponse weatherResponse = new WeatherResponse();
+
+        WeatherResponse.Live weatherLiveResponse = thirdPartyApiService.getWeather();
+
+        if (weatherLiveResponse != null) {
+            weatherResponse.setStatus(200);
+            weatherResponse.setLives(weatherLiveResponse);
+        } else {
+            weatherResponse.setStatus(404);
+        }
+        return weatherResponse;
     }
 
     /**

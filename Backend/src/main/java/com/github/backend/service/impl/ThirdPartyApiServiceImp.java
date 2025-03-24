@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -25,11 +26,12 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
      */
     private static String WEATHER_KEY; // 高德天气 API KEY
 
-    public WeatherResponse getWeather() {
-        WeatherResponse weatherResponse = new WeatherResponse();
+    @Override
+    public WeatherResponse.Live getWeather() {
+        WeatherResponse.Live weatherLiveResponse = new WeatherResponse.Live();
 
         final String url = "https://restapi.amap.com/v3/weather/weatherInfo";
-        final String city = "440402";
+        final String city = "440402"; // 珠海香洲区城市编号
 
         Map<String, String> params = new HashMap<>();
         params.put("key", WEATHER_KEY);
@@ -38,7 +40,18 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
 
         JSONObject live = Https.get(url, params, null);
 
-        return null;
+        if (Objects.equals(live.getString("status"), "1")) {
+            weatherLiveResponse.setProvince(live.getString("province"));
+            weatherLiveResponse.setCity(live.getString("city"));
+            weatherLiveResponse.setWeather(live.getString("weather"));
+            weatherLiveResponse.setTemperature(live.getString("temperature"));
+            weatherLiveResponse.setWinddirection(live.getString("winddirection"));
+            weatherLiveResponse.setWindpower(live.getString("windpower"));
+            weatherLiveResponse.setHumidity(live.getString("humidity"));
+            weatherLiveResponse.setReporttime(live.getString("reporttime"));
+        }
+
+        return weatherLiveResponse;
     }
 // =================================================================================================
 // ///////////////////////////////////////// 一言 API ///////////////////////////////////////////////
