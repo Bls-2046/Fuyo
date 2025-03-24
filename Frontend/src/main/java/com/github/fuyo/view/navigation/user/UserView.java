@@ -42,14 +42,14 @@ public class UserView extends JLayeredPane {
         URL avatarIconFile = getClass().getClassLoader().getResource(String.format("staticImage/%s/%s", "mainFrame/iconUserAvatar", user.getUsername() + ".png"));
         RUILabel avatarImage = new RUILabel("mainFrame/iconUserAvatar", (avatarIconFile == null ? "default.png" : user.getUsername() + ".png"));
         add(avatarImage.imageLabel(125 - offset_x,97), PALETTE_LAYER);
-        add(RUILabel.getTextLabel(383+10,137 + 7, message,40,"微软雅黑", Color.GRAY,Font.BOLD),POPUP_LAYER);
-        add(RUILabel.getTextLabel(383+160,137 + 5, user.getName() + " ~",48,"微软雅黑", Color.GRAY,Font.BOLD),POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(383+10,137 + 7, message,40,"微软雅黑", Color.GRAY,Font.BOLD),POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(383+160,137 + 5, user.getName() + " ~",48,"微软雅黑", Color.GRAY,Font.BOLD),POPUP_LAYER);
 
         // Information Panel
-        add(RUILabel.getTextLabel(607,398-12, user.getDepartment(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
-        add(RUILabel.getTextLabel(607,483-12, user.getPhone(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
-        add(RUILabel.getTextLabel(607,571-12, user.getUsername(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
-        add(RUILabel.getTextLabel(607,660-12, user.getEmail(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(607,398-12, user.getDepartment(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(607,483-12, user.getPhone(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(607,571-12, user.getUsername(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(607,660-12, user.getEmail(),22,"微软雅黑", Color.GRAY,Font.PLAIN),POPUP_LAYER);
 
         // Button Layer
         switchAccountButton = RUILabel.getStaticEmptyLayerButton(205-offset_x, 591-offset_y, 413, 284);

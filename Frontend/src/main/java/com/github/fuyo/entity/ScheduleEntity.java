@@ -1,6 +1,8 @@
 package com.github.fuyo.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -8,6 +10,7 @@ import java.time.LocalDateTime;
  * 日程安排
  */
 @Data
+@AllArgsConstructor
 public class ScheduleEntity {
     private String title; // 日程标题
     private LocalDateTime datetime; // 日程时间

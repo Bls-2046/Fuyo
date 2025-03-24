@@ -53,7 +53,7 @@ public class LoadingController {
             if (result){ // 成功
                 view.renderSuccess();
                 // Navi窗口层
-                Timer timer = new Timer(3000, e -> {
+                Timer timer = new Timer(750, e -> {
                     view.dispose(); // 关闭当前窗口
                     // 创建 NavigationController 实例
                     new NavigationController(new NavigationView(), new NavigationModel()).getView().setVisible(true);

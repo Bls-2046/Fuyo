@@ -79,7 +79,7 @@ public class RUILabel {
      * @param fontFamily 字体家族
      * @return 对象
      */
-    public JTextField getTextLabel(int posX, int posY, String message, Color color, int fontSize, String fontFamily) {
+    public JTextField getImageTextLabel(int posX, int posY, String message, Color color, int fontSize, String fontFamily) {
         ImageIcon icon = new ImageIcon(
                 Objects.requireNonNull(getClass().getClassLoader().getResource(String.format("staticImage/%s/%s", fileType, fileName)))
         );
@@ -227,7 +227,7 @@ public class RUILabel {
     }
 
     /**
-     * 静态方式获取文字Label
+     * 静态方式获取文字Label (Align = Left)
      * @param posX 位置X
      * @param posY 位置Y
      * @param message 显示文字
@@ -236,7 +236,7 @@ public class RUILabel {
      * @param fontFamily 字体家族
      * @return 对象
      */
-    public static JLabel getTextLabel(int posX, int posY, String message, int fontSize, String fontFamily, Color color) {
+    public static JLabel getEmptyTextLabel(int posX, int posY, String message, int fontSize, String fontFamily, Color color) {
         JLabel text = new JLabel();
         text.setBounds(posX, posY, 1000, 50);
         text.setForeground(color);
@@ -258,7 +258,7 @@ public class RUILabel {
      * @param fontStyle 字体样式
      * @return 对象
      */
-    public static JLabel getTextLabel(int posX, int posY, String message, int fontSize, String fontFamily, Color color, int fontStyle) {
+    public static JLabel getEmptyTextLabel(int posX, int posY, String message, int fontSize, String fontFamily, Color color, int fontStyle) {
         JLabel text = new JLabel();
         text.setBounds(posX, posY, 1000, 50);
         text.setForeground(color);
@@ -278,6 +278,39 @@ public class RUILabel {
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
         return button;
+    }
+
+    /**
+     * Align = Center
+     * @return JTextField(输入框)
+     */
+    public static JTextField getEmptyInputTextLabel(int posX, int posY, int sizeW, int sizeH, String message, Color color, int fontSize, String fontFamily, int fontStyle) {
+
+        JTextField textField = new JTextField();
+        textField.setText(message);
+        textField.setOpaque(false);
+        textField.setBorder(BorderFactory.createEmptyBorder());
+        textField.setBounds(posX, posY, sizeW, sizeH);
+        textField.setHorizontalAlignment(JTextField.CENTER);
+        textField.setFont(new Font(fontFamily, fontStyle, fontSize));
+        textField.setForeground(color);
+        textField.putClientProperty("ime.strict", true);
+        textField.putClientProperty("JComponent.roundRect", true);
+
+        return textField;
+    }
+
+    public static JTextArea getEmptyTextArea(int posX, int posY, int sizeW, int sizeH,int word, int line, Color color, int fontSize, String fontFamily, int fontStyle) {
+
+        JTextArea textArea = new JTextArea(line, word);
+        textArea.setOpaque(false);
+        textArea.setBorder(BorderFactory.createEmptyBorder());
+        textArea.setBounds(posX, posY, sizeW, sizeH);
+        textArea.setBounds(posX, posY, sizeW, sizeH);
+        textArea.setFont(new Font(fontFamily, fontStyle, fontSize));
+        textArea.setForeground(color);
+
+        return textArea;
     }
 
 

@@ -1,18 +1,14 @@
 package com.github.fuyo.view.navigation;
 
-import com.github.fuyo.entity.NaviFunctionButtonEnum;
 import com.github.fuyo.entity.NaviFunctionEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
-import com.github.fuyo.view.navigation.clazz.ClazzView;
-import com.github.fuyo.view.navigation.user.UserView;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +42,12 @@ public class NavigationView extends JFrame {
         setSize(1360, 768);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(new Color(0, 0, 0, 0));
+        // setBackground(new Color(0, 0, 0, 0));
+
+        // IME?
+        setUndecorated(true);
+        setBackground(new Color(0,0,0,1));
+        setOpacity(0.99f);
 
         // JLayeredPane
         lp = getLayeredPane();
@@ -66,7 +67,7 @@ public class NavigationView extends JFrame {
         RUILabel avatarImage = new RUILabel("mainFrame/iconUserAvatar", (avatarIconFile == null ? "default.png" : userEntity.getUsername() + ".png"));
         lp.add(avatarImage.imageLabel(28,717,37,37), JLayeredPane.PALETTE_LAYER);
 
-        lp.add(RUILabel.getTextLabel(79,709,userEntity.getName(),20,"微软雅黑",Color.GRAY,Font.PLAIN), JLayeredPane.PALETTE_LAYER);
+        lp.add(RUILabel.getEmptyTextLabel(79,709,userEntity.getName(),20,"微软雅黑",Color.GRAY,Font.PLAIN), JLayeredPane.PALETTE_LAYER);
 
         // Function Navi Fixed
         NaviFunctionEntity navi1 = new NaviFunctionEntity("课程表",false,lp,new int[]{17,101}, "demo.png");

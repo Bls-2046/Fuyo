@@ -40,7 +40,7 @@ public class NaviFunctionEntity {
         // We will check if function is selected or not.
         RUILabel labelNaviIcon = new RUILabel("mainFrame/" + ((active) ? "iconActivate" : "iconDeActivate"),iconName);
         JLabel naviIcon = labelNaviIcon.imageLabel(navi1posX+18, navi1posY+15);
-        JLabel naviName = RUILabel.getTextLabel(navi1posX+50,navi1posY-3,functionName,18,"微软雅黑", (active) ? Color.WHITE : Color.BLACK);
+        JLabel naviName = RUILabel.getEmptyTextLabel(navi1posX+50,navi1posY-3,functionName,18,"微软雅黑", (active) ? Color.WHITE : Color.BLACK);
         naviName.setFont(naviName.getFont().deriveFont(Font.PLAIN));
         JButton functionBtn = emptyButtonLayer();
 

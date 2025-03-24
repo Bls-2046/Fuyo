@@ -49,7 +49,7 @@ public class LoginView extends JFrame {
         lp.add(labelInputArea.imageLabel(591,219), JLayeredPane.PALETTE_LAYER);
         lp.add(labelInputArea.imageLabel(591,219 + 50), JLayeredPane.PALETTE_LAYER);
 
-        JTextField usernameInput = labelInputArea.getTextLabel(591,219,"",Color.GRAY,13,"Agency FB");
+        JTextField usernameInput = labelInputArea.getImageTextLabel(591,219,"",Color.GRAY,13,"Agency FB");
         JPasswordField passwordInput = labelInputArea.passwordLabel(591,219 + 50,"",Color.GRAY,13,"Agency FB");
 
         lp.add(usernameInput, JLayeredPane.PALETTE_LAYER);

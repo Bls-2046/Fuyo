@@ -1,19 +1,14 @@
 package com.github.fuyo.view.navigation.clazz;
 
 import com.github.fuyo.entity.Tabletime;
-import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 public class ClazzView extends JLayeredPane {
@@ -77,22 +72,22 @@ public class ClazzView extends JLayeredPane {
         String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "~已经上完课啦~" : (remainingClazzCount == tabletime.size()) ? "准备上课~" : "课间休息~";
         String currentClazzPlace = currentClazz != null ? currentClazz.getPlace() : "";
 
-        add(RUILabel.getTextLabel(102, 152 - posYFix, currentClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getTextLabel(102, 192 - posYFix, currentClazzName, 48, "微软雅黑", Color.GRAY), POPUP_LAYER);
-        add(RUILabel.getTextLabel(148, 315 - posYFix, currentClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(102, 152 - posYFix, currentClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(102, 192 - posYFix, currentClazzName, 48, "微软雅黑", Color.GRAY), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(148, 315 - posYFix, currentClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Next Clazz
         String nextClazzTime = nextClazz != null ? getTimeString(nextClazz.getBeginDay())[0] + " - " + getTimeString(nextClazz.getEndDay())[1] : "";
         String nextClazzName = nextClazz != null ? nextClazz.getClazz() : "~已经上完课啦~";
         String nextClazzPlace = nextClazz != null ? nextClazz.getPlace() : "";
 
-        add(RUILabel.getTextLabel(102, 507 - posYFix, nextClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getTextLabel(102, 547 - posYFix, nextClazzName, 48, "微软雅黑", Color.GRAY), POPUP_LAYER);
-        add(RUILabel.getTextLabel(148, 670 - posYFix, nextClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(102, 507 - posYFix, nextClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(102, 547 - posYFix, nextClazzName, 48, "微软雅黑", Color.GRAY), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(148, 670 - posYFix, nextClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Remaining
-        add(RUILabel.getTextLabel(629, 524, ""+remainingClazzCount, 60, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getTextLabel(629+30, 524, "节课", 40, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(629, 524, ""+remainingClazzCount, 60, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(629+30, 524, "节课", 40, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
     }
 
