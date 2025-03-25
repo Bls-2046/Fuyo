@@ -2,16 +2,25 @@ package com.github.fuyo.controller;
 
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.ScheduleViewEntity;
+import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.model.ScheduleModel;
+import com.github.fuyo.view.messagebox.ErrorMessageBox;
+import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static com.github.fuyo.view.navigation.schedule.ScheduleDialogView.showDialog;
 
 @Slf4j
 public class ScheduleController {
@@ -22,14 +31,20 @@ public class ScheduleController {
     private ScheduleViewEntity viewEntity;
     private List<ScheduleEntity> scheduleEntities;
 
+    private Thread remindMonitor;
+    private Thread executeMonitor;
+
     public ScheduleController(ScheduleView view, ScheduleModel model) {
         this.view = view;
         this.model = model;
 
         viewEntity = view.getViewEntity();
 
-        // TODO: 监听
+        // Test
+        // showDialog(new ScheduleEntity("Test",LocalDateTime.now(),LocalDateTime.now(),"N/A"));
 
+        // 刷新监听逻辑
+        monitorAndRepaint();
 
         // 提交按钮逻辑
         JButton submitButton = viewEntity.getSubmitButton();
@@ -90,19 +105,42 @@ public class ScheduleController {
 
                 // 清空全部输入框
                 view.clearInput();
-            } catch (Exception ex) {
-
-                // TODO: 显示错误窗口(ErrorMessageBox)
+            }
+            catch (NumberFormatException ex) {
+                ErrorMessageBox.showErrorBox("输入格式有误，请检查");
+            }
+            catch (Exception ex) {
                 ex.printStackTrace();
-                log.error(ex.getMessage() + "解析错误?");
-
             }
         });
+
+
+
     }
 
     // 删除事件按钮执行器
     public static void deleteScheduleEventClicked(ScheduleEntity schedule) {
+        // TODO: 发送到后端进行删除
+
         // 删除Schedule按钮点击后触发
         log.info("Delete Schedule for {} Clicked" , schedule.getTitle());
+    }
+
+    // 动态刷新
+    private void monitorAndRepaint() {
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        // 1S检查一次时间
+        executor.scheduleAtFixedRate(() -> {
+
+            List<ScheduleEntity> schedule = UserEntity.getUserInformation().getSchedule();
+
+            if (!schedule.isEmpty()) {
+                scheduleEntities = schedule;
+                view.setScheduleEntities(scheduleEntities);
+                view.repaintEDW();
+            }
+
+        }, 0, 1000, TimeUnit.MILLISECONDS); // 1 SEC / CHECK
     }
 }

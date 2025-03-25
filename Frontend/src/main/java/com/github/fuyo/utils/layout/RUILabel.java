@@ -269,6 +269,28 @@ public class RUILabel {
         return text;
     }
 
+    /**
+     * 静态方式获取文字CenterLabel
+     * @param posX 位置X
+     * @param posY 位置Y
+     * @param message 显示文字
+     * @param color 颜色
+     * @param fontSize 字体大小
+     * @param fontFamily 字体家族
+     * @param fontStyle 字体样式
+     * @return 对象
+     */
+    public static JLabel getCenterEmptyTextLabel(int posX, int posY, int sizeW, int sizeH, String message, int fontSize, String fontFamily, Color color, int fontStyle) {
+        JLabel text = new JLabel();
+        text.setBounds(posX, posY, sizeW, sizeH);
+        text.setForeground(color);
+        text.setFont(new Font(fontFamily, fontStyle, fontSize));
+        text.setHorizontalAlignment(JLabel.CENTER);
+        text.setText(message);
+
+        return text;
+    }
+
     public static JButton getStaticEmptyLayerButton(int posX, int posY, int sizeW, int sizeH) {
         JButton button = new JButton();
         button.setOpaque(false);

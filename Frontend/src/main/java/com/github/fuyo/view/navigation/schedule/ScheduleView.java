@@ -115,6 +115,13 @@ public class ScheduleView extends JLayeredPane {
         repaint();
     }
 
-
+    public static String wordLimitation(String word) {
+        String display = word;
+        display = display.replaceAll("\n"," ");
+        if (display.length() > 55) {
+            display = display.substring(0, 55) + "...";
+        }
+        return display;
+    }
 
 }

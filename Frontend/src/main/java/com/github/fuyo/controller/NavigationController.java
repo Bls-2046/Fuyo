@@ -12,12 +12,14 @@ import com.github.fuyo.model.UserViewModel;
 import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
+import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
 import com.github.fuyo.view.navigation.user.UserView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,6 @@ public class NavigationController implements NavigationCloseListener {
             });
         });
     }
-
 
     /**
      * 切换账号
