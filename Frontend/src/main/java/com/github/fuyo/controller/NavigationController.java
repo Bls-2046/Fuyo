@@ -84,7 +84,6 @@ public class NavigationController implements NavigationCloseListener {
                 view.renderRouterView(scheduleController.getView());
             });
         });
-
     }
 
 

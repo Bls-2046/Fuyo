@@ -4,7 +4,7 @@ import com.github.backend.dto.user.NicknameRequest;
 import com.github.backend.dto.user.NicknameResponse;
 import com.github.backend.dto.user.ScheduleRequest;
 import com.github.backend.dto.user.ScheduleResponse;
-import com.github.backend.service.UploadService;
+import com.github.backend.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
  * 前端上传和保存信息
  */
 @RestController
-@RequestMapping("/api/upload")
-public class UploadController {
-    private final UploadService uploadService;
+@RequestMapping("/api/update")
+public class UpdateController {
+    private final UpdateService updateService;
 
     @Autowired
-    public UploadController(UploadService uploadService) {
-        this.uploadService = uploadService;
+    public UpdateController(UpdateService updateService) {
+        this.updateService = updateService;
     }
 
     /**
@@ -34,7 +34,7 @@ public class UploadController {
         String nickname = nicknameRequest.getNickname();
 
         try {
-            Boolean uploadResult = uploadService.uploadNickname(username, nickname);
+            Boolean uploadResult = updateService.uploadNickname(username, nickname);
 
             if (uploadResult) {
                 nicknameResponse.setStatus(200);
@@ -56,12 +56,12 @@ public class UploadController {
      * @param scheduleRequest 用户新增日程安排信息
      * @return ScheduleResponse
      */
-    @PostMapping("/schedule")
+    @PostMapping("/schedule/add")
     public ScheduleResponse uploadSchedule(@RequestBody ScheduleRequest scheduleRequest) {
         ScheduleResponse scheduleResponse = new ScheduleResponse();
 
         try {
-            Boolean uploadResult = uploadService.uploadSchedule(scheduleRequest);
+            Boolean uploadResult = updateService.uploadSchedule(scheduleRequest);
 
             if (uploadResult) {
                 scheduleResponse.setStatus(200);

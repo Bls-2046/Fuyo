@@ -5,6 +5,7 @@ import com.github.backend.service.ThirdPartyApiService;
 import com.github.backend.utils.Https;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Objects;
 @Component
 public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
 // =================================================================================================
-// ///////////////////////////////////////// 高德天气 API ////////////////////////////////////////////
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 高德天气 API ////////////////////////////////////////////
     /**
      * 珠海香洲区天气
      * <a href="https://lbs.amap.com/api/webservice/guide/api/weatherinfo/#t1">天气 API 文档</a>
@@ -41,20 +42,36 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
         JSONObject live = Https.get(url, params, null);
 
         if (Objects.equals(live.getString("status"), "1")) {
-            weatherLiveResponse.setProvince(live.getString("province"));
-            weatherLiveResponse.setCity(live.getString("city"));
-            weatherLiveResponse.setWeather(live.getString("weather"));
-            weatherLiveResponse.setTemperature(live.getString("temperature"));
-            weatherLiveResponse.setWinddirection(live.getString("winddirection"));
-            weatherLiveResponse.setWindpower(live.getString("windpower"));
-            weatherLiveResponse.setHumidity(live.getString("humidity"));
-            weatherLiveResponse.setReporttime(live.getString("reporttime"));
+            // 获取 lives 数组
+            JSONArray livesArray = live.getJSONArray("lives");
+            if (!livesArray.isEmpty()) {
+                // 获取 lives 数组的第一个对象
+                JSONObject liveObject = livesArray.getJSONObject(0);
+
+                // 设置 WeatherResponse.Live 对象的字段
+                weatherLiveResponse.setProvince(liveObject.getString("province"));
+                weatherLiveResponse.setCity(liveObject.getString("city"));
+                weatherLiveResponse.setWeather(liveObject.getString("weather"));
+                weatherLiveResponse.setTemperature(liveObject.getString("temperature"));
+                weatherLiveResponse.setWinddirection(liveObject.getString("winddirection"));
+                weatherLiveResponse.setWindpower(liveObject.getString("windpower"));
+                weatherLiveResponse.setHumidity(liveObject.getString("humidity"));
+                weatherLiveResponse.setReporttime(liveObject.getString("reporttime"));
+                weatherLiveResponse.setTemperature_float(liveObject.getString("temperature_float"));
+                weatherLiveResponse.setHumidity_float(liveObject.getString("humidity_float"));
+            } else {
+                log.warn("Lives array is empty.");
+                throw new RuntimeException("No weather data found.");
+            }
+        } else {
+            log.warn("API returned status: {}", live.getString("status"));
+            throw new RuntimeException("Failed to fetch weather data.");
         }
 
         return weatherLiveResponse;
     }
 // =================================================================================================
-// ///////////////////////////////////////// 一言 API ///////////////////////////////////////////////
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 一言 API //////////////////////////////////////////////
 
     private static String MEI_RI_YI_YAN_KEY; // 每日一言 API KEY:
     private static String MEI_RI_YING_YU_KEY; // 每日英语 API KEY
@@ -70,9 +87,9 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
         String sentence = "";
 
         if (randomNumber == 1) {
-            sentence = getChineseSentence();
+            sentence = getChineseSentence(); // 每日一言
         } else if (randomNumber == 2) {
-            sentence = getEnglishSentence();
+            sentence = getEnglishSentence(); // 每日英语
         }
         return sentence;
     }

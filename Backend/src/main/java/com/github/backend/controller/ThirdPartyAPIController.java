@@ -19,8 +19,10 @@ public class ThirdPartyAPIController {
     public ThirdPartyAPIController(ThirdPartyApiService thirdPartyApiService) {
         this.thirdPartyApiService = thirdPartyApiService;
     }
+
     /**
      * 获得珠海香洲区天气
+     * @return WeatherResponse
      */
     @GetMapping("/weather")
     public WeatherResponse getWeather() {
@@ -30,7 +32,7 @@ public class ThirdPartyAPIController {
 
         if (weatherLiveResponse != null) {
             weatherResponse.setStatus(200);
-            weatherResponse.setLives(weatherLiveResponse);
+            weatherResponse.setLive(weatherLiveResponse);
         } else {
             weatherResponse.setStatus(404);
         }

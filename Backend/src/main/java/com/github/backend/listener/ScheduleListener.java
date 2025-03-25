@@ -4,6 +4,7 @@ import com.github.backend.entity.ScheduleEntity;
 import com.github.backend.repository.ScheduleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executors;
 /**
  * 用于日程的监听
  */
+@Slf4j
 @Component
 public class ScheduleListener {
     private static List<ScheduleEntity> scheduleList  = new CopyOnWriteArrayList<>(); // 保存当前所有的日程信息
@@ -40,6 +42,7 @@ public class ScheduleListener {
     @Scheduled(fixedRate = 1000)
     private void checkAllScheduled() {
         // 对所有日程进行检查
+        log.info("checkAllScheduled");
         checkExecutorService.execute(() -> {
             LocalDateTime now = LocalDateTime.now();
             for(ScheduleEntity schedule : scheduleList) {

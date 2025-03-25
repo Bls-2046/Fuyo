@@ -1,34 +1,32 @@
 package com.github.backend.service.impl;
 
 import com.github.backend.dto.user.ScheduleRequest;
-import com.github.backend.entity.ScheduleEntity;
 import com.github.backend.entity.UserEntity;
-import com.github.backend.repository.ScheduleRepository;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.repository.WeChatUserRepository;
 import com.github.backend.service.ScheduleService;
-import com.github.backend.service.UploadService;
+import com.github.backend.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
  * 用户上传信息的逻辑处理
  */
 @Service
-public class UploadServiceImpl implements UploadService {
+public class UpdateServiceImpl implements UpdateService {
     private final WeChatUserRepository weChatUserRepository;
     private final UserRepository userRepository;
     private final ScheduleService scheduleService;
 
     @Autowired
-    public UploadServiceImpl(WeChatUserRepository weChatUserRepository, UserRepository userRepository, ScheduleService scheduleService) {
+    public UpdateServiceImpl(WeChatUserRepository weChatUserRepository, UserRepository userRepository, ScheduleService scheduleService) {
         this.weChatUserRepository = weChatUserRepository;
         this.userRepository = userRepository;
         this.scheduleService = scheduleService;
     }
+
     /**
      * 根据用户提供的微信名 nickname 在 WeChatUser 表中查找对应的名字
      * 若找到就根据 username 将用户微信名存入 User 表中

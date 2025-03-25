@@ -98,7 +98,6 @@ public class ScheduleController {
 
             }
         });
-
     }
 
     // 删除事件按钮执行器
