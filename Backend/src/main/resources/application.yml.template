@@ -22,3 +22,9 @@ spring:
 # 天气 API
 weather:
   key:
+
+# 一言 API
+yiyan:
+  key:
+    two:
+    four:

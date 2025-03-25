@@ -42,10 +42,4 @@ public class HomeModel {
         JSONObject response = Https.get(url, null, null);
         return response.getString("sentence");
     }
-
-    public static void main(String[] args) {
-        WeatherResponse aaa = getWeather();
-
-        System.out.println(aaa);
-    }
 }
