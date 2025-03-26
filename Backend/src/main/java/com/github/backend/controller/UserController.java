@@ -7,6 +7,8 @@
 
 package com.github.backend.controller;
 
+import com.github.backend.dto.schedule.ScheduleRequest;
+import com.github.backend.dto.schedule.ScheduleResponse;
 import com.github.backend.dto.user.*;
 import com.github.backend.service.UserService;
 
@@ -116,8 +118,8 @@ public class UserController {
 
     /**
      * 获取用户的日程安排信息
-     * @param scheduleRequest
-     * @return
+     * @param scheduleRequest 用户信息
+     * @return ScheduleResponse
      */
     @PostMapping("/schedule")
     public ScheduleResponse getSchedule(@RequestBody ScheduleRequest scheduleRequest) {

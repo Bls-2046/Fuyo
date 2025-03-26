@@ -1,5 +1,6 @@
 package com.github.fuyo.utils.https;
 
+import com.github.fuyo.utils.gson.GsonUtil;
 import com.google.gson.Gson;
 import okhttp3.*;
 import org.json.JSONObject;
@@ -25,7 +26,6 @@ public class Https {
     private Https() {}
 
     private static final OkHttpClient client;
-    private static final Gson gson = new Gson();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     static {
@@ -99,7 +99,8 @@ public class Https {
      * @return 解析后的 Java 对象
      * @throws IOException 如果发生 I/O 错误
      */
-    public static <T> T post(String url, Object object, Class<T> clazz) throws IOException {
+    public static <T> T post(String url, Object object, HttpHeaders headers, Class<T> clazz) throws IOException {
+        Gson gson = GsonUtil.createGson();
         String json = gson.toJson(object);
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()

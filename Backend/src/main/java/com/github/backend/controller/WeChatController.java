@@ -22,7 +22,7 @@ public class WeChatController {
     /**
      * 回调接口
      */
-    @PostMapping()
+    @PostMapping("/callback")
     public String upload() {
         return null;
     }

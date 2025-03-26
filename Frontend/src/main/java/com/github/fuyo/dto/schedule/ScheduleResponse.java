@@ -1,4 +1,4 @@
-package com.github.fuyo.dto;
+package com.github.fuyo.dto.schedule;
 
 import lombok.Data;
 

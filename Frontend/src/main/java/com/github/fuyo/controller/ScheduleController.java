@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +31,9 @@ public class ScheduleController {
     public ScheduleController(ScheduleView view, ScheduleModel model) {
         this.view = view;
         this.model = model;
+
+        // 时间设为当前时间
+        updateNowDateTime(this.view);
 
         viewEntity = view.getViewEntity();
 
@@ -86,27 +90,51 @@ public class ScheduleController {
                         viewEntity.getContent().getText()
                 );
 
-                // 添加newScheduleEntity到list中, TODO: 发送请求到后端?
-                scheduleEntities.add(newScheduleEntity);
+                String addResult = model.addSchedule(newScheduleEntity);
 
-                // 刷新渲染
-                view.setScheduleEntities(scheduleEntities);
-                view.repaintEDW();
+                if (Objects.equals(addResult, "添加成功")) {
 
-                // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
-                log.info("{}, unit: {}",newScheduleEntity.toString(),viewEntity.getRemindWidget().getType());
+                    scheduleEntities.add(newScheduleEntity);
 
-                // 清空全部输入框
-                view.clearInput();
-            }
-            catch (NumberFormatException ex) {
-                ErrorMessageBox.showErrorBox("输入格式有误，请检查");
+                    // 刷新渲染
+                    view.setScheduleEntities(scheduleEntities);
+                    view.repaintEDW();
+
+                    // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
+                    log.info("{}, unit: {}",newScheduleEntity.toString(),viewEntity.getRemindWidget().getType());
+                    // 清空全部输入框
+                    view.clearInput();
+
+                    // 将时间设置设为默认值
+                    view.getViewEntity().getRemindTime().setText("0");
+
+                    updateNowDateTime(this.view); // 更新时间输入框为当前时间
+                } else if (Objects.equals(addResult, "请填写标题及提醒日期")) {
+                    ErrorMessageBox.showErrorBox(addResult);
+                } else if (Objects.equals(addResult, "昨天的事情不可以明天做")) {
+                    ErrorMessageBox.showErrorBox(addResult);
+                } else {
+                    ErrorMessageBox.showErrorBox(addResult);
+                }
             }
             catch (Exception ex) {
-                ex.printStackTrace();
+                log.error(ex.getMessage());
             }
         });
 
+    }
+
+    /**
+     * 更新输入框默认数据
+     * @param view 日程视图
+     */
+    public void updateNowDateTime(ScheduleView view) {
+        LocalDateTime now = LocalDateTime.now();
+        view.getViewEntity().getScheduleYear().setText(String.valueOf(now.getYear()));
+        view.getViewEntity().getScheduleMonth().setText(String.valueOf(now.getMonthValue()));
+        view.getViewEntity().getScheduleDay().setText(String.valueOf(now.getDayOfMonth()));
+        view.getViewEntity().getScheduleHour().setText(String.valueOf(now.getHour()));
+        view.getViewEntity().getScheduleMinute().setText(String.valueOf(now.getMinute()));
     }
 
     // 删除事件按钮执行器

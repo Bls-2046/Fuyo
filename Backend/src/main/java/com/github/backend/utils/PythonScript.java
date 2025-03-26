@@ -2,10 +2,12 @@ package com.github.backend.utils;
 
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+@Component
 @Slf4j
 public class PythonScript {
     private PythonScript() {}
@@ -59,6 +61,10 @@ public class PythonScript {
     @PreDestroy
     public void stopPythonProcess() {
         try {
+            // 关闭浏览器
+            String exit = "exit";
+            writer.write(exit + "\n");
+
             if (writer != null) {
                 writer.close();
             }

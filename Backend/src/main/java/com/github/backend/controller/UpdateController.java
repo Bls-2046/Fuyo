@@ -1,9 +1,8 @@
 package com.github.backend.controller;
 
+import com.github.backend.dto.schedule.*;
 import com.github.backend.dto.user.NicknameRequest;
 import com.github.backend.dto.user.NicknameResponse;
-import com.github.backend.dto.user.ScheduleRequest;
-import com.github.backend.dto.user.ScheduleResponse;
 import com.github.backend.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +29,8 @@ public class UpdateController {
     public NicknameResponse upload(@RequestBody NicknameRequest nicknameRequest) {
         NicknameResponse nicknameResponse = new NicknameResponse();
 
-        String username = nicknameRequest.getUsername();
-        String nickname = nicknameRequest.getNickname();
-
         try {
-            Boolean uploadResult = updateService.uploadNickname(username, nickname);
+            Boolean uploadResult = updateService.updateWeChatNickname(nicknameRequest);
 
             if (uploadResult) {
                 nicknameResponse.setStatus(200);
@@ -53,28 +49,49 @@ public class UpdateController {
 
     /**
      * 用户上传新的日程信息
-     * @param scheduleRequest 用户新增日程安排信息
+     * @param addScheduleRequest 用户新增日程安排信息
      * @return ScheduleResponse
      */
     @PostMapping("/schedule/add")
-    public ScheduleResponse uploadSchedule(@RequestBody ScheduleRequest scheduleRequest) {
-        ScheduleResponse scheduleResponse = new ScheduleResponse();
+    public AddScheduleResponse addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
+        AddScheduleResponse addScheduleResponse = new AddScheduleResponse();
 
         try {
-            Boolean uploadResult = updateService.uploadSchedule(scheduleRequest);
+            Boolean addResult = updateService.addSchedule(addScheduleRequest);
 
-            if (uploadResult) {
-                scheduleResponse.setStatus(200);
-                scheduleResponse.setMessage("Successfully uploaded schedule");
+            if (addResult) {
+                addScheduleResponse.setStatus(200);
+                addScheduleResponse.setMessage("Successfully uploaded schedule");
             } else {
-                scheduleResponse.setStatus(400);
-                scheduleResponse.setMessage("Failed to upload schedule");
+                addScheduleResponse.setStatus(400);
+                addScheduleResponse.setMessage("Failed to upload schedule");
             }
         } catch (Exception e) {
-            scheduleResponse.setStatus(500);
-            scheduleResponse.setMessage(e.getMessage());
+            addScheduleResponse.setStatus(500);
+            addScheduleResponse.setMessage(e.getMessage());
         }
 
-        return scheduleResponse;
+        return addScheduleResponse;
+    }
+
+    @PostMapping("/schedule/delete")
+    public DeleteScheduleResponse deleteSchedule(@RequestBody DeleteScheduleRequest deleteScheduleRequest) {
+        DeleteScheduleResponse deleteScheduleResponse = new DeleteScheduleResponse();
+
+        try {
+            Boolean deleteResult = updateService.deleteSchedule(deleteScheduleRequest);
+
+            if (deleteResult) {
+                deleteScheduleResponse.setStatus(200);
+                deleteScheduleResponse.setMessage("Successfully deleted");
+            } else {
+                deleteScheduleResponse.setStatus(400);
+                deleteScheduleResponse.setMessage("Failed to deleted");
+            }
+        } catch (Exception e) {
+            deleteScheduleResponse.setStatus(500);
+            deleteScheduleResponse.setMessage(e.getMessage());
+        }
+        return deleteScheduleResponse;
     }
 }

@@ -280,6 +280,7 @@ def login_bitzh(username, password):
                                 });
                             """)
                             if is_request_complete:
+                                # 所有依赖 driver 的操作放在此处
                                 student_info = get_student_info(driver)
                                 result['message'] = '登录成功'
                                 result['data'] = student_info
@@ -314,25 +315,33 @@ def check_username():
         return True
     return False
 
-if __name__ == "__main__":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    # region # 访问参数配置
+def create_browser_with_timeout(timeout_seconds=900):
+    # 配置浏览器选项
     edge_options = Options()
     edge_options.add_argument("--disable-blink-features=AutomationControlled")
-    edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])  # 禁用日志
-    edge_options.add_argument("--log-level=3")  # 关闭所有日志（FATAL 级别）
+    edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
+    edge_options.add_argument("--log-level=3")
     edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    edge_options.add_argument("--headless=new")  # 启用无头模式
-    # endregion
+
+    # 创建浏览器实例
+    driver = webdriver.Edge(options=edge_options)
+
+    # 设置自动关闭定时器
+    timer = threading.Timer(timeout_seconds, driver.quit)
+    timer.start()
+
+    return driver, timer
+
+if __name__ == "__main__":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     service = Service(edge_driver_path)
-    driver = webdriver.Edge(service=service, options=edge_options)
     while True:
         try:
-            log_to_file("Waiting for input...")  # 调试输出
+            driver, timeout_timer = create_browser_with_timeout(900)
             username = sys.stdin.readline().strip()
+            if username == "exit":
+                driver.quit()
             password = sys.stdin.readline().strip()
-            log_to_file(f"Received username: {username}, password: {password}")
-            log_to_file("脚本启动")
 
             if check_username():
                 continue
@@ -342,6 +351,6 @@ if __name__ == "__main__":
             sys.stdout.flush()
 
         except Exception as e:
-            print(json.dumps({ "message": f"程序异常错误: {str(e)}", "data": {} }))
+            print(json.dumps({ "message": "连接超时, 请重试", "data": {} }))
+            driver.quit()
             sys.stdout.flush()
-    driver.quit()

@@ -1,6 +1,7 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.user.ScheduleResponse;
+import com.github.backend.dto.schedule.Schedule;
+import com.github.backend.dto.schedule.ScheduleResponse;
 import com.github.backend.dto.user.TabletimeResponse;
 import com.github.backend.dto.user.UserInformationResponse;
 import com.github.backend.entity.ScheduleEntity;
@@ -399,19 +400,19 @@ public class UserServiceImpl implements UserService {
      * @return List<ScheduleResponse.Schedule>
      */
     @Override
-    public List<ScheduleResponse.Schedule> getSchedule(String username) {
+    public List<Schedule> getSchedule(String username) {
         List<ScheduleEntity> querySchedule =  scheduleRepository.findByUserEntityUsername(username);
-        List<ScheduleResponse.Schedule> scheduleList = new ArrayList<>();
+        List<Schedule> scheduleList = new ArrayList<>();
 
         LocalDateTime now = LocalDateTime.now();
 
         for (ScheduleEntity schedule : querySchedule) {
-            if (schedule.getReminderDatetime().isBefore(now)) {
-                ScheduleResponse.Schedule scheduleResponseSchedule = new ScheduleResponse.Schedule();
+            if (schedule.getReminderDateTime().isBefore(now)) {
+                Schedule scheduleResponseSchedule = new Schedule();
 
                 scheduleResponseSchedule.setTitle(schedule.getTitle());
-                scheduleResponseSchedule.setDateTime(schedule.getDatetime());
-                scheduleResponseSchedule.setReminderDatetime(schedule.getReminderDatetime());
+                scheduleResponseSchedule.setDateTime(schedule.getDateTime());
+                scheduleResponseSchedule.setReminderDateTime(schedule.getReminderDateTime());
                 scheduleResponseSchedule.setDescription(schedule.getDescription());
 
                 scheduleList.add(scheduleResponseSchedule);

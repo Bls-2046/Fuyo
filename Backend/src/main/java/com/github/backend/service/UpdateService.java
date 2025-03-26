@@ -1,9 +1,16 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.user.ScheduleRequest;
+import com.github.backend.dto.schedule.AddScheduleRequest;
+import com.github.backend.dto.schedule.DeleteScheduleRequest;
+import com.github.backend.dto.user.NicknameRequest;
 
 public interface UpdateService {
-    Boolean uploadNickname(String username, String nickname);
-
-    Boolean uploadSchedule(ScheduleRequest schedule);
+    /**
+     * 更新微信昵称
+     * @param nicknameRequest 用户名与微信昵称
+     * @return Boolean
+     */
+    Boolean updateWeChatNickname(NicknameRequest nicknameRequest);
+    Boolean addSchedule(AddScheduleRequest schedule);
+    Boolean deleteSchedule(DeleteScheduleRequest schedule);
 }

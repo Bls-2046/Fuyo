@@ -42,13 +42,12 @@ public class ScheduleListener {
     @Scheduled(fixedRate = 1000)
     private void checkAllScheduled() {
         // 对所有日程进行检查
-        log.info("checkAllScheduled");
         checkExecutorService.execute(() -> {
             LocalDateTime now = LocalDateTime.now();
             for(ScheduleEntity schedule : scheduleList) {
                 // 如果当前时间与提醒时间一致, 将该事务保存至线程池并等待发送提醒
                 // reminderDateTime <= now <= DateTime
-                if (!now.isBefore(schedule.getReminderDatetime()) && !now.isAfter(schedule.getDatetime())) {
+                if (!now.isBefore(schedule.getReminderDateTime()) && !now.isAfter(schedule.getDateTime())) {
                     reminderExecutorService.execute(() -> {
                         // 提醒逻辑
                         Boolean isSendWeChatMessage = null;
@@ -70,7 +69,7 @@ public class ScheduleListener {
     private void checkScheduleReminderDatetime() {
         LocalDateTime now = LocalDateTime.now(); // 获取当前时间
         for(ScheduleEntity schedule : scheduleList) {
-            LocalDateTime reminderTimePlus1800s = schedule.getReminderDatetime().plusSeconds(1800); // 超过 30 分钟
+            LocalDateTime reminderTimePlus1800s = schedule.getReminderDateTime().plusSeconds(1800); // 超过 30 分钟
             if (now.equals(reminderTimePlus1800s)) {
                 scheduleRepository.delete(schedule);
             }
@@ -103,7 +102,7 @@ public class ScheduleListener {
 
         // 按提醒日期进行排序
         newScheduleList.sort(Comparator.comparing(
-                ScheduleEntity::getReminderDatetime,
+                ScheduleEntity::getReminderDateTime,
                 Comparator.nullsFirst(Comparator.naturalOrder())
         ));
 

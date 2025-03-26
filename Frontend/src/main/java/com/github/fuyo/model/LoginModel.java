@@ -28,7 +28,7 @@ public class LoginModel {
         String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址
         LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
         try {
-            LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, LoginResponse.class);
+            LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, null, LoginResponse.class);
             message = loginResponse.getMessage();
 
             if (loginResponse.getStatus() == 200) {
@@ -40,7 +40,7 @@ public class LoginModel {
                     UserInformationRequest userInformationRequest = new UserInformationRequest();
                     userInformationRequest.setUsername(username);
                     try {
-                        UserInformationResponse userInformationResponse = Https.<UserInformationResponse>post(url, userInformationRequest, UserInformationResponse.class);
+                        UserInformationResponse userInformationResponse = Https.<UserInformationResponse>post(url, userInformationRequest, null, UserInformationResponse.class);
 
                         // 使用同步块确保线程安全
                         synchronized (UserEntity.getUserInformation()) {
@@ -68,7 +68,7 @@ public class LoginModel {
                     tabletimeRequest.setUsername(username);
 
                     try {
-                        TableTimeResponse tableTimeResponse = Https.<TableTimeResponse>post(url, tabletimeRequest, TableTimeResponse.class);
+                        TableTimeResponse tableTimeResponse = Https.<TableTimeResponse>post(url, tabletimeRequest, null, TableTimeResponse.class);
 
                         List<TabletimeEntity> tabletimeEntity = tableTimeResponse.getTabletime().stream()
                                 .map(responseTabletime -> new TabletimeEntity(

@@ -1,6 +1,7 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.user.ScheduleResponse;
+import com.github.backend.dto.schedule.Schedule;
+import com.github.backend.dto.schedule.ScheduleResponse;
 import com.github.backend.dto.user.TabletimeResponse;
 import com.github.backend.dto.user.UserInformationResponse;
 
@@ -18,5 +19,5 @@ public interface UserService {
     // 获得学生课表信息
     List<TabletimeResponse.Tabletime> getTabletime(String username);
     // 获取日程安排信息
-    List<ScheduleResponse.Schedule> getSchedule(String username);
+    List<Schedule> getSchedule(String username);
 }

@@ -16,23 +16,41 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "schedule")
 public class ScheduleEntity {
+
     @Id
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
 
-    private String openid; // 微信公众号用户的唯一标识
-    private String title; // 日程标题
-    private LocalDateTime datetime; // 日程时间
-    private LocalDateTime reminderDatetime; // 日程提醒时间 (处理完成计算后存入)
-    private String description; // 日程具体内容
+    @Column(name = "openid", nullable = false, length = 64)
+    private String openid;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "date_time", nullable = false)
+    private LocalDateTime dateTime;
+
+    @Column(name = "reminder_date_time", nullable = false)
+    private LocalDateTime reminderDateTime;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "is_reminder_in_client", nullable = false, columnDefinition = "BIT(1) DEFAULT 0")
+    private Boolean isReminderInClient;
+
+    @Column(name = "is_send_we_chat_reminder", nullable = false, columnDefinition = "BIT(1) DEFAULT 0")
+    private Boolean isSendWeChatReminder;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private UserEntity userEntity;
 
-    // 生成唯一标识
     public ScheduleEntity() {
         this.id = UUID.randomUUID().toString();
+        // 初始化布尔值默认值（如果业务需要）
+        this.isReminderInClient = false;
+        this.isSendWeChatReminder = false;
     }
 }
