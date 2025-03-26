@@ -5,13 +5,11 @@ import com.github.fuyo.entity.ScheduleViewEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.model.ScheduleModel;
 import com.github.fuyo.view.messagebox.ErrorMessageBox;
-import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,8 +17,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static com.github.fuyo.view.navigation.schedule.ScheduleDialogView.showDialog;
 
 @Slf4j
 public class ScheduleController {
@@ -30,9 +26,6 @@ public class ScheduleController {
 
     private ScheduleViewEntity viewEntity;
     private List<ScheduleEntity> scheduleEntities;
-
-    private Thread remindMonitor;
-    private Thread executeMonitor;
 
     public ScheduleController(ScheduleView view, ScheduleModel model) {
         this.view = view;
@@ -113,8 +106,6 @@ public class ScheduleController {
                 ex.printStackTrace();
             }
         });
-
-
 
     }
 

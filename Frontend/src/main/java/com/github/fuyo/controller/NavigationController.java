@@ -10,16 +10,16 @@ import com.github.fuyo.model.NavigationModel;
 import com.github.fuyo.model.ScheduleModel;
 import com.github.fuyo.model.UserViewModel;
 import com.github.fuyo.view.LoginView;
+import com.github.fuyo.view.messagebox.ErrorMessageBox;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
-import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
+import com.github.fuyo.view.navigation.schedule.GuideView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
 import com.github.fuyo.view.navigation.user.UserView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +44,17 @@ public class NavigationController implements NavigationCloseListener {
         // 添加监听
         exitButton.addActionListener(e -> System.exit(0));
 
+        // Index层
+        JButton indexButton  = naviButtonList.get(NaviFunctionButtonEnum.INDEX.ordinal());
+        indexButton.addActionListener(e -> {
+            List<TabletimeEntity> tabletimeEntity = user.getTabletimeEntity();
+
+            // 按图层顺序渲染，优先渲染导航栏。
+            SwingUtilities.invokeLater(() -> {
+                view.renderRouterView(new ClazzView(tabletimeEntity));
+            });
+        });
+
         // Clazz层
         JButton clazzButton  = naviButtonList.get(NaviFunctionButtonEnum.CLAZZ.ordinal());
         clazzButton.addActionListener(e -> {
@@ -66,7 +77,6 @@ public class NavigationController implements NavigationCloseListener {
             });
         });
 
-
         // Schedule层
         JButton scheduleButton = naviButtonList.get(NaviFunctionButtonEnum.NOTIFY.ordinal());
         scheduleButton.addActionListener(e -> {
@@ -80,11 +90,56 @@ public class NavigationController implements NavigationCloseListener {
                 scheduleEntities = new ArrayList<>();
             }
 
-            ScheduleController scheduleController = new ScheduleController(new ScheduleView(scheduleEntities), new ScheduleModel());
+            if (user.getWechatUser() == null) {
+                log.warn("user.getWechatUser() is null, goto GuideView");
 
-            SwingUtilities.invokeLater(() -> {
-                view.renderRouterView(scheduleController.getView());
-            });
+                SwingUtilities.invokeLater(() -> {
+                    // 没有获取到微信用户数据
+                    GuideView guideView = new GuideView();
+                    SwingUtilities.invokeLater(() -> {
+                       view.renderRouterView(guideView);
+                    });
+                    JButton submitButton = guideView.getSubmitButton();
+                    submitButton.addActionListener(e2 -> {
+
+                        boolean isVaild = false;
+
+                        // wx nick name string
+                        String userNickName = guideView.getNickNameInput().getText();
+
+                        // TODO: 判断逻辑, 校验通过则设置isVaild = true
+                        if (!userNickName.isEmpty()) {
+                            log.info("User nickname is {}", userNickName);
+                            isVaild = true;
+                        } else {
+                            log.info("User nickname is empty");
+                        }
+
+                        if (isVaild){
+                            view.getLp().remove(guideView);
+                            view.revalidate();
+                            view.repaint();
+                            ScheduleController scheduleController = new ScheduleController(new ScheduleView(scheduleEntities), new ScheduleModel());
+
+                            SwingUtilities.invokeLater(() -> {
+                                view.renderRouterView(scheduleController.getView());
+                            });
+                        } else {
+                            ErrorMessageBox.showErrorBox("校验错误，请重新输入");
+                        }
+
+                    });
+                });
+
+            } else {
+
+                ScheduleController scheduleController = new ScheduleController(new ScheduleView(scheduleEntities), new ScheduleModel());
+
+                SwingUtilities.invokeLater(() -> {
+                    view.renderRouterView(scheduleController.getView());
+                });
+
+            }
         });
     }
 
