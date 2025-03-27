@@ -16,6 +16,11 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "schedule")
 public class ScheduleEntity {
+    public ScheduleEntity() {
+        this.id = UUID.randomUUID().toString();
+        this.isReminderInClient = false;
+        this.isSendWeChatReminder = false;
+    }
 
     @Id
     @Column(name = "id", unique = true, nullable = false, length = 36)
@@ -46,11 +51,4 @@ public class ScheduleEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private UserEntity userEntity;
-
-    public ScheduleEntity() {
-        this.id = UUID.randomUUID().toString();
-        // 初始化布尔值默认值（如果业务需要）
-        this.isReminderInClient = false;
-        this.isSendWeChatReminder = false;
-    }
 }

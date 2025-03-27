@@ -10,6 +10,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "wechat_user")
 public class WeChatUserEntity {
+    public WeChatUserEntity() {
+        this.id = UUID.randomUUID().toString();
+    }
+
     @Id
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
@@ -66,9 +70,4 @@ public class WeChatUserEntity {
 
     @Column(name = "qr_scene_str", length = 128)
     private String qrSceneStr; // 二维码扫码场景描述（开发者自定义）
-
-    // 为每微信用户生成唯一标识
-    public WeChatUserEntity() {
-        this.id = UUID.randomUUID().toString();
-    }
 }
