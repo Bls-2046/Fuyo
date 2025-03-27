@@ -3,7 +3,7 @@ package com.github.backend.controller;
 import com.github.backend.dto.schedule.*;
 import com.github.backend.dto.wechat.NicknameRequest;
 import com.github.backend.dto.wechat.NicknameResponse;
-import com.github.backend.service.UpdateService;
+import com.github.backend.service.UpdateDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +14,16 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/update")
-public class UpdateController {
-    private final UpdateService updateService;
+public class UpdateDataController {
+    private final UpdateDataService updateDataService;
 
     @Autowired
-    public UpdateController(UpdateService updateService) {
-        this.updateService = updateService;
+    public UpdateDataController(UpdateDataService updateDataService) {
+        this.updateDataService = updateDataService;
     }
 
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Schedule /////////////////////////////////////////////
     /**
      * 上传微信用户名(需要关注微信公众号)
      * @param nicknameRequest 请求体
@@ -32,7 +34,7 @@ public class UpdateController {
         NicknameResponse nicknameResponse = new NicknameResponse();
 
         try {
-            Boolean uploadResult = updateService.updateWeChatNickname(nicknameRequest);
+            Boolean uploadResult = updateDataService.updateWeChatNickname(nicknameRequest);
 
             if (uploadResult) {
                 nicknameResponse.setStatus(200);
@@ -59,7 +61,7 @@ public class UpdateController {
         AddScheduleResponse addScheduleResponse = new AddScheduleResponse();
         System.out.println(addScheduleRequest);
         try {
-            Boolean addResult = updateService.addSchedule(addScheduleRequest);
+            Boolean addResult = updateDataService.addSchedule(addScheduleRequest);
 
             if (addResult) {
                 addScheduleResponse.setStatus(200);
@@ -78,15 +80,15 @@ public class UpdateController {
 
     /**
      * 删除用户指定的日程信息
-     * @param deleteScheduleRequest
-     * @return
+     * @param deleteScheduleRequest 指定的日程信息
+     * @return DeleteScheduleResponse
      */
     @PostMapping("/schedule/delete")
     public DeleteScheduleResponse deleteSchedule(@RequestBody DeleteScheduleRequest deleteScheduleRequest) {
         DeleteScheduleResponse deleteScheduleResponse = new DeleteScheduleResponse();
 
         try {
-            Boolean deleteResult = updateService.deleteSchedule(deleteScheduleRequest);
+            Boolean deleteResult = updateDataService.deleteSchedule(deleteScheduleRequest);
 
             if (deleteResult) {
                 deleteScheduleResponse.setStatus(200);
@@ -102,6 +104,11 @@ public class UpdateController {
         return deleteScheduleResponse;
     }
 
+    /**
+     * 对已显示提示框日程作标记
+     * @param markRemindedScheduleForClientRequest 已显示提示框的日程信息
+     * @return MarkRemindedScheduleForClientResponse
+     */
     @PostMapping("/schedule/mark-reminder-for-client")
     public MarkRemindedScheduleForClientResponse markRemindedScheduleForClient(
             @RequestBody MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest) {
@@ -110,7 +117,7 @@ public class UpdateController {
 
         try {
             log.info(String.valueOf(markRemindedScheduleForClientRequest));
-            Boolean markResult = updateService.markRemindedScheduleForClient(markRemindedScheduleForClientRequest);
+            Boolean markResult = updateDataService.markRemindedScheduleForClient(markRemindedScheduleForClientRequest);
 
             if (markResult) {
                 markRemindedScheduleForClientResponse.setStatus(200);
