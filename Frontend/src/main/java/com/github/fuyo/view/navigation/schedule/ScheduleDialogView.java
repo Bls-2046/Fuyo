@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
-public class ScheduleDialogView extends JFrame {
+public class ScheduleDialogView extends JDialog {
 
     public ScheduleDialogView(ScheduleEntity scheduleEntity) {
 
@@ -16,7 +16,7 @@ public class ScheduleDialogView extends JFrame {
         setResizable(false);
         setSize(640, 320);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setBackground(new Color(0, 0, 0, 0));
 
         JLayeredPane lp = getLayeredPane();
@@ -48,11 +48,16 @@ public class ScheduleDialogView extends JFrame {
         });
         lp.add(closeButton, JLayeredPane.POPUP_LAYER);
 
-        setVisible(true);
     }
 
     public static void showDialog(ScheduleEntity scheduleEntity) {
-        new ScheduleDialogView(scheduleEntity);
+        ScheduleDialogView dialog = new ScheduleDialogView(scheduleEntity);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Some offsets
+        int x = (int)(screenSize.getWidth() - dialog.getWidth()) - 10;
+        int y = (int)(screenSize.getHeight() - dialog.getHeight()) - 10;
+        dialog.setLocation(x, y);
+        dialog.setVisible(true);
     }
 
 }

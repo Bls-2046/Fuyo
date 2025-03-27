@@ -38,30 +38,40 @@ public class EventDashWidget extends JLayeredPane {
         setBounds(71, 492, 901, 227);
         setOpaque(false);
 
+        // cnt
+        int i = 0;
+
         // For-i Create, each for 90 height, Maximum is 3
-        for (int i = 0; i < (Math.min(events.size(), 3)); i++) {
+        for (ScheduleEntity schedule : events) {
+
+            if (i > 2) break; // 0, 1, 2
 
             log.info("EventDashWidget initWidget schedule create");
 
-            ScheduleEntity schedule = events.get(i);
+            // if true, then dont show
+            if (!schedule.getIsReminderInClient()) {
+                // bg
+                RUILabel bg = new RUILabel("mainFrame/views/reminder","EventDashContent.png");
+                add(bg.imageLabel(0,90*i),POPUP_LAYER);
 
-            // bg
-            RUILabel bg = new RUILabel("mainFrame/views/reminder","EventDashContent.png");
-            add(bg.imageLabel(0,90*i),POPUP_LAYER);
+                // text
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                String time = schedule.getDateTime().format(dtf);
 
-            // text
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            String time = schedule.getDateTime().format(dtf);
+                add(RUILabel.getEmptyTextLabel(17,(90*i) - 17,time,14,"微软雅黑",Color.GRAY,Font.PLAIN),POPUP_LAYER);
+                add(RUILabel.getEmptyTextLabel(17,7 + (90*i), ScheduleView.wordLimitation(schedule.getTitle() + " - " + schedule.getDescription()),22,"微软雅黑",Color.GRAY,Font.BOLD),POPUP_LAYER);
 
-            add(RUILabel.getEmptyTextLabel(17,(90*i) - 17,time,14,"微软雅黑",Color.GRAY,Font.PLAIN),POPUP_LAYER);
-            add(RUILabel.getEmptyTextLabel(17,7 + (90*i), ScheduleView.wordLimitation(schedule.getTitle() + " - " + schedule.getDescription()),22,"微软雅黑",Color.GRAY,Font.BOLD),POPUP_LAYER);
+                JButton button = RUILabel.getStaticEmptyLayerButton(865,5 + (90*i),36,37);
+                buttons.add(button);
+                add(button,POPUP_LAYER);
+                button.addActionListener(e -> {
+                    deleteObject(schedule);
+                });
 
-            JButton button = RUILabel.getStaticEmptyLayerButton(865,5 + (90*i),36,37);
-            buttons.add(button);
-            add(button,POPUP_LAYER);
-            button.addActionListener(e -> {
-                deleteObject(schedule);
-            });
+                i++;
+
+            }
+
         }
     }
 
