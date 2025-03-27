@@ -81,6 +81,7 @@ public class ScheduleController {
                 LocalDateTime result = LocalDateTime.of(date, time);
 
                 ScheduleEntity newScheduleEntity = new ScheduleEntity(
+                        "",
                         viewEntity.getTitle().getText(),
                         result,
                         result.minusSeconds(second),

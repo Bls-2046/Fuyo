@@ -14,6 +14,7 @@ public class ScheduleResponse {
 
     @Data
     public static class Schedule {
+        private String id;
         private String title;
         private LocalDateTime dateTime;
         private LocalDateTime reminderDateTime;

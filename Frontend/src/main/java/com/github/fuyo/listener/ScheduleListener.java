@@ -58,7 +58,7 @@ public final class ScheduleListener {
         LocalDateTime now = LocalDateTime.now();
         for (ScheduleEntity schedule : (UserEntity.getUserInformation().getSchedule())) {
             if (!schedule.getIsReminderInClient()) {
-                if (now.isAfter(schedule.getReminderDateTime()) && now.isBefore(schedule.getDateTime())) {
+                if (now.isAfter(schedule.getReminderDateTime())) {
 
                     markReminderScheduleForClient(schedule);
                     log.warn(schedule.toString());
@@ -85,25 +85,17 @@ public final class ScheduleListener {
             MarkRemindedScheduleForClientRequest
                     markRemindedScheduleForClientRequest = new MarkRemindedScheduleForClientRequest();
 
-            markRemindedScheduleForClientRequest.setUsername(
-                    UserEntity.getUserInformation().getUsername()
-            );
-            markRemindedScheduleForClientRequest.setOpenid(
-                    "testUser"
-            );
-            markRemindedScheduleForClientRequest.setSchedule(schedule);
+            markRemindedScheduleForClientRequest.setId(schedule.getId());
+            markRemindedScheduleForClientRequest.setUsername(UserEntity.getUserInformation().getUsername());
 
             MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse
-                    = Https.post(
-                            url,
-                    markRemindedScheduleForClientRequest,
-                    null,
-                    MarkRemindedScheduleForClientResponse.class);
+                    = Https.post(url, markRemindedScheduleForClientRequest, null, MarkRemindedScheduleForClientResponse.class);
 
             if (markRemindedScheduleForClientResponse.getStatus() == 200) {
                 log.info("mark reminder for client success");
             }
         } catch (IOException e) {
+            e.printStackTrace();
             log.info(e.getMessage());
         }
     }

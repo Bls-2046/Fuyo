@@ -70,24 +70,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Boolean deleteScheduleInfo(DeleteScheduleRequest deleteScheduleRequest) {
         try {
+            String id = deleteScheduleRequest.getId();
             String username = deleteScheduleRequest.getUsername();
-            String openid = deleteScheduleRequest.getOpenid();
-            String title = deleteScheduleRequest.getSchedule().getTitle();
-            LocalDateTime dateTime = deleteScheduleRequest.getSchedule().getDateTime().truncatedTo(ChronoUnit.SECONDS);
-            LocalDateTime reminderDateTime = deleteScheduleRequest.getSchedule().getReminderDateTime().truncatedTo(ChronoUnit.SECONDS);  // 修正此处为 getReminderDateTime()
 
-            String description = deleteScheduleRequest.getSchedule().getDescription();
-
-            ScheduleEntity deleteSchedule = scheduleRepository.findByTitleAndDateTimeAndReminderDateTimeAndDescriptionAndOpenidAndUserEntityUsername(
-                    title,
-                    dateTime.minusSeconds(1),  // 时间下限（当前时间-1秒）
-                    dateTime.plusSeconds(1),   // 时间上限（当前时间+1秒）
-                    reminderDateTime.minusSeconds(1),
-                    reminderDateTime.plusSeconds(1),
-                    description,
-                    openid,
-                    username
-            );
+            ScheduleEntity deleteSchedule = scheduleRepository.findByIdAndUserEntityUsername(id, username);
 
             scheduleRepository.delete(deleteSchedule);
 
@@ -107,24 +93,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Boolean markRemindedScheduleForClient(MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest) {
         try {
+            String id = markRemindedScheduleForClientRequest.getId();
             String username = markRemindedScheduleForClientRequest.getUsername();
-            String openid = markRemindedScheduleForClientRequest.getOpenid();
-            String title = markRemindedScheduleForClientRequest.getSchedule().getTitle();
-            LocalDateTime dateTime = markRemindedScheduleForClientRequest.getSchedule().getDateTime().truncatedTo(ChronoUnit.SECONDS);
-            LocalDateTime reminderDateTime = markRemindedScheduleForClientRequest.getSchedule().getReminderDateTime().truncatedTo(ChronoUnit.SECONDS);
 
-            String description = markRemindedScheduleForClientRequest.getSchedule().getDescription();
-
-            ScheduleEntity schedule = scheduleRepository.findByTitleAndDateTimeAndReminderDateTimeAndDescriptionAndOpenidAndUserEntityUsername(
-                    title,
-                    dateTime.minusSeconds(1),
-                    dateTime.plusSeconds(1),
-                    reminderDateTime.minusSeconds(1),
-                    reminderDateTime.plusSeconds(1),
-                    description,
-                    openid,
-                    username
-            );
+            ScheduleEntity schedule = scheduleRepository.findByIdAndUserEntityUsername(id, username);
 
             log.info(schedule.toString());
 
@@ -134,7 +106,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return false;

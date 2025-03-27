@@ -7,7 +7,6 @@ import lombok.Data;
  */
 @Data
 public class MarkRemindedScheduleForClientRequest {
+    private String id;
     private String username;
-    private String openid;
-    private Schedule schedule;
 }

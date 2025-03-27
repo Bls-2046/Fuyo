@@ -410,6 +410,7 @@ public class UserServiceImpl implements UserService {
             if (schedule.getReminderDateTime().isBefore(now)) {
                 ScheduleResponse.Schedule scheduleResponseSchedule = new ScheduleResponse.Schedule();
 
+                scheduleResponseSchedule.setId(schedule.getId());
                 scheduleResponseSchedule.setTitle(schedule.getTitle());
                 scheduleResponseSchedule.setDateTime(schedule.getDateTime());
                 scheduleResponseSchedule.setReminderDateTime(schedule.getReminderDateTime());

@@ -1,9 +1,6 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.schedule.AddScheduleResponse;
-import com.github.fuyo.dto.schedule.DeleteScheduleResponse;
-import com.github.fuyo.dto.schedule.ScheduleRequest;
-import com.github.fuyo.dto.schedule.ScheduleResponse;
+import com.github.fuyo.dto.schedule.*;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.https.Https;
@@ -45,24 +42,20 @@ public class ScheduleModel {
         String result = "添加失败";
         try {
             String url = "http://127.0.0.1:8080/api/update/schedule/add";
-            Map<String, Object> body = new HashMap<>();
+            AddScheduleRequest addScheduleRequest = new AddScheduleRequest();
+            Schedule newSchedule = new Schedule();
 
-            body.put("username", UserEntity.getUserInformation().getUsername());
-            // body.put("openid", UserEntity.getUserInformation().getWechatUser().getOpenid());
+            addScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
+            addScheduleRequest.setOpenid("testUser");
 
-            // 测试
-            body.put("openid", "testUser");
+            newSchedule.setTitle(schedule.getTitle());
+            newSchedule.setDataTime(schedule.getDateTime());
+            newSchedule.setReminderDateTime(schedule.getDateTime());
+            newSchedule.setDescription(schedule.getDescription());
 
-            Map<String, Object> scheduleObject = new HashMap<>();
-            scheduleObject.put("title", schedule.getTitle());
-            scheduleObject.put("dateTime", schedule.getDateTime());
-            scheduleObject.put("reminderDateTime", schedule.getReminderDateTime());
-            scheduleObject.put("description", schedule.getDescription());
+            addScheduleRequest.setSchedule(newSchedule);
 
-            // 将 schedule 对象放入外层对象
-            body.put("schedule", scheduleObject);
-
-            AddScheduleResponse addResult = Https.<AddScheduleResponse>post(url, body, null, AddScheduleResponse.class);
+            AddScheduleResponse addResult = Https.<AddScheduleResponse>post(url, addScheduleRequest, null, AddScheduleResponse.class);
 
             if (addResult.getStatus() == 200) {
                 result = "添加成功";
@@ -81,22 +74,13 @@ public class ScheduleModel {
      */
     public static String deleteSchedule(ScheduleEntity schedule) {
         String url = "http://127.0.0.1:8080/api/update/schedule/delete";
-        Map<String, Object> body = new HashMap<>();
+        DeleteScheduleRequest deleteScheduleRequest = new DeleteScheduleRequest();
 
-        body.put("username", UserEntity.getUserInformation().getUsername());
+        deleteScheduleRequest.setId(schedule.getId());
+        deleteScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
 
-        body.put("openid", "testUser");
-
-        Map<String, Object> scheduleObject = new HashMap<>();
-        scheduleObject.put("title", schedule.getTitle());
-        scheduleObject.put("dateTime", schedule.getDateTime());
-        scheduleObject.put("reminderDateTime", schedule.getReminderDateTime());
-        scheduleObject.put("description", schedule.getDescription());
-
-        // 将 schedule 对象放入外层对象
-        body.put("schedule", scheduleObject);
         try {
-            DeleteScheduleResponse deleteResult = Https.<DeleteScheduleResponse>post(url, body, null, DeleteScheduleResponse.class);
+            DeleteScheduleResponse deleteResult = Https.<DeleteScheduleResponse>post(url, deleteScheduleRequest, null, DeleteScheduleResponse.class);
 
             if (deleteResult.getStatus() == 200) {
                 return "删除成功";
@@ -120,6 +104,7 @@ public class ScheduleModel {
             ScheduleResponse scheduleResponse = Https.<ScheduleResponse>post(url, scheduleRequest, null, ScheduleResponse.class);
             List<ScheduleEntity> scheduleEntity = scheduleResponse.getSchedule().stream()
                     .map(responseSchedule -> new ScheduleEntity(
+                            responseSchedule.getId(),
                             responseSchedule.getTitle(),
                             responseSchedule.getDateTime(),
                             responseSchedule.getReminderDateTime(),
