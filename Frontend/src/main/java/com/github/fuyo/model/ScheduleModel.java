@@ -90,7 +90,7 @@ public class ScheduleModel {
     }
 
     public static void getSchedule(String username) {
-        String url = "http://localhost:8080/api/user/schedule";
+        String url = "http://localhost:8080/api/fetch/schedule";
         ScheduleRequest scheduleRequest = new ScheduleRequest();
         try {
             scheduleRequest.setUsername(username);

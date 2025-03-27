@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class TabletimeModel {
     public TabletimeModel() {}
 
-    public static void getTabletime(String username) {
-        String url = "http://localhost:8080/api/user/tabletime";
+    public static void fetchTabletime(String username) {
+        String url = "http://localhost:8080/api/fetch/tabletime";
         TabletimeRequest tabletimeRequest = new TabletimeRequest();
         tabletimeRequest.setUsername(username);
 

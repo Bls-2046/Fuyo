@@ -1,11 +1,6 @@
 package com.github.fuyo.model;
 
 import com.github.fuyo.dto.*;
-import com.github.fuyo.dto.schedule.ScheduleRequest;
-import com.github.fuyo.dto.schedule.ScheduleResponse;
-import com.github.fuyo.entity.ScheduleEntity;
-import com.github.fuyo.entity.TabletimeEntity;
-import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.listener.StartupTasks;
 import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.Https;
@@ -15,11 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class LoginModel {
@@ -31,7 +22,7 @@ public class LoginModel {
     public String loginVerification(String username, String password) {
         String message;
 
-        String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址
+        String loginUrl = "http://localhost:8080/api/operation/login";
         LoginRequest loginRequest = new LoginRequest(username, password);
         try {
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, null, LoginResponse.class);
@@ -55,7 +46,7 @@ public class LoginModel {
                 // 获取用户课表信息
                 new Thread(() -> {
                     try {
-                        TabletimeModel.getTabletime(username);
+                        TabletimeModel.fetchTabletime(username);
                     } catch (Exception e) {
                         log.error(e.getMessage());
                     } finally {
