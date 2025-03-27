@@ -52,20 +52,14 @@ public class ScheduleController {
 
                 int second = 0;
 
-                // 提前提醒时间
+                // 提前提醒时间, 通过日期时间计算提醒时间
                 switch (viewEntity.getRemindWidget().getType()) {
-                    case 1 -> {
-                        // Day
-                        second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 86400;
-                    }
-                    case 2 -> {
-                        // Hrs
-                        second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 3600;
-                    }
-                    case 3 -> {
-                        // Min
-                        second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 60;
-                    }
+                    case 1 -> // Day
+                            second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 86400;
+                    case 2 -> // Hrs
+                            second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 3600;
+                    case 3 -> // Min
+                            second = Integer.parseInt(viewEntity.getRemindTime().getText()) * 60;
                 }
 
                 LocalDate date = LocalDate.of(
