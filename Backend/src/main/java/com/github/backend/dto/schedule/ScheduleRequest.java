@@ -8,5 +8,4 @@ import java.time.LocalDateTime;
 public class ScheduleRequest {
     private String username;
     private String openid;
-    private Schedule schedule;
 }

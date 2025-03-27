@@ -2,6 +2,7 @@ package com.github.backend.service.impl;
 
 import com.github.backend.dto.schedule.AddScheduleRequest;
 import com.github.backend.dto.schedule.DeleteScheduleRequest;
+import com.github.backend.dto.schedule.MarkRemindedScheduleForClientRequest;
 import com.github.backend.dto.user.NicknameRequest;
 import com.github.backend.service.ScheduleService;
 import com.github.backend.service.UpdateService;
@@ -52,5 +53,13 @@ public class UpdateServiceImpl implements UpdateService {
     @Override
     public Boolean deleteSchedule(DeleteScheduleRequest deleteScheduleRequest) {
         return scheduleService.deleteScheduleInfo(deleteScheduleRequest);
+    }
+
+
+    @Override
+    public Boolean markRemindedScheduleForClient(
+            MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest
+    ) {
+        return scheduleService.markRemindedScheduleForClient(markRemindedScheduleForClientRequest);
     }
 }

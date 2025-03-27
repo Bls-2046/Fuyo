@@ -2,6 +2,7 @@ package com.github.backend.service.impl;
 
 import com.github.backend.dto.schedule.AddScheduleRequest;
 import com.github.backend.dto.schedule.DeleteScheduleRequest;
+import com.github.backend.dto.schedule.MarkRemindedScheduleForClientRequest;
 import com.github.backend.entity.ScheduleEntity;
 import com.github.backend.entity.UserEntity;
 import com.github.backend.repository.ScheduleRepository;
@@ -68,7 +69,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public Boolean deleteScheduleInfo(DeleteScheduleRequest deleteScheduleRequest) {
-
         try {
             String username = deleteScheduleRequest.getUsername();
             String openid = deleteScheduleRequest.getOpenid();
@@ -90,7 +90,47 @@ public class ScheduleServiceImpl implements ScheduleService {
             );
 
             scheduleRepository.delete(deleteSchedule);
+
             return true;
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * 为前端已显示提醒弹窗的日程做标记
+     * @param markRemindedScheduleForClientRequest
+     * @return Boolean
+     */
+    @Override
+    public Boolean markRemindedScheduleForClient(MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest) {
+        try {
+            String username = markRemindedScheduleForClientRequest.getUsername();
+            String openid = markRemindedScheduleForClientRequest.getOpenid();
+            String title = markRemindedScheduleForClientRequest.getSchedule().getTitle();
+            LocalDateTime dateTime = markRemindedScheduleForClientRequest.getSchedule().getDateTime().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime reminderDateTime = markRemindedScheduleForClientRequest.getSchedule().getReminderDateTime().truncatedTo(ChronoUnit.SECONDS);
+
+            String description = markRemindedScheduleForClientRequest.getSchedule().getDescription();
+
+            ScheduleEntity schedule = scheduleRepository.findByTitleAndDateTimeAndReminderDateTimeAndDescriptionAndOpenidAndUserEntityUsername(
+                    title,
+                    dateTime.minusSeconds(1),
+                    dateTime.plusSeconds(1),
+                    reminderDateTime.minusSeconds(1),
+                    reminderDateTime.plusSeconds(1),
+                    description,
+                    openid,
+                    username
+            );
+
+            schedule.setIsReminderInClient(Boolean.TRUE);
+            scheduleRepository.save(schedule);
+
+            return true;
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }

@@ -1,57 +1,114 @@
 package com.github.fuyo.listener;
 
+import com.github.fuyo.dto.schedule.MarkRemindedScheduleForClientRequest;
+import com.github.fuyo.dto.schedule.MarkRemindedScheduleForClientResponse;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.utils.https.Https;
+import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.fuyo.view.navigation.schedule.ScheduleDialogView.showDialog;
 
-public class ScheduleListener {
+@Slf4j
+public final class ScheduleListener {
+    private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-    public ScheduleListener() {
-        monitorAndTrigger(0);
-        monitorAndTrigger(1);
-        monitorAndTrigger(2);
-    }
+    private static final ExecutorService taskExecutor = Executors.newCachedThreadPool();
 
-    // 时间监听器
-    private void monitorAndTrigger(int idx) {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private static boolean isRunning = false; // 监听状态标志
 
-        // 1S检查一次时间
+    // 私有构造方法，防止外部实例化
+    private ScheduleListener() {}
+
+    /**
+     * 登录成功后调用此方法启动监听
+     */
+    public static synchronized void start() {
+        if (isRunning) {
+            return;
+        }
         executor.scheduleAtFixedRate(() -> {
-
-            List<ScheduleEntity> schedule = UserEntity.getUserInformation().getSchedule();
-            ScheduleEntity scheduleEntity = schedule.get(idx);
-
-            if (scheduleEntity != null) {
-
-                LocalDateTime now = LocalDateTime.now();
-
-                // 如果当前时间位于Reminder和Date之间
-                if ((now.isAfter(scheduleEntity.getReminderDatetime()) && now.isBefore(scheduleEntity.getDatetime()))) {
-
-                    SwingUtilities.invokeLater(() -> {
-
-                        // TODO: 服务端删除
-
-
-                        // 显示提示框
-                        showDialog(scheduleEntity);
-
-                    });
-
-                }
-
+            log.info("ScheduleListener is running");
+            try {
+                checkAndTriggerSchedules();
+            } catch (Exception e) {
+                log.info(e.getMessage());
             }
+        }, 0, 1, TimeUnit.SECONDS);
 
-        }, 0, 1000, TimeUnit.MILLISECONDS); // 1 SEC / CHECK
+        isRunning = true;
     }
 
+    /**
+     * 检查日程并提醒
+     */
+    private static void checkAndTriggerSchedules() {
+        LocalDateTime now = LocalDateTime.now();
+        for (ScheduleEntity schedule : (UserEntity.getUserInformation().getSchedule())) {
+            if (!schedule.getIsReminderInClient()) {
+                if (schedule.getReminderDateTime().isAfter(now)) {
+                    // 标记已发送提醒的日程
+                    schedule.setIsReminderInClient(true);
+                    // 数据库标记
+                    new Thread(() -> markReminderScheduleForClient(schedule)).start();
+
+                    taskExecutor.submit(() -> {
+                        // 消息框弹出
+                        ScheduleDialogView.showDialog(schedule);
+                    });
+                }
+            }
+        }
+    }
+
+    /**
+     * 想后端发送请求改变数据库标记
+     * @param schedule 日程信息
+     */
+    private static void markReminderScheduleForClient(ScheduleEntity schedule) {
+        try {
+            String url = "http://127.0.0.1:8080/fuyo/schedule/mark-reminder-for-client";
+            MarkRemindedScheduleForClientRequest
+                    markRemindedScheduleForClientRequest = new MarkRemindedScheduleForClientRequest();
+
+            markRemindedScheduleForClientRequest.setUsername(
+                    UserEntity.getUserInformation().getUsername()
+            );
+            markRemindedScheduleForClientRequest.setOpenid(
+                    UserEntity.getUserInformation().getWechatUser().getOpenid()
+            );
+            markRemindedScheduleForClientRequest.setSchedule(schedule);
+
+            MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse
+                    = Https.post(
+                            url,
+                    markRemindedScheduleForClientRequest,
+                    null,
+                    MarkRemindedScheduleForClientResponse.class);
+
+            if (markRemindedScheduleForClientResponse.getStatus() == 200) {
+                log.info("mark reminder for client success");
+            }
+        } catch (IOException e) {
+            log.info(e.getMessage());
+        }
+    }
+
+    /**
+     * 停止监听（如退出登录时调用）
+     */
+    public static synchronized void stop() {
+        executor.shutdownNow(); // 立即终止任务
+        isRunning = false;
+    }
 }

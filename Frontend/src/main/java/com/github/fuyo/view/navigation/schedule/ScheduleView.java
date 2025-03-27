@@ -34,7 +34,7 @@ public class ScheduleView extends JLayeredPane {
         this.scheduleEntities = scheduleEntities;
 
         // Sort
-        scheduleEntities.sort((o1, o2) -> o2.getDatetime().compareTo(o1.getDatetime()));
+        scheduleEntities.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
 
         // Fixed
         setBounds(260, 0, 1100, 768);
@@ -108,7 +108,7 @@ public class ScheduleView extends JLayeredPane {
     public void repaintEDW(){
         remove(edw);
         // Sort
-        scheduleEntities.sort(((o1, o2) -> o2.getDatetime().compareTo(o1.getDatetime())));
+        scheduleEntities.sort(((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime())));
         edw = new EventDashWidget(scheduleEntities);
         add(edw, POPUP_LAYER);
         revalidate();

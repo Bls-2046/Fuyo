@@ -165,5 +165,4 @@ public class NavigationController implements NavigationCloseListener {
             log.error("NavigationView is null!");
         }
     }
-
 }

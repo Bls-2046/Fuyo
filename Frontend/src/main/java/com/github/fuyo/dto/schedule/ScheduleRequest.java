@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class ScheduleRequest {
-    private Schedule schedule;
+    private String username;
+    private String openid;
 }

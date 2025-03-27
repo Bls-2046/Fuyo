@@ -51,7 +51,7 @@ public class EventDashWidget extends JLayeredPane {
 
             // text
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            String time = schedule.getDatetime().format(dtf);
+            String time = schedule.getDateTime().format(dtf);
 
             add(RUILabel.getEmptyTextLabel(17,(90*i) - 17,time,14,"微软雅黑",Color.GRAY,Font.PLAIN),POPUP_LAYER);
             add(RUILabel.getEmptyTextLabel(17,7 + (90*i), ScheduleView.wordLimitation(schedule.getTitle() + " - " + schedule.getDescription()),22,"微软雅黑",Color.GRAY,Font.BOLD),POPUP_LAYER);

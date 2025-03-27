@@ -1,8 +1,12 @@
 package com.github.fuyo.model;
 
 import com.github.fuyo.dto.*;
+import com.github.fuyo.dto.schedule.ScheduleRequest;
+import com.github.fuyo.dto.schedule.ScheduleResponse;
+import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.listener.StartupTasks;
 import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.Https;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
@@ -26,69 +32,41 @@ public class LoginModel {
         String message;
 
         String loginUrl = "http://localhost:8080/api/user/login"; // 验证请求地址
-        LoginRequest loginRequest = new LoginRequest(username, password); // 构建请求体
+        LoginRequest loginRequest = new LoginRequest(username, password);
         try {
             LoginResponse loginResponse = Https.<LoginResponse>post(loginUrl, loginRequest, null, LoginResponse.class);
             message = loginResponse.getMessage();
 
             if (loginResponse.getStatus() == 200) {
 
-                CountDownLatch latch = new CountDownLatch(2);
+                CountDownLatch latch = new CountDownLatch(3);
 
+                // 获取用户基本信息
                 new Thread(() -> {
-                    String url = "http://localhost:8080/api/user/information";
-                    UserInformationRequest userInformationRequest = new UserInformationRequest();
-                    userInformationRequest.setUsername(username);
                     try {
-                        UserInformationResponse userInformationResponse = Https.<UserInformationResponse>post(url, userInformationRequest, null, UserInformationResponse.class);
-
-                        // 使用同步块确保线程安全
-                        synchronized (UserEntity.getUserInformation()) {
-                            UserEntity.getUserInformation().setUsername(userInformationResponse.getData().get("username"));
-                            UserEntity.getUserInformation().setName(userInformationResponse.getData().get("name"));
-                            UserEntity.getUserInformation().setDepartment(userInformationResponse.getData().get("department"));
-                            UserEntity.getUserInformation().setEmail(userInformationResponse.getData().get("email"));
-                            UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
-                            UserEntity.getUserInformation().setCookie(userInformationResponse.getData().get("cookie"));
-
-                            log.info("成功保存数据 - {}", UserEntity.getUserInformation().toString());
-
-                        }
-                    } catch (IOException e) {
+                        UserInformationModel.getUserInformation(username);
+                    } catch (Exception e) {
                         log.error(e.getMessage());
-                    }
-                    finally {
+                    } finally {
                         latch.countDown();
                     }
                 }).start();
 
+                // 获取用户课表信息
                 new Thread(() -> {
-                    String url = "http://localhost:8080/api/user/tabletime";
-                    TabletimeRequest tabletimeRequest = new TabletimeRequest();
-                    tabletimeRequest.setUsername(username);
-
                     try {
-                        TableTimeResponse tableTimeResponse = Https.<TableTimeResponse>post(url, tabletimeRequest, null, TableTimeResponse.class);
+                        TabletimeModel.getTabletime(username);
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    } finally {
+                        latch.countDown();
+                    }
+                }).start();
 
-                        List<TabletimeEntity> tabletimeEntity = tableTimeResponse.getTabletime().stream()
-                                .map(responseTabletime -> new TabletimeEntity(
-                                        responseTabletime.getKeyID(),
-                                        responseTabletime.getClazz(),
-                                        responseTabletime.getX(),
-                                        responseTabletime.getY(),
-                                        responseTabletime.getBeginDay(),
-                                        responseTabletime.getEndDay(),
-                                        responseTabletime.getWeekType(),
-                                        responseTabletime.getPlace(),
-                                        responseTabletime.getStartWeek(),
-                                        responseTabletime.getFinishWeek()
-                                ))
-                                .collect(Collectors.toList());
-
-                        // 使用同步块确保线程安全
-                        synchronized (UserEntity.getUserInformation()) {
-                            UserEntity.getUserInformation().setTabletimeEntity(tabletimeEntity);
-                        }
+                // 获取日程信息
+                new Thread(() -> {
+                    try {
+                        ScheduleModel.getSchedule(username);
                     } catch (Exception e) {
                         log.error(e.getMessage());
                     } finally {
@@ -108,6 +86,9 @@ public class LoginModel {
             log.error(e.getMessage());
             throw new RuntimeException(e);
         }
+
+        StartupTasks.scheduler();
+
         return message;
     }
 

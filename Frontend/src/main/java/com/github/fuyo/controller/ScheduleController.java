@@ -37,9 +37,6 @@ public class ScheduleController {
 
         viewEntity = view.getViewEntity();
 
-        // Test
-        // showDialog(new ScheduleEntity("Test",LocalDateTime.now(),LocalDateTime.now(),"N/A"));
-
         // 刷新监听逻辑
         monitorAndRepaint();
 
@@ -87,34 +84,31 @@ public class ScheduleController {
                         viewEntity.getTitle().getText(),
                         result,
                         result.minusSeconds(second),
-                        viewEntity.getContent().getText()
+                        viewEntity.getContent().getText(),
+                        null
                 );
 
                 String addResult = model.addSchedule(newScheduleEntity);
 
-                if (Objects.equals(addResult, "添加成功")) {
+                switch (addResult) {
+                    case "添加成功" -> {
+                        scheduleEntities.add(newScheduleEntity);
 
-                    scheduleEntities.add(newScheduleEntity);
+                        // 刷新渲染
+                        view.setScheduleEntities(scheduleEntities);
+                        view.repaintEDW();
 
-                    // 刷新渲染
-                    view.setScheduleEntities(scheduleEntities);
-                    view.repaintEDW();
+                        // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
+                        log.info("{}, unit: {}", newScheduleEntity, viewEntity.getRemindWidget().getType());
+                        // 清空全部输入框
+                        view.clearInput();
 
-                    // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
-                    log.info("{}, unit: {}",newScheduleEntity.toString(),viewEntity.getRemindWidget().getType());
-                    // 清空全部输入框
-                    view.clearInput();
+                        // 将时间设置设为默认值
+                        view.getViewEntity().getRemindTime().setText("0");
 
-                    // 将时间设置设为默认值
-                    view.getViewEntity().getRemindTime().setText("0");
-
-                    updateNowDateTime(this.view); // 更新时间输入框为当前时间
-                } else if (Objects.equals(addResult, "请填写标题及提醒日期")) {
-                    ErrorMessageBox.showErrorBox(addResult);
-                } else if (Objects.equals(addResult, "昨天的事情不可以明天做")) {
-                    ErrorMessageBox.showErrorBox(addResult);
-                } else {
-                    ErrorMessageBox.showErrorBox(addResult);
+                        updateNowDateTime(this.view); // 更新时间输入框为当前时间
+                    }
+                    case null, default -> ErrorMessageBox.showErrorBox(addResult);
                 }
             }
             catch (Exception ex) {
@@ -140,6 +134,7 @@ public class ScheduleController {
     // 删除事件按钮执行器
     public static void deleteScheduleEventClicked(ScheduleEntity schedule) {
         // TODO: 发送到后端进行删除
+        ScheduleModel.deleteSchedule(schedule);
 
         // 删除Schedule按钮点击后触发
         log.info("Delete Schedule for {} Clicked" , schedule.getTitle());
@@ -147,10 +142,8 @@ public class ScheduleController {
 
     // 动态刷新
     private void monitorAndRepaint() {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-
         // 1S检查一次时间
-        executor.scheduleAtFixedRate(() -> {
+//        executor.scheduleAtFixedRate(() -> {
 
             List<ScheduleEntity> schedule = UserEntity.getUserInformation().getSchedule();
 
@@ -159,7 +152,6 @@ public class ScheduleController {
                 view.setScheduleEntities(scheduleEntities);
                 view.repaintEDW();
             }
-
-        }, 0, 1000, TimeUnit.MILLISECONDS); // 1 SEC / CHECK
+//        }, 0, 1000, TimeUnit.MILLISECONDS); // 1 SEC / CHECK
     }
 }

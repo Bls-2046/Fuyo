@@ -25,7 +25,7 @@ public class ScheduleDialogView extends JFrame {
         lp.add(bg.imageLabel(0,0),JLayeredPane.DEFAULT_LAYER);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String time = scheduleEntity.getDatetime().format(dtf);
+        String time = scheduleEntity.getDateTime().format(dtf);
 
         lp.add(RUILabel.getCenterEmptyTextLabel(44,116,551,22,
                 time

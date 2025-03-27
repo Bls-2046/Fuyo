@@ -10,4 +10,13 @@ public class ScheduleResponse {
     private int status;
     private String message;
     private List<Schedule> schedule;
+
+    @Data
+    public static class Schedule {
+        private String title;
+        private LocalDateTime dateTime;
+        private LocalDateTime reminderDateTime;
+        private String description;
+        private Boolean isReminderInClient;
+    }
 }

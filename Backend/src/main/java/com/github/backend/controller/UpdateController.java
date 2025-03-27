@@ -74,6 +74,11 @@ public class UpdateController {
         return addScheduleResponse;
     }
 
+    /**
+     * 删除用户指定的日程信息
+     * @param deleteScheduleRequest
+     * @return
+     */
     @PostMapping("/schedule/delete")
     public DeleteScheduleResponse deleteSchedule(@RequestBody DeleteScheduleRequest deleteScheduleRequest) {
         DeleteScheduleResponse deleteScheduleResponse = new DeleteScheduleResponse();
@@ -93,5 +98,25 @@ public class UpdateController {
             deleteScheduleResponse.setMessage(e.getMessage());
         }
         return deleteScheduleResponse;
+    }
+
+    @PostMapping("/schedule/mark-reminder-for-client")
+    public MarkRemindedScheduleForClientResponse markRemindedScheduleForClient(
+            @RequestBody MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest) {
+
+        MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse = new MarkRemindedScheduleForClientResponse();
+
+        try {
+            Boolean markResult = updateService.markRemindedScheduleForClient(markRemindedScheduleForClientRequest);
+
+            if (markResult) {
+                markRemindedScheduleForClientResponse.setStatus(200);
+            } else {
+                markRemindedScheduleForClientResponse.setStatus(400);
+            }
+        } catch (Exception e) {
+            markRemindedScheduleForClientResponse.setStatus(500);
+        }
+        return markRemindedScheduleForClientResponse;
     }
 }

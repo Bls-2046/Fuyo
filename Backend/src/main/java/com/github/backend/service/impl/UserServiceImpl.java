@@ -400,20 +400,21 @@ public class UserServiceImpl implements UserService {
      * @return List<ScheduleResponse.Schedule>
      */
     @Override
-    public List<Schedule> getSchedule(String username) {
+    public List<ScheduleResponse.Schedule> getSchedule(String username) {
         List<ScheduleEntity> querySchedule =  scheduleRepository.findByUserEntityUsername(username);
-        List<Schedule> scheduleList = new ArrayList<>();
+        List<ScheduleResponse.Schedule> scheduleList = new ArrayList<>();
 
         LocalDateTime now = LocalDateTime.now();
 
         for (ScheduleEntity schedule : querySchedule) {
             if (schedule.getReminderDateTime().isBefore(now)) {
-                Schedule scheduleResponseSchedule = new Schedule();
+                ScheduleResponse.Schedule scheduleResponseSchedule = new ScheduleResponse.Schedule();
 
                 scheduleResponseSchedule.setTitle(schedule.getTitle());
                 scheduleResponseSchedule.setDateTime(schedule.getDateTime());
                 scheduleResponseSchedule.setReminderDateTime(schedule.getReminderDateTime());
                 scheduleResponseSchedule.setDescription(schedule.getDescription());
+                scheduleResponseSchedule.setIsReminderInClient(schedule.getIsReminderInClient());
 
                 scheduleList.add(scheduleResponseSchedule);
             }

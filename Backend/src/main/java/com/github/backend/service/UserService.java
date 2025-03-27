@@ -19,5 +19,5 @@ public interface UserService {
     // 获得学生课表信息
     List<TabletimeResponse.Tabletime> getTabletime(String username);
     // 获取日程安排信息
-    List<Schedule> getSchedule(String username);
+    List<ScheduleResponse.Schedule> getSchedule(String username);
 }
