@@ -94,7 +94,7 @@ public class NavigationView extends JFrame {
         navi1.addActionListener(e -> actionPerformed(e,navi1));
         naviButtonList.add(navi1.getFunctionButton());
 
-        NaviFunctionEntity navi2 = new NaviFunctionEntity("日期提醒",false,lp,new int[]{17,101 + 60 * 2}, "calendar.png");
+        NaviFunctionEntity navi2 = new NaviFunctionEntity("日程提醒",false,lp,new int[]{17,101 + 60 * 2}, "calendar.png");
         naviFuncObjs.add(navi2);
         navi2.addToPanel();
         navi2.addActionListener(e -> actionPerformed(e,navi2));
@@ -123,13 +123,6 @@ public class NavigationView extends JFrame {
         userButton.addActionListener(e -> deActivateAll());
         naviButtonList.add(userButton);
         lp.add(userButton, JLayeredPane.POPUP_LAYER);
-
-        // For debug usage, plz change this into controller layer
-        // userButton.addActionListener(e -> {
-        //     SwingUtilities.invokeLater(() -> {
-        //         renderRouterView(new UserView(userEntity));
-        //     });
-        // });
 
         setVisible(true);
     }

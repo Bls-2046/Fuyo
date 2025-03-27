@@ -54,10 +54,9 @@ public class ScheduleDialogView extends JDialog {
         ScheduleDialogView dialog = new ScheduleDialogView(scheduleEntity);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // Some offsets
-        int x = (int)(screenSize.getWidth() - dialog.getWidth()) - 10;
-        int y = (int)(screenSize.getHeight() - dialog.getHeight()) - 10;
+        int x = (int)(screenSize.getWidth() - dialog.getWidth());
+        int y = (int)(screenSize.getHeight() - dialog.getHeight()) - 40;
         dialog.setLocation(x, y);
         dialog.setVisible(true);
     }
-
 }

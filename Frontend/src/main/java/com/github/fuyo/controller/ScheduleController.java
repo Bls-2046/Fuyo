@@ -121,7 +121,6 @@ public class ScheduleController {
                 log.error(ex.getMessage());
             }
         });
-
     }
 
     /**
@@ -146,11 +145,8 @@ public class ScheduleController {
         log.info("Delete Schedule for {} Clicked" , schedule.getTitle());
     }
 
-    // 动态刷新
+    // 点击添加按钮后刷新
     private void monitorAndRepaint() {
-        // 1S检查一次时间
-//        executor.scheduleAtFixedRate(() -> {
-
             List<ScheduleEntity> schedule = UserEntity.getUserInformation().getSchedule();
 
             if (!schedule.isEmpty()) {
@@ -158,6 +154,5 @@ public class ScheduleController {
                 view.setScheduleEntities(scheduleEntities);
                 view.repaintEDW();
             }
-//        }, 0, 1000, TimeUnit.MILLISECONDS); // 1 SEC / CHECK
     }
 }
