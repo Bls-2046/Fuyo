@@ -51,7 +51,7 @@ public class ScheduleModel {
             // body.put("openid", UserEntity.getUserInformation().getWechatUser().getOpenid());
 
             // 测试
-            body.put("openid", "textUser");
+            body.put("openid", "testUser");
 
             Map<String, Object> scheduleObject = new HashMap<>();
             scheduleObject.put("title", schedule.getTitle());
@@ -85,7 +85,7 @@ public class ScheduleModel {
 
         body.put("username", UserEntity.getUserInformation().getUsername());
 
-        body.put("openid", "textUser");
+        body.put("openid", "testUser");
 
         Map<String, Object> scheduleObject = new HashMap<>();
         scheduleObject.put("title", schedule.getTitle());

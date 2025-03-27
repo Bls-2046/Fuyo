@@ -89,7 +89,7 @@ public final class ScheduleListener {
                     UserEntity.getUserInformation().getUsername()
             );
             markRemindedScheduleForClientRequest.setOpenid(
-                    UserEntity.getUserInformation().getWechatUser().getOpenid()
+                    "testUser"
             );
             markRemindedScheduleForClientRequest.setSchedule(schedule);
 
