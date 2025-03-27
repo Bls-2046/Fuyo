@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -111,7 +112,12 @@ public class ScheduleController {
                     case null, default -> ErrorMessageBox.showErrorBox(addResult);
                 }
             }
+            catch (DateTimeException dtex) {
+                view.clearInput();
+                ErrorMessageBox.showErrorBox("非法输入，请重新输入");
+            }
             catch (Exception ex) {
+                ex.printStackTrace();
                 log.error(ex.getMessage());
             }
         });

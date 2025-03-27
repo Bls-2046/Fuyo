@@ -6,6 +6,7 @@ import com.github.fuyo.utils.layout.RUILabel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 @Data
 public class ScheduleView extends JLayeredPane {
 
@@ -32,9 +34,6 @@ public class ScheduleView extends JLayeredPane {
     public ScheduleView(List<ScheduleEntity> scheduleEntities) {
 
         this.scheduleEntities = scheduleEntities;
-
-        // Sort
-        scheduleEntities.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
 
         // Fixed
         setBounds(260, 0, 1100, 768);
@@ -107,8 +106,7 @@ public class ScheduleView extends JLayeredPane {
     // Event will firstly add to this view, then submit.
     public void repaintEDW(){
         remove(edw);
-        // Sort
-        scheduleEntities.sort(((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime())));
+        log.info("\n\nNewData of scheduleEntities{}\n", scheduleEntities.toString());
         edw = new EventDashWidget(scheduleEntities);
         add(edw, POPUP_LAYER);
         revalidate();
