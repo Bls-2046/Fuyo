@@ -85,7 +85,7 @@ public class ScheduleController {
                         result,
                         result.minusSeconds(second),
                         viewEntity.getContent().getText(),
-                        null
+                        false
                 );
 
                 String addResult = model.addSchedule(newScheduleEntity);
@@ -97,6 +97,8 @@ public class ScheduleController {
                         // 刷新渲染
                         view.setScheduleEntities(scheduleEntities);
                         view.repaintEDW();
+
+                        ScheduleModel.getSchedule(UserEntity.getUserInformation().getUsername());
 
                         // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
                         log.info("{}, unit: {}", newScheduleEntity, viewEntity.getRemindWidget().getType());

@@ -4,6 +4,7 @@ import com.github.fuyo.dto.schedule.MarkRemindedScheduleForClientRequest;
 import com.github.fuyo.dto.schedule.MarkRemindedScheduleForClientResponse;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.model.ScheduleModel;
 import com.github.fuyo.utils.https.Https;
 import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import lombok.extern.slf4j.Slf4j;
@@ -56,11 +57,12 @@ public final class ScheduleListener {
         LocalDateTime now = LocalDateTime.now();
         for (ScheduleEntity schedule : (UserEntity.getUserInformation().getSchedule())) {
             if (!schedule.getIsReminderInClient()) {
-                if (schedule.getReminderDateTime().isAfter(now)) {
-                    // 标记已发送提醒的日程
-                    schedule.setIsReminderInClient(true);
-                    // 数据库标记
-                    new Thread(() -> markReminderScheduleForClient(schedule)).start();
+                if (now.isAfter(schedule.getReminderDateTime()) && now.isBefore(schedule.getDateTime())) {
+
+                    markReminderScheduleForClient(schedule);
+                    log.warn(schedule.toString());
+
+                    schedule.setIsReminderInClient(Boolean.TRUE);
 
                     taskExecutor.submit(() -> {
                         // 消息框弹出
@@ -69,6 +71,7 @@ public final class ScheduleListener {
                 }
             }
         }
+        ScheduleModel.getSchedule(UserEntity.getUserInformation().getUsername());
     }
 
     /**
@@ -77,7 +80,7 @@ public final class ScheduleListener {
      */
     private static void markReminderScheduleForClient(ScheduleEntity schedule) {
         try {
-            String url = "http://127.0.0.1:8080/fuyo/schedule/mark-reminder-for-client";
+            String url = "http://127.0.0.1:8080/fuyo/api/update/schedule/mark-reminder-for-client";
             MarkRemindedScheduleForClientRequest
                     markRemindedScheduleForClientRequest = new MarkRemindedScheduleForClientRequest();
 

@@ -126,6 +126,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                     username
             );
 
+            log.info(schedule.toString());
+
             schedule.setIsReminderInClient(Boolean.TRUE);
             scheduleRepository.save(schedule);
 
