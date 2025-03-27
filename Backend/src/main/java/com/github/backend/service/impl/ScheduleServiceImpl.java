@@ -134,6 +134,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e.getMessage());
         }
         return false;

@@ -43,6 +43,7 @@ public final class ScheduleListener {
             try {
                 checkAndTriggerSchedules();
             } catch (Exception e) {
+                e.printStackTrace();
                 log.info(e.getMessage());
             }
         }, 0, 1, TimeUnit.SECONDS);
@@ -80,7 +81,7 @@ public final class ScheduleListener {
      */
     private static void markReminderScheduleForClient(ScheduleEntity schedule) {
         try {
-            String url = "http://127.0.0.1:8080/fuyo/api/update/schedule/mark-reminder-for-client";
+            String url = "http://127.0.0.1:8080/api/update/schedule/mark-reminder-for-client";
             MarkRemindedScheduleForClientRequest
                     markRemindedScheduleForClientRequest = new MarkRemindedScheduleForClientRequest();
 

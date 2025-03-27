@@ -4,12 +4,14 @@ import com.github.backend.dto.schedule.*;
 import com.github.backend.dto.user.NicknameRequest;
 import com.github.backend.dto.user.NicknameResponse;
 import com.github.backend.service.UpdateService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 前端上传和保存信息
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/update")
 public class UpdateController {
@@ -107,6 +109,7 @@ public class UpdateController {
         MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse = new MarkRemindedScheduleForClientResponse();
 
         try {
+            log.info(String.valueOf(markRemindedScheduleForClientRequest));
             Boolean markResult = updateService.markRemindedScheduleForClient(markRemindedScheduleForClientRequest);
 
             if (markResult) {
