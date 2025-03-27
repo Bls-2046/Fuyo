@@ -69,7 +69,7 @@ public class ClazzView extends JLayeredPane {
 
         // Current Clazz
         String currentClazzTime = currentClazz != null ? getTimeString(currentClazz.getBeginDay())[0] + " - " + getTimeString(currentClazz.getEndDay())[1] : "";
-        String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "休息时间" : (remainingClazzCount == tabletimeEntity.size()) ? "准备上课~" : "课间休息~";
+        String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "休憩时间" : (remainingClazzCount == tabletimeEntity.size()) ? "准备上课~" : "课间休息~";
         String currentClazzPlace = currentClazz != null ? currentClazz.getPlace() : "";
 
         add(RUILabel.getEmptyTextLabel(102, 152 - posYFix, currentClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
