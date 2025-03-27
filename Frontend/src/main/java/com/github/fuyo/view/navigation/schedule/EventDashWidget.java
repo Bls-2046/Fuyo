@@ -59,7 +59,7 @@ public class EventDashWidget extends JLayeredPane {
                 String time = schedule.getDateTime().format(dtf);
 
                 add(RUILabel.getEmptyTextLabel(17,(90*i) - 17,time,14,"微软雅黑",Color.GRAY,Font.PLAIN),POPUP_LAYER);
-                add(RUILabel.getEmptyTextLabel(17,7 + (90*i), ScheduleView.wordLimitation(schedule.getTitle() + " - " +
+                add(RUILabel.getEmptyTextLabel(17,7 + (90*i), ScheduleView.wordLimitation(((schedule.getTitle().isEmpty()) ? "无标题" : schedule.getTitle()) + " - " +
                                 ((schedule.getDescription().isEmpty()) ? "无描述" : schedule.getDescription())
                         ),22,"微软雅黑",Color.GRAY,Font.BOLD),POPUP_LAYER);
 

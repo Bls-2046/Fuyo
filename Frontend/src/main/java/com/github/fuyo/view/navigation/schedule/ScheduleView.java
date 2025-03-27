@@ -42,7 +42,7 @@ public class ScheduleView extends JLayeredPane {
         add(bgLabel.imageLabel(0, 0), DEFAULT_LAYER);
 
         // Input Area
-        JTextField titleInput = RUILabel.getEmptyInputTextLabel(72, 118, 464, 37, "请输入标题", Color.GRAY,18, "微软雅黑",Font.PLAIN);
+        JTextField titleInput = RUILabel.getEmptyInputTextLabel(72, 118, 464, 37, "", Color.GRAY,18, "微软雅黑",Font.PLAIN);
         add(titleInput, POPUP_LAYER);
 
         JTextField reminderTimeInput = RUILabel.getEmptyInputTextLabel(562, 118, 112, 37, "0", Color.GRAY,18, "微软雅黑",Font.PLAIN);
