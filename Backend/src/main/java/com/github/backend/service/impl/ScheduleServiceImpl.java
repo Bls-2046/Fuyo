@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -36,30 +37,35 @@ public class ScheduleServiceImpl implements ScheduleService {
     public Boolean addScheduleInfo(AddScheduleRequest schedule) {
         ScheduleEntity newSchedule = new ScheduleEntity();
 
-        String username = schedule.getUsername() ;
-        UserEntity user = userRepository.findByUsername(username);
+        try {
+            String username = schedule.getUsername();
+            UserEntity user = userRepository.findByUsername(username);
+            String openid = schedule.getOpenid();
+            String title = schedule.getSchedule().getTitle();
+            LocalDateTime dateTime = schedule.getSchedule().getDateTime();
+            LocalDateTime reminderDateTime = schedule.getSchedule().getReminderDateTime();
+            String description = schedule.getSchedule().getDescription();
 
-        String openid = schedule.getOpenid();
-        String title = schedule.getSchedule().getTitle();
-        LocalDateTime dateTime = schedule.getSchedule().getDateTime();
-        LocalDateTime reminderDateTime = schedule.getSchedule().getReminderDateTime();
-        String description = schedule.getSchedule().getDescription();
-
-//        if (username != null && openid != null && title != null && dateTime != null && reminderDateTime != null) {
             newSchedule.setTitle(title);
             newSchedule.setDateTime(dateTime);
             newSchedule.setReminderDateTime(reminderDateTime);
-            newSchedule.setDescription(description);
+            if (Objects.equals(description, "")) {
+                newSchedule.setDescription("好像有什么重要的事... ");
+            } else {
+                newSchedule.setDescription(description);
+            }
             newSchedule.setUserEntity(user);
             newSchedule.setOpenid(openid);
-            newSchedule.setIsReminderInClient(false);
-            newSchedule.setIsSendWeChatReminder(false);
+            newSchedule.setIsReminderInClient(Boolean.FALSE);
+            newSchedule.setIsSendWeChatReminder(Boolean.FALSE);
 
             scheduleRepository.save(newSchedule);
 
             return true;
-//        }
-//        return false;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return false;
     }
 
     /**

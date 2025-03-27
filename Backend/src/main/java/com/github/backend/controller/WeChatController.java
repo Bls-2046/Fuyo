@@ -19,11 +19,8 @@ public class WeChatController {
         this.wechatService = wechatService;
     }
 
-    /**
-     * 回调接口
-     */
-    @PostMapping("/callback")
-    public String upload() {
-        return null;
+
+    public void verifyWeChatUser() {
+
     }
 }

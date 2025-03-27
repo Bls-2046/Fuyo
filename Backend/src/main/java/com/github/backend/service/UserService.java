@@ -1,6 +1,5 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.schedule.Schedule;
 import com.github.backend.dto.schedule.ScheduleResponse;
 import com.github.backend.dto.user.TabletimeResponse;
 import com.github.backend.dto.user.UserInformationResponse;

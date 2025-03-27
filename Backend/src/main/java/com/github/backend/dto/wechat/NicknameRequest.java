@@ -1,4 +1,4 @@
-package com.github.backend.dto.user;
+package com.github.backend.dto.wechat;
 
 import lombok.Data;
 

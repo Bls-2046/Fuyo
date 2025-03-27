@@ -3,8 +3,11 @@ package com.github.backend.service;
 import com.github.backend.dto.schedule.AddScheduleRequest;
 import com.github.backend.dto.schedule.DeleteScheduleRequest;
 import com.github.backend.dto.schedule.MarkRemindedScheduleForClientRequest;
-import com.github.backend.dto.user.NicknameRequest;
+import com.github.backend.dto.wechat.NicknameRequest;
 
+/**
+ * 数据更新方法
+ */
 public interface UpdateService {
     /**
      * 更新微信昵称

@@ -1,8 +1,8 @@
 package com.github.backend.controller;
 
 import com.github.backend.dto.schedule.*;
-import com.github.backend.dto.user.NicknameRequest;
-import com.github.backend.dto.user.NicknameResponse;
+import com.github.backend.dto.wechat.NicknameRequest;
+import com.github.backend.dto.wechat.NicknameResponse;
 import com.github.backend.service.UpdateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class UpdateController {
     @PostMapping("/schedule/add")
     public AddScheduleResponse addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
         AddScheduleResponse addScheduleResponse = new AddScheduleResponse();
-
+        System.out.println(addScheduleRequest);
         try {
             Boolean addResult = updateService.addSchedule(addScheduleRequest);
 

@@ -9,16 +9,12 @@ import com.github.fuyo.utils.https.Https;
 import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static com.github.fuyo.view.navigation.schedule.ScheduleDialogView.showDialog;
 
 @Slf4j
 public final class ScheduleListener {
@@ -39,12 +35,10 @@ public final class ScheduleListener {
             return;
         }
         executor.scheduleAtFixedRate(() -> {
-            log.info("ScheduleListener is running");
             try {
                 checkAndTriggerSchedules();
             } catch (Exception e) {
-                e.printStackTrace();
-                log.info(e.getMessage());
+                log.error(e.getMessage());
             }
         }, 0, 1, TimeUnit.SECONDS);
 
@@ -95,8 +89,7 @@ public final class ScheduleListener {
                 log.info("mark reminder for client success");
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 

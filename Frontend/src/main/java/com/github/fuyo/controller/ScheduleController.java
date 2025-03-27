@@ -101,6 +101,9 @@ public class ScheduleController {
 
                         ScheduleModel.getSchedule(UserEntity.getUserInformation().getUsername());
 
+                        // TODO 测试数据
+                        System.out.println(UserEntity.getUserInformation().getSchedule());
+
                         // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
                         log.info("{}, unit: {}", newScheduleEntity, viewEntity.getRemindWidget().getType());
                         // 清空全部输入框

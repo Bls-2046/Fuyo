@@ -43,13 +43,13 @@ public class ScheduleModel {
         try {
             String url = "http://127.0.0.1:8080/api/update/schedule/add";
             AddScheduleRequest addScheduleRequest = new AddScheduleRequest();
-            Schedule newSchedule = new Schedule();
+            AddScheduleRequest.Schedule newSchedule = new AddScheduleRequest.Schedule();
 
             addScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
             addScheduleRequest.setOpenid("testUser");
 
             newSchedule.setTitle(schedule.getTitle());
-            newSchedule.setDataTime(schedule.getDateTime());
+            newSchedule.setDateTime(schedule.getDateTime());
             newSchedule.setReminderDateTime(schedule.getDateTime());
             newSchedule.setDescription(schedule.getDescription());
 
@@ -112,8 +112,6 @@ public class ScheduleModel {
                             responseSchedule.getIsReminderInClient()
                     ))
                     .collect(Collectors.toList());
-
-            log.info(scheduleEntity.toString());
 
             // 使用同步块确保线程安全
             synchronized (UserEntity.getUserInformation()) {

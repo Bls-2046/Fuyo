@@ -1,6 +1,5 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.schedule.Schedule;
 import com.github.backend.dto.schedule.ScheduleResponse;
 import com.github.backend.dto.user.TabletimeResponse;
 import com.github.backend.dto.user.UserInformationResponse;
@@ -420,6 +419,8 @@ public class UserServiceImpl implements UserService {
                 scheduleList.add(scheduleResponseSchedule);
             }
         }
+        scheduleList.sort(Comparator.comparing(ScheduleResponse.Schedule::getReminderDateTime));
+
         return scheduleList;
     }
 }

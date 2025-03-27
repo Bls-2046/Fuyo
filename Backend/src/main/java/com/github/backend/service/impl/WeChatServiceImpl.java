@@ -1,6 +1,6 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.user.NicknameRequest;
+import com.github.backend.dto.wechat.NicknameRequest;
 import com.github.backend.entity.UserEntity;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.repository.WeChatUserRepository;
