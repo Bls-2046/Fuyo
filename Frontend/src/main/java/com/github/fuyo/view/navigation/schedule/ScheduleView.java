@@ -2,6 +2,7 @@ package com.github.fuyo.view.navigation.schedule;
 
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.ScheduleViewEntity;
+import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.Data;
 import lombok.Getter;

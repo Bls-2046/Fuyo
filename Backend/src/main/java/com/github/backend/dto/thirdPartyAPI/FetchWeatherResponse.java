@@ -1,9 +1,9 @@
-package com.github.fuyo.dto;
+package com.github.backend.dto.thirdPartyAPI;
 
 import lombok.Data;
 
 @Data
-public class WeatherResponse {
+public class FetchWeatherResponse {
     private int status;
     private Live live;
 

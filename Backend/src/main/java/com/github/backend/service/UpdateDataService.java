@@ -3,18 +3,14 @@ package com.github.backend.service;
 import com.github.backend.dto.schedule.AddScheduleRequest;
 import com.github.backend.dto.schedule.DeleteScheduleRequest;
 import com.github.backend.dto.schedule.MarkRemindedScheduleForClientRequest;
-import com.github.backend.dto.wechat.NicknameRequest;
+import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
 
 /**
  * 数据更新方法接口
  */
 public interface UpdateDataService {
-    /**
-     * 更新微信昵称
-     * @param nicknameRequest 用户名与微信昵称
-     * @return Boolean
-     */
-    Boolean updateWeChatNickname(NicknameRequest nicknameRequest);
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Schedule /////////////////////////////////////////////
 
     /**
      * 添加日程信息
@@ -36,4 +32,13 @@ public interface UpdateDataService {
     Boolean markRemindedScheduleForClient(
             MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest
     );
+
+    // WeChat
+
+    /**
+     * 更新用户微信名称
+     * @param updateWeChatNicknameRequest
+     * @return Boolean
+     */
+    Boolean updateWeChatNickname(UpdateWeChatNicknameRequest updateWeChatNicknameRequest);
 }

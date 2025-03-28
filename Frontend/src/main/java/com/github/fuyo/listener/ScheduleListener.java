@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public final class ScheduleListener {
+
     private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     private static final ExecutorService taskExecutor = Executors.newCachedThreadPool();
@@ -38,7 +39,7 @@ public final class ScheduleListener {
             try {
                 checkAndTriggerSchedules();
             } catch (Exception e) {
-                log.error(e.getMessage());
+                // log.error(e.getMessage());
             }
         }, 0, 1, TimeUnit.SECONDS);
 
@@ -66,11 +67,10 @@ public final class ScheduleListener {
                 }
             }
         }
-        ScheduleModel.getSchedule(UserEntity.getUserInformation().getUsername());
     }
 
     /**
-     * 想后端发送请求改变数据库标记
+     * 向后端发送请求改变数据库标记
      * @param schedule 日程信息
      */
     private static void markReminderScheduleForClient(ScheduleEntity schedule) {
@@ -89,7 +89,7 @@ public final class ScheduleListener {
                 log.info("mark reminder for client success");
             }
         } catch (IOException e) {
-            log.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

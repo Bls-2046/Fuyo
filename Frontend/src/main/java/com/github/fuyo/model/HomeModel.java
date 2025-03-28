@@ -1,45 +1,38 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.WeatherResponse;
+import com.github.fuyo.dto.FetchWeatherResponse;
+import com.github.fuyo.dto.thirdPartyAPI.FetchYiYanResponse;
 import com.github.fuyo.utils.https.Https;
-import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class HomeModel {
     public HomeModel() {}
 
-    public static WeatherResponse getWeather() {
-        WeatherResponse weatherResponse = new WeatherResponse();
-        weatherResponse.setLive(new WeatherResponse.Live());
+    public static FetchWeatherResponse fetchWeather() throws IOException {
+        FetchWeatherResponse fetchWeatherResponse = new FetchWeatherResponse();
+        fetchWeatherResponse.setLive(new FetchWeatherResponse.Live());
 
         String url = "http://127.0.0.1:8080/api/weather";
 
-        JSONObject weather = Https.get(url, null, null);
+        FetchWeatherResponse weather = Https.get(url, null, null, FetchWeatherResponse.class);
 
-        weatherResponse.setStatus(weather.getInt("status"));
-        if (weatherResponse.getStatus() == 200) {
-            JSONObject weatherLiveResponse = weather.getJSONObject("live");
-            weatherResponse.getLive().setProvince(weatherLiveResponse.getString("province"));
-            weatherResponse.getLive().setCity(weatherLiveResponse.getString("city"));
-            weatherResponse.getLive().setWeather(weatherLiveResponse.getString("weather"));
-            weatherResponse.getLive().setTemperature(weatherLiveResponse.getString("temperature"));
-            weatherResponse.getLive().setWinddirection(weatherLiveResponse.getString("winddirection"));
-            weatherResponse.getLive().setWindpower(weatherLiveResponse.getString("windpower"));
-            weatherResponse.getLive().setHumidity(weatherLiveResponse.getString("humidity"));
-            weatherResponse.getLive().setReporttime(weatherLiveResponse.getString("reporttime"));
-            weatherResponse.getLive().setTemperature_float(weatherLiveResponse.getString("temperature_float"));
-            weatherResponse.getLive().setHumidity_float(weatherLiveResponse.getString("humidity_float"));
+        if (fetchWeatherResponse.getStatus() == 200) {
+            return weather;
         }
 
-        return weatherResponse;
+        return null;
     }
 
     /**
      * 每日一言
      * @return String
      */
-    public static String getOneSentence() {
+    public static String fetchYiYan() throws IOException {
         String url = "http://127.0.0.1:8080/api/yiyan";
-        JSONObject response = Https.get(url, null, null);
-        return response.getString("sentence");
+
+        FetchYiYanResponse response = Https.get(url, null, null, FetchYiYanResponse.class);
+
+        return response.getSentence();
     }
 }

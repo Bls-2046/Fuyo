@@ -1,4 +1,4 @@
-package com.github.backend.dto.api;
+package com.github.fuyo.dto;
 
 import lombok.Data;
 

@@ -18,11 +18,6 @@ public class WeChatUserEntity {
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private UserEntity userEntity;
-
     @Column(name = "openid", unique = true, nullable = false, length = 128)
     private String openid; // 用户的唯一标识
 

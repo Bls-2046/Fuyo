@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.api.FetchWeatherResponse;
+import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
 
 /**
  * 第三方 API 使用方法接口

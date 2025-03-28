@@ -38,7 +38,6 @@ public class NavigationView extends JFrame {
     }
 
     private void initComponent() {
-        log.info("initComponent, userEntity = " + userEntity);
         setTitle("Fuyo Navigator");
         setUndecorated(true);
         setResizable(false);

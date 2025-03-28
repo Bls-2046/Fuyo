@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
         String password = loginRequest.getPassword();
 
         UserEntity userEntity = userRepository.findByUsername(username);
+
         if (userEntity == null) {
             try {
                 // 运行 Python 脚本进行验证并获取用户信息
@@ -93,6 +94,7 @@ public class UserServiceImpl implements UserService {
                     throw new RuntimeException(message);
                 }
 
+                System.out.println(data);
                 // 将数据保持到数据库
                 saveUserInformation(data, username, password);
 

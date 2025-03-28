@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.wechat.NicknameRequest;
+import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
 
 /**
  * 微信相关操作接口
@@ -8,8 +8,8 @@ import com.github.backend.dto.wechat.NicknameRequest;
 public interface WeChatService {
     /**
      * 更新用户微信昵称
-     * @param nicknameRequest 微信昵称
+     * @param updateWeChatNicknameRequest 微信昵称
      * @return Boolean
      */
-    Boolean updateWeChatNickname(NicknameRequest nicknameRequest);
+    Boolean updateWeChatNickname(UpdateWeChatNicknameRequest updateWeChatNicknameRequest);
 }

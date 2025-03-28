@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.api.FetchWeatherResponse;
+import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.backend.dto.schedule.FetchScheduleRequest;
 import com.github.backend.dto.schedule.FetchScheduleResponse;
 import com.github.backend.dto.tabletime.FetchTabletimeRequest;
@@ -14,13 +14,18 @@ import java.util.List;
  * 数据获取方法接口
  */
 public interface FetchDataService {
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ User /////////////////////////////////////////////////
     /**
      * 获得用户基本信息
-     * @param username 用户名
+     * @param fetchUserBaseInformationRequest 用户名
      * @return UserInformationResponse.UserInformation
      */
     FetchUserBaseInformationResponse.UserInformation fetchUserBaseInformation(FetchUserBaseInformationRequest fetchUserBaseInformationRequest);
 
+
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Tabletime ////////////////////////////////////////////
     /**
      * 获取课表信息
      * @param fetchTabletimeRequest 用户信息
@@ -28,12 +33,21 @@ public interface FetchDataService {
      */
     List<FetchTabletimeResponse.Tabletime> fetchTabletime(FetchTabletimeRequest fetchTabletimeRequest);
 
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Schedule /////////////////////////////////////////////
+
     /**
      * 获取用户的日程安排信息
      * @param fetchScheduleRequest 用户信息
      * @return ScheduleResponse
      */
     List<FetchScheduleResponse.Schedule> fetchSchedule(FetchScheduleRequest fetchScheduleRequest);
+
+    // WeChat
+
+
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ API ///////////////////////////////////////////////
 
     /**
      * 获取珠海香洲区天气

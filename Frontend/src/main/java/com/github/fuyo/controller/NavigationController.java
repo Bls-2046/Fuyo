@@ -1,12 +1,10 @@
 package com.github.fuyo.controller;
 
-import com.github.fuyo.entity.NaviFunctionButtonEnum;
-import com.github.fuyo.entity.ScheduleEntity;
-import com.github.fuyo.entity.TabletimeEntity;
-import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.entity.*;
 import com.github.fuyo.listener.NavigationCloseListener;
 import com.github.fuyo.model.LoginModel;
-import com.github.fuyo.model.NavigationModel;
+import com.github.fuyo.model.WeChatModel;
+import com.github.fuyo.model.layout.NavigationModel;
 import com.github.fuyo.model.ScheduleModel;
 import com.github.fuyo.model.UserViewModel;
 import com.github.fuyo.view.LoginView;
@@ -102,17 +100,23 @@ public class NavigationController implements NavigationCloseListener {
                     JButton submitButton = guideView.getSubmitButton();
                     submitButton.addActionListener(e2 -> {
 
+                        // 验证用户微信昵称
                         boolean isVaild = false;
+                        WeChatEntity wechatUser =  UserEntity.getUserInformation().getWechatUser();
+                        if (wechatUser != null) {
+                            String nickname = wechatUser.getNickname();
+                            if (nickname == null) {
+                                nickname = guideView.getNickNameInput().getText();
+                                Boolean updateWeChatNickNameResult = WeChatModel.updateWeChatNickName(nickname);
+                                if (updateWeChatNickNameResult) {
+                                    UserEntity.getUserInformation().getWechatUser().setNickname(nickname);
+                                    isVaild = true;
+                                } else {
+                                    ErrorMessageBox.showErrorBox("该名称已被占用");
+                                    guideView.getNickNameInput().setText("");
+                                }
 
-                        // wx nick name string
-                        String userNickName = guideView.getNickNameInput().getText();
-
-                        // TODO: 判断逻辑, 校验通过则设置isVaild = true
-                        if (!userNickName.isEmpty()) {
-                            log.info("User nickname is {}", userNickName);
-                            isVaild = true;
-                        } else {
-                            log.info("User nickname is empty");
+                            }
                         }
 
                         if (isVaild){

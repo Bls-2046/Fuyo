@@ -1,7 +1,8 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.wechat.NicknameRequest;
+import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
 import com.github.backend.entity.UserEntity;
+import com.github.backend.entity.WeChatUserEntity;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.repository.WeChatUserRepository;
 import com.github.backend.service.WeChatService;
@@ -26,20 +27,35 @@ public class WeChatServiceImpl implements WeChatService {
         this.weChatUserRepository = weChatUserRepository;
     }
 
+    /**
+     *
+     * @param updateWeChatNicknameRequest 微信昵称
+     * @return Boolean
+     */
     @Override
-    public Boolean updateWeChatNickname(NicknameRequest nicknameRequest) {
-        String username = nicknameRequest.getUsername();
-        String nickname = nicknameRequest.getNickname();
+    public Boolean updateWeChatNickname(UpdateWeChatNicknameRequest updateWeChatNicknameRequest) {
+        try {
+            String username = updateWeChatNicknameRequest.getUsername();
+            String nickname = updateWeChatNicknameRequest.getNickname();
 
-        String queryNickname = weChatUserRepository.findNicknameByNickname(nickname);
+            WeChatUserEntity queryResult = weChatUserRepository.findNicknameByNickname(nickname);
+            String newNickname = queryResult.getNickname();
 
-        if (Objects.equals(queryNickname, nickname)) {
-            UserEntity user = userRepository.findByUsername(username);
-            if (Objects.nonNull(user)) {
-                user.setNickname(nickname);
-                userRepository.save(user);
-                return true;
+            if (newNickname != null) {
+                if (Objects.equals(newNickname, nickname)) {
+                    UserEntity user = userRepository.findByUsername(username);
+                    if (Objects.nonNull(user)) {
+
+                        // 保存微信昵称到用户基本信息表
+                        user.setNickname(nickname);
+                        userRepository.save(user);
+
+                        return true;
+                    }
+                }
             }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return false;
     }

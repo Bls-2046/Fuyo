@@ -1,6 +1,6 @@
 package com.github.fuyo.controller;
 
-import com.github.fuyo.model.LoadingFailedModel;
+import com.github.fuyo.model.layout.LoadingFailedModel;
 import com.github.fuyo.view.load.LoadingFailedView;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

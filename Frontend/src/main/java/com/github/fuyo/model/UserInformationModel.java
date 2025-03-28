@@ -30,7 +30,7 @@ public class UserInformationModel {
                 UserEntity.getUserInformation().setPhone(userInformationResponse.getData().get("phone"));
                 UserEntity.getUserInformation().setCookie(userInformationResponse.getData().get("cookie"));
 
-                log.info("成功保存数据 - {}", UserEntity.getUserInformation().toString());
+                log.info("成功保存用户基本数据: {}, {}, {}", UserEntity.getUserInformation().getUsername(),UserEntity.getUserInformation().getName(), UserEntity.getUserInformation().getDepartment());
 
             }
         } catch (IOException e) {

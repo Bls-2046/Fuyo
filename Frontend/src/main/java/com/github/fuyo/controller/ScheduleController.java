@@ -15,10 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class ScheduleController {
@@ -94,10 +90,7 @@ public class ScheduleController {
                         view.setScheduleEntities(scheduleEntities);
                         view.repaintEDW();
 
-                        ScheduleModel.getSchedule(UserEntity.getUserInformation().getUsername());
-
-                        // TODO 测试数据
-                        System.out.println(UserEntity.getUserInformation().getSchedule());
+                        ScheduleModel.fetchSchedule(UserEntity.getUserInformation().getUsername());
 
                         // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
                         log.info("{}, unit: {}", newScheduleEntity, viewEntity.getRemindWidget().getType());
@@ -138,7 +131,7 @@ public class ScheduleController {
 
     // 删除事件按钮执行器
     public static void deleteScheduleEventClicked(ScheduleEntity schedule) {
-        // TODO: 发送到后端进行删除
+
         ScheduleModel.deleteSchedule(schedule);
 
         // 删除Schedule按钮点击后触发

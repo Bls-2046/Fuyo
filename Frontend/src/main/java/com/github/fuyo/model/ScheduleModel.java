@@ -3,7 +3,10 @@ package com.github.fuyo.model;
 import com.github.fuyo.dto.schedule.*;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
+import com.github.fuyo.utils.https.HttpHeaders;
 import com.github.fuyo.utils.https.Https;
+import com.github.fuyo.utils.https.HttpsException;
+import com.github.fuyo.utils.https.HttpsTest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -14,6 +17,43 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ScheduleModel {
     public ScheduleModel() {}
+
+    /**
+     * 获取用户日志信息
+     * @param username 用户名
+     */
+    public static void fetchSchedule(String username) {
+        String url = "http://localhost:8080/api/fetch/schedule";
+        ScheduleRequest scheduleRequest = new ScheduleRequest();
+        try {
+            scheduleRequest.setUsername(username);
+//            scheduleRequest.setOpenid(openid);
+
+            // TODO 测试数据
+            scheduleRequest.setOpenid("textUer");
+
+            ScheduleResponse scheduleResponse = HttpsTest.<ScheduleResponse>post(url, scheduleRequest, HttpHeaders.basic(), ScheduleResponse.class);
+            List<ScheduleEntity> scheduleEntity = scheduleResponse.getSchedule().stream()
+                    .map(responseSchedule -> new ScheduleEntity(
+                            responseSchedule.getId(),
+                            responseSchedule.getTitle(),
+                            responseSchedule.getDateTime(),
+                            responseSchedule.getReminderDateTime(),
+                            responseSchedule.getDescription(),
+                            responseSchedule.getIsReminderInClient()
+                    ))
+                    .collect(Collectors.toList());
+
+            log.info("成功获取用户日志信息: {}", scheduleEntity);
+
+            // 使用同步块确保线程安全
+            synchronized (UserEntity.getUserInformation()) {
+                UserEntity.getUserInformation().setSchedule(scheduleEntity);
+            }
+        } catch (HttpsException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 添加用户日程信息
@@ -59,8 +99,7 @@ public class ScheduleModel {
                 result = "添加成功";
             }
         } catch (IOException e) {
-            log.info(e.getMessage());
-            result = "连接超时, 请稍后重试";
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -78,45 +117,14 @@ public class ScheduleModel {
         deleteScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
 
         try {
-            DeleteScheduleResponse deleteResult = Https.<DeleteScheduleResponse>post(url, deleteScheduleRequest, null, DeleteScheduleResponse.class);
+            DeleteScheduleResponse deleteResult = Https.<DeleteScheduleResponse>delete(url, deleteScheduleRequest, null, DeleteScheduleResponse.class);
 
             if (deleteResult.getStatus() == 200) {
                 return "删除成功";
             }
         } catch (IOException e) {
-            log.info(e.getMessage());
+            throw new RuntimeException(e);
         }
         return "删除失败";
-    }
-
-    public static void getSchedule(String username) {
-        String url = "http://localhost:8080/api/fetch/schedule";
-        ScheduleRequest scheduleRequest = new ScheduleRequest();
-        try {
-            scheduleRequest.setUsername(username);
-//                        scheduleRequest.setOpenid(openid);
-
-            // TODO 测试数据
-            scheduleRequest.setOpenid("textUer");
-
-            ScheduleResponse scheduleResponse = Https.<ScheduleResponse>post(url, scheduleRequest, null, ScheduleResponse.class);
-            List<ScheduleEntity> scheduleEntity = scheduleResponse.getSchedule().stream()
-                    .map(responseSchedule -> new ScheduleEntity(
-                            responseSchedule.getId(),
-                            responseSchedule.getTitle(),
-                            responseSchedule.getDateTime(),
-                            responseSchedule.getReminderDateTime(),
-                            responseSchedule.getDescription(),
-                            responseSchedule.getIsReminderInClient()
-                    ))
-                    .collect(Collectors.toList());
-
-            // 使用同步块确保线程安全
-            synchronized (UserEntity.getUserInformation()) {
-                UserEntity.getUserInformation().setSchedule(scheduleEntity);
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
     }
 }

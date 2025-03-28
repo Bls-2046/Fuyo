@@ -30,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 返回用户的日程安排信息
-     * @param username 用户名
+     * @param fetchScheduleRequest 用户名
      * @return List<ScheduleResponse.Schedule>
      */
     @Override
@@ -43,7 +43,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime now = LocalDateTime.now();
 
         for (ScheduleEntity schedule : querySchedule) {
-            if (schedule.getReminderDateTime().isBefore(now)) {
+            if (now.isBefore(schedule.getDateTime())) {
                 FetchScheduleResponse.Schedule scheduleResponseSchedule = new FetchScheduleResponse.Schedule();
 
                 scheduleResponseSchedule.setId(schedule.getId());
@@ -119,6 +119,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e.getMessage());
         }
         return false;
@@ -137,14 +138,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
             ScheduleEntity schedule = scheduleRepository.findByIdAndUserEntityUsername(id, username);
 
-            log.info(schedule.toString());
-
             schedule.setIsReminderInClient(Boolean.TRUE);
             scheduleRepository.save(schedule);
 
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e.getMessage());
         }
         return false;

@@ -1,6 +1,6 @@
 package com.github.fuyo.controller;
 
-import com.github.fuyo.model.LoadingModel;
+import com.github.fuyo.model.layout.LoadingModel;
 import com.github.fuyo.model.LoginModel;
 import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.load.LoadingView;

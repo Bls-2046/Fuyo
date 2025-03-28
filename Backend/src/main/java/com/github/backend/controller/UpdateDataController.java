@@ -1,8 +1,8 @@
 package com.github.backend.controller;
 
 import com.github.backend.dto.schedule.*;
-import com.github.backend.dto.wechat.NicknameRequest;
-import com.github.backend.dto.wechat.NicknameResponse;
+import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
+import com.github.backend.dto.wechat.UpdateWeChatNicknameResponse;
 import com.github.backend.service.UpdateDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,29 +26,29 @@ public class UpdateDataController {
 // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Schedule /////////////////////////////////////////////
     /**
      * 上传微信用户名(需要关注微信公众号)
-     * @param nicknameRequest 请求体
+     * @param updateWeChatNicknameRequest 请求体
      * @return NicknameResponse
      */
     @PostMapping("/nickname")
-    public NicknameResponse upload(@RequestBody NicknameRequest nicknameRequest) {
-        NicknameResponse nicknameResponse = new NicknameResponse();
+    public UpdateWeChatNicknameResponse upload(@RequestBody UpdateWeChatNicknameRequest updateWeChatNicknameRequest) {
+        UpdateWeChatNicknameResponse updateWeChatNicknameResponse = new UpdateWeChatNicknameResponse();
 
         try {
-            Boolean uploadResult = updateDataService.updateWeChatNickname(nicknameRequest);
+            Boolean uploadResult = updateDataService.updateWeChatNickname(updateWeChatNicknameRequest);
 
             if (uploadResult) {
-                nicknameResponse.setStatus(200);
-                nicknameResponse.setMessage("Successfully uploaded nickname");
+                updateWeChatNicknameResponse.setStatus(200);
+                updateWeChatNicknameResponse.setMessage("Successfully uploaded nickname");
             } else {
-                nicknameResponse.setStatus(400);
-                nicknameResponse.setMessage("Failed to upload nickname");
+                updateWeChatNicknameResponse.setStatus(400);
+                updateWeChatNicknameResponse.setMessage("Failed to upload nickname");
             }
         } catch (Exception e) {
-            nicknameResponse.setStatus(500);
-            nicknameResponse.setMessage(e.getMessage());
+            updateWeChatNicknameResponse.setStatus(500);
+            updateWeChatNicknameResponse.setMessage(e.getMessage());
         }
 
-        return nicknameResponse;
+        return updateWeChatNicknameResponse;
     }
 
     /**
@@ -83,7 +83,7 @@ public class UpdateDataController {
      * @param deleteScheduleRequest 指定的日程信息
      * @return DeleteScheduleResponse
      */
-    @PostMapping("/schedule/delete")
+    @DeleteMapping("/schedule/delete")
     public DeleteScheduleResponse deleteSchedule(@RequestBody DeleteScheduleRequest deleteScheduleRequest) {
         DeleteScheduleResponse deleteScheduleResponse = new DeleteScheduleResponse();
 
@@ -116,7 +116,6 @@ public class UpdateDataController {
         MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse = new MarkRemindedScheduleForClientResponse();
 
         try {
-            log.info(String.valueOf(markRemindedScheduleForClientRequest));
             Boolean markResult = updateDataService.markRemindedScheduleForClient(markRemindedScheduleForClientRequest);
 
             if (markResult) {
@@ -128,5 +127,27 @@ public class UpdateDataController {
             markRemindedScheduleForClientResponse.setStatus(500);
         }
         return markRemindedScheduleForClientResponse;
+    }
+
+    /**
+     * 更新用户微信昵称
+     * @param updateWeChatNicknameRequest 更新微信用户名称请求体
+     * @return UpdateNicknameResponse
+     */
+    @PutMapping("/wechat/nickname")
+    public UpdateWeChatNicknameResponse updateNickname(@RequestBody UpdateWeChatNicknameRequest updateWeChatNicknameRequest) {
+        UpdateWeChatNicknameResponse updateWeChatNicknameResponse = new UpdateWeChatNicknameResponse();
+        try {
+            Boolean updateResult = updateDataService.updateWeChatNickname(updateWeChatNicknameRequest);
+
+            if (updateResult) {
+                updateWeChatNicknameResponse.setStatus(200);
+            } else {
+                updateWeChatNicknameResponse.setStatus(400);
+            }
+        } catch (Exception e){
+            updateWeChatNicknameResponse.setStatus(500);
+        }
+        return updateWeChatNicknameResponse;
     }
 }

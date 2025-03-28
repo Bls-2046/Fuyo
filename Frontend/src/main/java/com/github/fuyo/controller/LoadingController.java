@@ -1,8 +1,8 @@
 package com.github.fuyo.controller;
 
-import com.github.fuyo.model.LoadingFailedModel;
-import com.github.fuyo.model.LoadingModel;
-import com.github.fuyo.model.NavigationModel;
+import com.github.fuyo.model.layout.LoadingFailedModel;
+import com.github.fuyo.model.layout.LoadingModel;
+import com.github.fuyo.model.layout.NavigationModel;
 import com.github.fuyo.view.load.LoadingFailedView;
 import com.github.fuyo.view.load.LoadingView;
 import com.github.fuyo.view.navigation.NavigationView;
@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

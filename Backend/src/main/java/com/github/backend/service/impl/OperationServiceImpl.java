@@ -4,6 +4,7 @@ import com.github.backend.dto.user.LoginRequest;
 import com.github.backend.service.OperationService;
 import com.github.backend.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OperationServiceImpl implements OperationService {
@@ -14,6 +15,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
+    @Transactional
     public Boolean loginVerification(LoginRequest loginRequest) {
         return userService.loginVerification(loginRequest);
     }

@@ -1,6 +1,5 @@
 package com.github.fuyo.dto.schedule;
 
-import com.github.fuyo.entity.ScheduleEntity;
 import lombok.Data;
 
 /**

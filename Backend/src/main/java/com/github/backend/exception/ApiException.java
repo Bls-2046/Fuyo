@@ -17,5 +17,4 @@ public class ApiException extends RuntimeException {
         this.status = status;
         this.detailMessage = detailMessage;
     }
-
 }

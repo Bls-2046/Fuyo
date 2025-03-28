@@ -1,7 +1,7 @@
 package com.github.backend.controller;
 
-import com.github.backend.dto.api.FetchYiYanResponse;
-import com.github.backend.dto.api.FetchWeatherResponse;
+import com.github.backend.dto.thirdPartyAPI.FetchYiYanResponse;
+import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.backend.dto.schedule.FetchScheduleRequest;
 import com.github.backend.dto.schedule.FetchScheduleResponse;
 import com.github.backend.dto.tabletime.FetchTabletimeRequest;

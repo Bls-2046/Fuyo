@@ -3,7 +3,7 @@ package com.github.backend.dto.wechat;
 import lombok.Data;
 
 @Data
-public class NicknameResponse {
+public class UpdateWeChatNicknameResponse {
     private int status;
     private String message;
 }

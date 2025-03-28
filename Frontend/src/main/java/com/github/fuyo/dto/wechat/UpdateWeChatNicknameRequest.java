@@ -1,9 +1,9 @@
-package com.github.backend.dto.wechat;
+package com.github.fuyo.dto.wechat;
 
 import lombok.Data;
 
 @Data
-public class NicknameRequest {
+public class UpdateWeChatNicknameRequest {
     private String username;
     private String nickname;
 }

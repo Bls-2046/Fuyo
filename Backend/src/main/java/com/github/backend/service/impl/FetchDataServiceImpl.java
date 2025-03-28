@@ -1,6 +1,6 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.api.FetchWeatherResponse;
+import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.backend.dto.schedule.FetchScheduleRequest;
 import com.github.backend.dto.schedule.FetchScheduleResponse;
 import com.github.backend.dto.tabletime.FetchTabletimeRequest;

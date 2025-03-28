@@ -36,7 +36,7 @@ public class TabletimeEntity {
     @Column(name = "end_day", nullable = false)
     private int endDay; // 当天课程结束时间
 
-    @Column(name = "week_type", nullable = false)
+    @Column(name = "week_type")
     private String weekType; // 是否分单双周
 
     @Column(name = "place", nullable = false)

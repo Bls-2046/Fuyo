@@ -2,6 +2,7 @@ package com.github.fuyo.entity;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
@@ -47,8 +48,8 @@ public class UserEntity {
     private String cookie;
 
     private List<TabletimeEntity> tabletimeEntity;      // 课表
-    private List<ScheduleEntity> schedule;  // 日程安排
-    private WeChatEntity wechatUser;        // 微信用户基本信息
+    private List<ScheduleEntity> schedule;              // 日程安排
+    private WeChatEntity wechatUser;                    // 微信用户基本信息
 
     /**
      * 公共静态方法，提供全局访问点
@@ -59,6 +60,9 @@ public class UserEntity {
             synchronized (UserEntity.class) {
                 if (userInformation == null) {
                     userInformation = new UserEntity();
+//                    userInformation.setTabletimeEntity(new ArrayList<TabletimeEntity>());
+                    userInformation.setSchedule(new ArrayList<ScheduleEntity>());
+                    userInformation.setWechatUser(new WeChatEntity());
                 }
             }
         }

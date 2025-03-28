@@ -1,6 +1,6 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.api.FetchWeatherResponse;
+import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.backend.service.ThirdPartyApiService;
 import com.github.backend.utils.Https;
 import jakarta.annotation.PostConstruct;

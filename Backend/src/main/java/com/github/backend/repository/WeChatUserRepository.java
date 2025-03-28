@@ -11,6 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WeChatUserRepository extends JpaRepository<WeChatUserEntity, String> {
     // 根据 nickname 值进行查找并返回查找到的值
-    @Query("SELECT WeChatUser.nickname FROM WeChatUserEntity WeChatUser WHERE WeChatUser.nickname = :nickname")
-    String findNicknameByNickname(String nickname);
+    WeChatUserEntity findNicknameByNickname(String nickname);
 }

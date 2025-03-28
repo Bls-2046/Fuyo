@@ -1,21 +1,15 @@
 package com.github.fuyo.utils.https;
 
-import com.github.fuyo.utils.gson.GsonUtil;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.*;
-import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import java.io.IOException;
-import java.net.http.HttpHeaders;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -27,100 +21,155 @@ public class Https {
 
     private static final OkHttpClient client;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule()) // 添加这行
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     static {
-        client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
-    }
+        // 配置SSL忽略验证（仅开发环境）
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+                    public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+                    public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                }
+        };
 
-    private static final RestTemplate restTemplate;
-
-    static {
-        // 初始化 RestTemplate
-        restTemplate = new RestTemplate();
-
-        // 配置 SSL 忽略证书验证（仅用于测试环境）
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, new TrustManager[]{new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-                public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-            }}, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+            client = new OkHttpClient.Builder()
+                    .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager)trustAllCerts[0])
+                    .hostnameVerifier((hostname, session) -> true)
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .build();
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException("Failed to configure SSL", e);
         }
     }
 
     /**
-     * 发送 GET 请求，返回 JSON 数据
-     *
-     * @param url    请求 URL
-     * @param params 请求参数（可选）
-     * @param headers 请求头（可选）
-     * @return JSON 格式的响应数据
+     * 发送GET请求
+     * @param url 请求URL
+     * @param params 查询参数
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @return 响应对象
      */
-    public static JSONObject get(String url, Map<String, String> params, HttpHeaders headers) {
-        // 构建 URL 和查询参数
+    public static <T> T get(String url,
+                            Map<String, String> params,
+                            HttpHeaders headers,
+                            Class<T> responseType) throws IOException {
+        // 构建URL
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
         if (params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                builder.queryParam(entry.getKey(), entry.getValue());
-            }
+            params.forEach(builder::queryParam);
         }
 
-        // 创建 HTTP 实体
-        HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
+        // 构建请求
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(builder.build().toUriString())
+                .get();
 
-        // 发送 GET 请求
-        ResponseEntity<String> response = restTemplate.exchange(
-                builder.toUriString(),
-                HttpMethod.GET,
-                entity,
-                String.class
-        );
+        addHeaders(requestBuilder, headers);
 
-        // 将响应体转换为 JSONObject
-        return new JSONObject(response.getBody());
+        return executeRequest(requestBuilder.build(), responseType);
     }
 
     /**
-     * 发送通用的 POST 请求
-     *
-     * @param url    请求的 URL
-     * @param object 请求体中的对象，将被序列化为 JSON
-     * @param clazz  响应数据的类型
-     * @param <T>    响应数据的泛型类型
-     * @return 解析后的 Java 对象
-     * @throws IOException 如果发生 I/O 错误
+     * 发送POST请求
+     * @param url 请求URL
+     * @param body 请求体对象
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @return 响应对象
      */
-    public static <T> T post(String url, Object object, HttpHeaders headers, Class<T> clazz) throws IOException {
-        Gson gson = GsonUtil.createGson();
-        String json = gson.toJson(object);
-        RequestBody body = RequestBody.create(json, JSON);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .addHeader("Accept", "application/json")
-                .addHeader("Content-Type", "application/json")
-                .build();
+    public static <T> T post(String url,
+                             Object body,
+                             HttpHeaders headers,
+                             Class<T> responseType) throws IOException {
+        return sendBodyRequest(url, body, headers, responseType, "POST");
+    }
 
+    /**
+     * 发送PUT请求
+     * @param url 请求URL
+     * @param body 请求体对象
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @return 响应对象
+     */
+    public static <T> T put(String url,
+                            Object body,
+                            HttpHeaders headers,
+                            Class<T> responseType) throws IOException {
+        return sendBodyRequest(url, body, headers, responseType, "PUT");
+    }
+
+    /**
+     * 发送DELETE请求
+     * @param url 请求URL
+     * @param body 请求体对象（可选）
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @return 响应对象
+     */
+    public static <T> T delete(String url,
+                               Object body,
+                               HttpHeaders headers,
+                               Class<T> responseType) throws IOException {
+        return sendBodyRequest(url, body, headers, responseType, "DELETE");
+    }
+
+    // ================ 私有方法 ================
+
+    private static <T> T sendBodyRequest(String url,
+                                         Object body,
+                                         HttpHeaders headers,
+                                         Class<T> responseType,
+                                         String method) throws IOException {
+        try {
+            String json = objectMapper.writeValueAsString(body);
+            RequestBody requestBody = RequestBody.create(json, JSON);
+
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(url)
+                    .method(method, requestBody);
+
+            addHeaders(requestBuilder, headers);
+
+            return executeRequest(requestBuilder.build(), responseType);
+        } catch (JsonProcessingException e) {
+            throw new IOException("Failed to serialize request body", e);
+        }
+    }
+
+    private static void addHeaders(Request.Builder builder, HttpHeaders headers) {
+        if (headers != null) {
+            headers.forEach((name, values) ->
+                    values.forEach(value -> builder.addHeader(name, value))
+            );
+        }
+        // 默认头
+        builder.addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/json");
+    }
+
+    private static <T> T executeRequest(Request request, Class<T> responseType) throws IOException {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response.code());
+                throw new IOException("HTTP " + response.code() + ": " +
+                        (response.body() != null ? response.body().string() : ""));
             }
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                String responseBodyString = responseBody.string();
-                return gson.fromJson(responseBodyString, clazz);
-            } else {
-                throw new IOException("Response body is null");
+
+            ResponseBody body = response.body();
+            if (body != null) {
+                return objectMapper.readValue(body.string(), responseType);
             }
+            throw new IOException("Empty response body");
         }
     }
 }
