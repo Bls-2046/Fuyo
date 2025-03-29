@@ -4,10 +4,12 @@ import com.github.fuyo.dto.*;
 import com.github.fuyo.listener.StartupTasks;
 import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.HttpHeaders;
+import com.github.fuyo.utils.https.Https;
 import com.github.fuyo.utils.https.HttpsException;
 import com.github.fuyo.utils.https.HttpsTest;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +28,7 @@ public class LoginModel {
         String loginUrl = "http://localhost:8080/api/operation/login";
         LoginRequest loginRequest = new LoginRequest(username, password);
         try {
-            LoginResponse loginResponse = HttpsTest.post(loginUrl, loginRequest, HttpHeaders.basic(), LoginResponse.class);
+            LoginResponse loginResponse = Https.post(loginUrl, loginRequest, null, LoginResponse.class);
             message = loginResponse.getMessage();
 
             if (loginResponse.getStatus() == 200) {
@@ -71,7 +73,7 @@ public class LoginModel {
         } catch (InterruptedException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
-        } catch (HttpsException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 

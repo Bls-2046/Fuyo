@@ -36,7 +36,7 @@ public class UserViewController {
             model.clearFileContent();
             // 清空当前用户信息
             UserEntity.clearUserInformation();
-            ScheduleListener.stop();
+            ScheduleListener.pause();
             // 关闭导航界面
             navigationCloseListener.onClose();
         } catch (Exception e) {

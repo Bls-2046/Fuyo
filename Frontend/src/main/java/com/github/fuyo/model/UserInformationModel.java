@@ -3,10 +3,7 @@ package com.github.fuyo.model;
 import com.github.fuyo.dto.UserInformationRequest;
 import com.github.fuyo.dto.UserInformationResponse;
 import com.github.fuyo.entity.UserEntity;
-import com.github.fuyo.utils.https.HttpHeaders;
 import com.github.fuyo.utils.https.Https;
-import com.github.fuyo.utils.https.HttpsException;
-import com.github.fuyo.utils.https.HttpsTest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -22,7 +19,7 @@ public class UserInformationModel {
         userInformationRequest.setUsername(username);
 
         try {
-            UserInformationResponse userInformationResponse = HttpsTest.<UserInformationResponse>post(url, userInformationRequest, HttpHeaders.basic(), UserInformationResponse.class);
+            UserInformationResponse userInformationResponse = Https.post(url, userInformationRequest, null, UserInformationResponse.class);
 
             // 使用同步块确保线程安全
             synchronized (UserEntity.getUserInformation()) {
@@ -37,7 +34,7 @@ public class UserInformationModel {
                 log.info("成功保存用户基本数据: {}", userInformationResponse);
 
             }
-        } catch (HttpsException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

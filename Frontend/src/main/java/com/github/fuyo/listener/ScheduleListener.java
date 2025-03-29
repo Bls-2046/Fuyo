@@ -11,19 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 public final class ScheduleListener {
 
     private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-
     private static final ExecutorService taskExecutor = Executors.newCachedThreadPool();
-
-    private static boolean isRunning = false; // 监听状态标志
+    private static ScheduledFuture<?> scheduledFuture;
+    private static volatile boolean isRunning = false;
 
     // 私有构造方法，防止外部实例化
     private ScheduleListener() {}
@@ -52,6 +48,7 @@ public final class ScheduleListener {
     private static void checkAndTriggerSchedules() {
         LocalDateTime now = LocalDateTime.now();
         log.error("check running!");
+        log.info(UserEntity.getUserInformation().getSchedule().toString());
         for (ScheduleEntity schedule : (UserEntity.getUserInformation().getSchedule())) {
             log.info(String.valueOf(schedule));
             if (!schedule.getIsReminderInClient()) {
@@ -97,10 +94,31 @@ public final class ScheduleListener {
     }
 
     /**
-     * 停止监听（如退出登录时调用）
+     * 暂停监听，并清空所有待执行和正在执行的任务
+     */
+    public static synchronized void pause() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true); // true表示中断正在执行的任务
+        }
+        // 清空线程池的任务队列
+        ((ScheduledThreadPoolExecutor) executor).getQueue().clear();
+        isRunning = false;
+    }
+
+    /**
+     * 恢复监听（新账号登录后调用）
+     */
+    public static synchronized void resume() {
+        if (!isRunning) {
+            start(); // 重新启动任务
+        }
+    }
+
+    /**
+     * 完全停止监听（退出登录时调用）
      */
     public static synchronized void stop() {
-        executor.shutdownNow(); // 立即终止任务
-        isRunning = false;
+        pause(); // 先暂停任务
+        executor.shutdownNow(); // 彻底关闭线程池（仅限程序退出时调用）
     }
 }

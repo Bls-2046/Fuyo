@@ -44,7 +44,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         for (ScheduleEntity schedule : querySchedule) {
 
-            if (now.isBefore(schedule.getDateTime())) {
+            if (now.isAfter(schedule.getReminderDateTime())) {
                 FetchScheduleResponse.Schedule scheduleResponseSchedule = new FetchScheduleResponse.Schedule();
 
                 scheduleResponseSchedule.setId(schedule.getId());
@@ -120,7 +120,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return false;
@@ -145,7 +144,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return false;

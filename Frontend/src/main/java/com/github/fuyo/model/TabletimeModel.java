@@ -4,9 +4,7 @@ import com.github.fuyo.dto.TableTimeResponse;
 import com.github.fuyo.dto.TabletimeRequest;
 import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.entity.UserEntity;
-import com.github.fuyo.utils.https.HttpHeaders;
 import com.github.fuyo.utils.https.Https;
-import com.github.fuyo.utils.https.HttpsTest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class TabletimeModel {
         tabletimeRequest.setUsername(username);
 
         try {
-            TableTimeResponse tableTimeResponse = HttpsTest.<TableTimeResponse>post(url, tabletimeRequest, HttpHeaders.basic(), TableTimeResponse.class);
+            TableTimeResponse tableTimeResponse = Https.post(url, tabletimeRequest, null, TableTimeResponse.class);
 
             List<TabletimeEntity> tabletimeEntity = tableTimeResponse.getTabletime().stream()
                     .map(responseTabletime -> new TabletimeEntity(
