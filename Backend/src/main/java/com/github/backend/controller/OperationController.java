@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/operation")
@@ -32,28 +34,43 @@ public class OperationController {
      */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-
         LoginResponse loginResponse = new LoginResponse();
 
         try {
-            boolean isAuthenticated = operationService.loginVerification(loginRequest);
+            String loginResult = operationService.loginVerification(loginRequest);
 
-            if (isAuthenticated) {
-                // 2. 认证成功
+            if (Objects.equals(loginResult, "登录成功")) {
                 loginResponse.setStatus(HttpStatus.OK.value())
-                        .setMessage("登录成功");
+                        .setMessage(loginResult);
+
+                log.info(String.valueOf(loginResponse));
+
                 return ResponseEntity.ok(loginResponse);
             } else {
-                // 3. 认证失败
+                // 业务预期内的失败（密码错误、用户不存在）
                 loginResponse.setStatus(HttpStatus.UNAUTHORIZED.value())
-                        .setMessage("用户名或密码错误");
+                        .setMessage(loginResult);
+
+                log.error(String.valueOf(loginResponse));
+
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
             }
+        } catch (RuntimeException e) {
+            // 已知的业务异常（密码错误），按预期返回 401，无需记录 ERROR 日志
+            loginResponse.setStatus(HttpStatus.UNAUTHORIZED.value())
+                    .setMessage(e.getMessage()); // 直接返回异常消息
+
+            log.error(String.valueOf(loginResponse));
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
         } catch (Exception e) {
-            // 5. 系统异常处理
-            log.error("登录异常: username={}", loginRequest.getUsername(), e);
+            // 真正的系统异常（如数据库连接失败）
+            log.error("登录系统异常: username={}", loginRequest.getUsername(), e);
             loginResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .setMessage("系统繁忙，请稍后重试");
+
+            log.error(String.valueOf(loginResponse));
+
             return ResponseEntity.internalServerError().body(loginResponse);
         }
     }
