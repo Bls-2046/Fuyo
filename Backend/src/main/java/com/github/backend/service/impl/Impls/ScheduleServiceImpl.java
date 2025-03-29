@@ -40,11 +40,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<ScheduleEntity> querySchedule =  scheduleRepository.findByUserEntityUsername(username);
         List<FetchScheduleResponse.Schedule> scheduleList = new ArrayList<>();
 
-        LocalDateTime now = LocalDateTime.now();
+        // LocalDateTime now = LocalDateTime.now();
 
         for (ScheduleEntity schedule : querySchedule) {
 
-            if (now.isAfter(schedule.getReminderDateTime())) {
+            if (schedule.getIsReminderInClient() == Boolean.FALSE) {
                 FetchScheduleResponse.Schedule scheduleResponseSchedule = new FetchScheduleResponse.Schedule();
 
                 scheduleResponseSchedule.setId(schedule.getId());
