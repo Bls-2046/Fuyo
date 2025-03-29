@@ -16,7 +16,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     @Transactional
-    public Boolean loginVerification(LoginRequest loginRequest) {
+    public String loginVerification(LoginRequest loginRequest) {
         return userService.loginVerification(loginRequest);
     }
 }

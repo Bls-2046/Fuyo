@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
         this.tabletimeRepository = tabletimeRepository;
     }
 
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Fetch Data //////////////////////////////////////////////
+
     /**
      * 获取用户基本信息
      * @param fetchUserBaseInformationRequest 用户名用于查询
@@ -65,14 +68,15 @@ public class UserServiceImpl implements UserService {
         return userInfo;
     }
 
-
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Operation ////////////////////////////////////////////
     /**
      * 用户登录验证
      * 通过 python 脚本 login_bitzh.py 模拟账号登录
      * @param loginRequest 登录信息
      */
     @Override
-    public Boolean loginVerification(LoginRequest loginRequest) {
+    public String loginVerification(LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
@@ -92,14 +96,14 @@ public class UserServiceImpl implements UserService {
 
                 // 根据 message 判断验证结果
                 if (!message.equals("登录成功")) {
-                    throw new RuntimeException(message);
+                    return message;
                 }
 
                 System.out.println(data);
                 // 将数据保持到数据库
-                saveUserInformation(data, username, password);
-
-                return true;
+                if (saveUserInformation(data, username, password)) {
+                    return "登录成功";
+                }
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
@@ -107,9 +111,9 @@ public class UserServiceImpl implements UserService {
             if (!Password.matches(password, userEntity.getPassword())) {
                 throw new RuntimeException("密码错误");
             }
-            return true;
+            return "登录成功";
         }
-        return false;
+        return "登录超时, 请稍后重试";
     }
 
     /**
@@ -118,7 +122,7 @@ public class UserServiceImpl implements UserService {
      * @param username 用户名
      * @param password 密码
      */
-    public void saveUserInformation(JSONObject data, String username, String password) {
+    public Boolean saveUserInformation(JSONObject data, String username, String password) {
         UserEntity userEntity = new UserEntity();
         try {
             userEntity.setId(username);
@@ -149,10 +153,13 @@ public class UserServiceImpl implements UserService {
             userRepository.save(userEntity);
 
             // 使用 cookie 发起请求，获取课表信息并存入数据库
-            fetchAndSaveTabletime(userEntity, cookie);
+            if (fetchAndSaveTabletime(userEntity, cookie)) {
+                return true;
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -160,7 +167,7 @@ public class UserServiceImpl implements UserService {
      * @param userEntity 用户实体类
      * @param cookie cookie 用于对第一次对 <a href="https://s.bitzh.edu.cn/manage/protal/gettabletime" /> 发起请求
      */
-    private void fetchAndSaveTabletime(UserEntity userEntity, String cookie) {
+    private Boolean fetchAndSaveTabletime(UserEntity userEntity, String cookie) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Cookie", cookie);
@@ -208,9 +215,11 @@ public class UserServiceImpl implements UserService {
                 tabletimeRepository.save(tabletime);
             }
             log.info("用户 {} 的课表信息已成功保存", userEntity.getUsername());
+            return true;
         } catch (Exception e) {
             log.error("获取或保存课表信息失败: {}", e.getMessage());
         }
+        return false;
     }
 
     /**

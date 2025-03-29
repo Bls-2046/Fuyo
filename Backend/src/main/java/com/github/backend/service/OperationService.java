@@ -8,5 +8,5 @@ public interface OperationService {
      * 通过 python 脚本 login_bitzh.py 模拟账号登录
      * @param loginRequest 登录请求体
      */
-    Boolean loginVerification(LoginRequest loginRequest);
+    String loginVerification(LoginRequest loginRequest);
 }

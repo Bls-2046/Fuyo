@@ -13,7 +13,7 @@ public interface UserService {
      * @param loginRequest 登录信息
      * @return Boolean
      */
-    Boolean loginVerification(LoginRequest loginRequest);
+    String loginVerification(LoginRequest loginRequest);
 
     /**
      * 获得用户信息
