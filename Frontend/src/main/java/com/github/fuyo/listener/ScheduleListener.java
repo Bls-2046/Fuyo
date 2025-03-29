@@ -8,6 +8,7 @@ import com.github.fuyo.model.ScheduleModel;
 import com.github.fuyo.utils.https.Https;
 import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -47,19 +48,15 @@ public final class ScheduleListener {
      */
     private static void checkAndTriggerSchedules() {
         LocalDateTime now = LocalDateTime.now();
-        log.error("check running!");
-        log.info(UserEntity.getUserInformation().getSchedule().toString());
         for (ScheduleEntity schedule : (UserEntity.getUserInformation().getSchedule())) {
-            log.info(String.valueOf(schedule));
             if (!schedule.getIsReminderInClient()) {
                 if (now.isAfter(schedule.getReminderDateTime())) {
 
                     markReminderScheduleForClient(schedule);
-                    log.warn(schedule.toString());
+                    log.info("显示提示弹窗的日程为: {}", schedule);
 
                     schedule.setIsReminderInClient(Boolean.TRUE);
 
-                    ScheduleDialogView.showDialog(schedule);
                     taskExecutor.submit(() -> {
                         // 消息框弹出
                         ScheduleDialogView.showDialog(schedule);
@@ -85,7 +82,7 @@ public final class ScheduleListener {
             MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse
                     = Https.put(url, markRemindedScheduleForClientRequest, null, MarkRemindedScheduleForClientResponse.class);
 
-            if (markRemindedScheduleForClientResponse.getStatus() == 200) {
+            if (markRemindedScheduleForClientResponse.getStatus() == HttpStatus.OK.value()) {
                 log.info("mark reminder for client success");
             }
         } catch (IOException e) {
@@ -103,15 +100,6 @@ public final class ScheduleListener {
         // 清空线程池的任务队列
         ((ScheduledThreadPoolExecutor) executor).getQueue().clear();
         isRunning = false;
-    }
-
-    /**
-     * 恢复监听（新账号登录后调用）
-     */
-    public static synchronized void resume() {
-        if (!isRunning) {
-            start(); // 重新启动任务
-        }
     }
 
     /**
