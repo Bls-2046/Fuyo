@@ -17,6 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from PIL import Image, ImageFilter, ImageEnhance
 import requests
 import easyocr
+import atexit
 import time
 import os
 import sys
@@ -40,6 +41,7 @@ def log_to_file(message):
         log_file.write(f"[{timestamp}] {message}\n")
 
 driver = None
+all_drivers = []
 edge_options = None
 
 # 配置参数
@@ -330,20 +332,45 @@ def create_browser_with_timeout(timeout_seconds=900):
     timer = threading.Timer(timeout_seconds, driver.quit)
     timer.start()
 
+    all_drivers.append(driver)
+
     return driver, timer
 
+def close_all_drivers():
+    """安全关闭所有浏览器，并清空列表"""
+    log_to_file("开始关闭所有浏览器...")
+    for driver in all_drivers[:]:  # 遍历副本，避免修改原列表
+        try:
+            if driver:
+                driver.quit()
+                log_to_file(f"成功关闭 driver: {driver}")
+        except Exception as e:
+            log_to_file(f"关闭 driver 失败: {e}")
+    all_drivers.clear()
+    log_to_file("所有浏览器已关闭")
+
+# 注册退出时的清理函数
+atexit.register(close_all_drivers)
+
 if __name__ == "__main__":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', line_buffering=True)
     service = Service(edge_driver_path)
+
     while True:
         try:
             driver, timeout_timer = create_browser_with_timeout(900)
+            all_drivers.append(driver)  # 将新 driver 加入全局列表
+
             username = sys.stdin.readline().strip()
             if username == "exit":
-                driver.quit()
+                close_all_drivers()  # 同步关闭浏览器
+                print("BROWSERS_CLOSED_OK")  # 发送确认信号
+                sys.stdout.flush()
+                break
+
             password = sys.stdin.readline().strip()
 
-            if check_username():
+            if check_username():  # 假设这是你的校验函数
                 continue
 
             result = login_bitzh(username, password)
@@ -351,6 +378,7 @@ if __name__ == "__main__":
             sys.stdout.flush()
 
         except Exception as e:
-            print(json.dumps({ "message": "连接超时, 请重试", "data": {} }))
-            driver.quit()
+            print(json.dumps({"message": "连接超时, 请重试", "data": {}}))
+            if driver:  # 确保异常时也关闭当前 driver
+                driver.quit()
             sys.stdout.flush()
