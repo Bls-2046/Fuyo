@@ -2,20 +2,20 @@ package com.github.fuyo.view.navigation.schedule;
 
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.ScheduleViewEntity;
-import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ScheduleView extends JLayeredPane {
 
@@ -46,7 +46,7 @@ public class ScheduleView extends JLayeredPane {
         JTextField titleInput = RUILabel.getEmptyInputTextLabel(72, 118, 464, 37, "", Color.GRAY,18, "微软雅黑",Font.PLAIN);
         add(titleInput, POPUP_LAYER);
 
-        JTextField reminderTimeInput = RUILabel.getEmptyInputTextLabel(562, 118, 112, 37, "0", Color.GRAY,18, "微软雅黑",Font.PLAIN);
+        JTextField reminderTimeInput = RUILabel.getEmptyInputTextLabel(562, 118, 112, 37, "", Color.GRAY,18, "微软雅黑",Font.PLAIN);
         add(reminderTimeInput, POPUP_LAYER);
 
         JTextField yearInput = RUILabel.getEmptyInputTextLabel(562, 260, 122, 37, "", Color.GRAY,18, "微软雅黑",Font.PLAIN);
@@ -65,14 +65,25 @@ public class ScheduleView extends JLayeredPane {
         add(minInput, POPUP_LAYER);
 
         // 4*6,6 (24,6) per line words, word, Microsoft YaHei, 18, Regular
-        JTextArea reminderTextArea = RUILabel.getEmptyTextArea(77, 212, 454, 155, 24, 6, Color.DARK_GRAY, 16, "微软雅黑", Font.PLAIN);
+        JTextArea reminderTextArea = RUILabel.getEmptyTextArea(88, 215, 454, 155, 24, 6, Color.GRAY, 18, "微软雅黑", Font.PLAIN);
         add(reminderTextArea, POPUP_LAYER);
 
         // Buttons
         // Warning: Reminder and EventDash should handle by other view class, not this clazz.
         JButton resetButton = RUILabel.getStaticEmptyLayerButton(907, 260, 92, 37);
-        resetButton.addActionListener(e -> {
-            clearInput();
+        resetButton.addActionListener(_ -> {
+            // 设置默认标题
+            getViewEntity().getTitle().setText("我的日程");
+            // 设置默认内容
+            getViewEntity().getContent().setText("好像有什么重要的事...");
+            // 将时间设置设为默认值
+            getViewEntity().getRemindTime().setText("0");
+            LocalDateTime now = LocalDateTime.now();
+            getViewEntity().getScheduleYear().setText(String.valueOf(now.getYear()));
+            getViewEntity().getScheduleMonth().setText(String.valueOf(now.getMonthValue()));
+            getViewEntity().getScheduleDay().setText(String.valueOf(now.getDayOfMonth()));
+            getViewEntity().getScheduleHour().setText(String.valueOf(now.getHour()));
+            getViewEntity().getScheduleMinute().setText(String.valueOf(now.getMinute()));
         });
         add(resetButton, POPUP_LAYER);
 

@@ -32,9 +32,6 @@ public class ClazzView extends JLayeredPane {
             }
         });
 
-        log.info(tabletimeEntity.toString());
-
-
         // Current Time?
         LocalTime now = LocalTime.now();
 
@@ -72,18 +69,18 @@ public class ClazzView extends JLayeredPane {
         String currentClazzName = currentClazz != null ? currentClazz.getClazz() : (remainingClazzCount == 0) ? "休憩时间" : (remainingClazzCount == tabletimeEntity.size()) ? "准备上课~" : "课间休息~";
         String currentClazzPlace = currentClazz != null ? currentClazz.getPlace() : "";
 
-        add(RUILabel.getEmptyTextLabel(102, 152 - posYFix, currentClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(102, 152 - posYFix, currentClazzTime, 30, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getEmptyTextLabel(102+30, 192 - posYFix, currentClazzName, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getEmptyTextLabel(148, 315 - posYFix, currentClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(148, 315 - posYFix, currentClazzPlace, 22, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Next Clazz
         String nextClazzTime = nextClazz != null ? getTimeString(nextClazz.getBeginDay())[0] + " - " + getTimeString(nextClazz.getEndDay())[1] : "";
         String nextClazzName = nextClazz != null ? nextClazz.getClazz() : "今日无事";
         String nextClazzPlace = nextClazz != null ? nextClazz.getPlace() : "";
 
-        add(RUILabel.getEmptyTextLabel(102, 507 - posYFix, nextClazzTime, 30, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(102, 507 - posYFix, nextClazzTime, 30, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getEmptyTextLabel(102+30, 547 - posYFix, nextClazzName, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getEmptyTextLabel(148, 670 - posYFix, nextClazzPlace, 22, "Agency FB", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(148, 670 - posYFix, nextClazzPlace, 22, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Remaining
         add(RUILabel.getEmptyTextLabel(629, 540, ""+remainingClazzCount, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
