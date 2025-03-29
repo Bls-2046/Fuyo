@@ -1,8 +1,10 @@
 package com.github.backend.dto.tabletime;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class FetchTabletimeRequest {
-    public String username;
+    private String username;
 }

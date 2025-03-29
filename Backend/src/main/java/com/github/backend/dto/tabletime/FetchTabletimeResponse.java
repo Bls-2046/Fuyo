@@ -1,16 +1,18 @@
 package com.github.backend.dto.tabletime;
 
 import lombok.Data;
-
+import lombok.experimental.Accessors;
 import java.util.List;
 
 @Data
+@Accessors(chain = true)
 public class FetchTabletimeResponse {
     private int status;
     private String message;
     private List<Tabletime> tabletime;
 
     @Data
+    @Accessors(chain = true)
     public static class Tabletime {
         private String keyID;
         private String clazz;

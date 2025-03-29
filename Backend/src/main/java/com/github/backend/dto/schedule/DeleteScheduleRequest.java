@@ -1,11 +1,10 @@
 package com.github.backend.dto.schedule;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
-/**
- * 删除用户日程的请求体
- */
 @Data
+@Accessors(chain = true)
 public class DeleteScheduleRequest {
     private String id;
     private String username;

@@ -1,13 +1,17 @@
 package com.github.backend.dto.thirdPartyAPI;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class FetchWeatherResponse {
     private int status;
+    private String message;
     private Live live;
 
     @Data
+    @Accessors(chain = true)
     public static class Live {
         private String province;
         private String city;

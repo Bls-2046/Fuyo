@@ -1,8 +1,10 @@
 package com.github.backend.dto.user;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)  // 添加这个注解以支持链式调用
 public class FetchUserBaseInformationResponse {
     private int status;
     private String message;

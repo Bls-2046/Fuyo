@@ -1,20 +1,20 @@
 package com.github.backend.dto.schedule;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-/**
- * 添加用户日程的响应体
- */
 @Data
+@Accessors(chain = true)
 public class AddScheduleResponse {
     private int status;
     private String message;
-    private Schedule schedule;
+    private ResponseSchedule schedule;
 
     @Data
-    public static class Schedule {
+    @Accessors(chain = true)
+    public static class ResponseSchedule {
         private String title;
         private LocalDateTime dateTime;
         private LocalDateTime reminderDateTime;
