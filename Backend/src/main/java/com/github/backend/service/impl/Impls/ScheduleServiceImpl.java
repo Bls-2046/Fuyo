@@ -43,6 +43,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime now = LocalDateTime.now();
 
         for (ScheduleEntity schedule : querySchedule) {
+
             if (now.isBefore(schedule.getDateTime())) {
                 FetchScheduleResponse.Schedule scheduleResponseSchedule = new FetchScheduleResponse.Schedule();
 
@@ -73,7 +74,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             String username = schedule.getUsername();
             UserEntity user = userRepository.findByUsername(username);
-            String openid = schedule.getOpenid();
+            String nickname = schedule.getNickname();
             String title = schedule.getSchedule().getTitle();
             LocalDateTime dateTime = schedule.getSchedule().getDateTime();
             LocalDateTime reminderDateTime = schedule.getSchedule().getReminderDateTime();
@@ -88,7 +89,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 newSchedule.setDescription(description);
             }
             newSchedule.setUserEntity(user);
-            newSchedule.setOpenid(openid);
+            newSchedule.setOpenid(nickname);
             newSchedule.setIsReminderInClient(Boolean.FALSE);
             newSchedule.setIsSendWeChatReminder(Boolean.FALSE);
 
@@ -127,7 +128,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 为前端已显示提醒弹窗的日程做标记
-     * @param markRemindedScheduleForClientRequest
+     * @param markRemindedScheduleForClientRequest 日程信息
      * @return Boolean
      */
     @Override

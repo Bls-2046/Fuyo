@@ -88,7 +88,9 @@ public class NavigationController implements NavigationCloseListener {
                 scheduleEntities = new ArrayList<>();
             }
 
-            if (user.getWechatUser() == null) {
+            System.out.println(user.getWechatUser().getNickname());
+            // TODO
+            if (user.getWechatUser().getNickname() == null) {
                 log.warn("user.getWechatUser() is null, goto GuideView");
 
                 SwingUtilities.invokeLater(() -> {
@@ -102,24 +104,24 @@ public class NavigationController implements NavigationCloseListener {
 
                         // 验证用户微信昵称
                         boolean isVaild = false;
-                        WeChatEntity wechatUser =  UserEntity.getUserInformation().getWechatUser();
-                        if (wechatUser != null) {
-                            String nickname = wechatUser.getNickname();
-                            if (nickname == null) {
-                                nickname = guideView.getNickNameInput().getText();
-                                Boolean updateWeChatNickNameResult = WeChatModel.updateWeChatNickName(nickname);
-                                if (updateWeChatNickNameResult) {
-                                    UserEntity.getUserInformation().getWechatUser().setNickname(nickname);
-                                    isVaild = true;
-                                } else {
-                                    ErrorMessageBox.showErrorBox("该名称已被占用");
-                                    guideView.getNickNameInput().setText("");
-                                }
 
+                        WeChatEntity wechatUser =  UserEntity.getUserInformation().getWechatUser();
+                        System.out.println(wechatUser);
+
+                        String nickname = wechatUser.getNickname();
+                        if (nickname == null) {
+                            nickname = guideView.getNickNameInput().getText();
+                            Boolean updateWeChatNickNameResult = WeChatModel.updateWeChatNickName(nickname);
+                            System.out.println("updateWeChatNicknameResult: " + updateWeChatNickNameResult);
+                            if (updateWeChatNickNameResult) {
+                                UserEntity.getUserInformation().getWechatUser().setNickname(nickname);
+                                isVaild = true;
+                            } else {
+                                guideView.getNickNameInput().setText("");
                             }
                         }
 
-                        if (isVaild){
+                        if (isVaild) {
                             view.getLp().remove(guideView);
                             view.revalidate();
                             view.repaint();
@@ -129,7 +131,7 @@ public class NavigationController implements NavigationCloseListener {
                                 view.renderRouterView(scheduleController.getView());
                             });
                         } else {
-                            ErrorMessageBox.showErrorBox("校验错误，请重新输入");
+                            ErrorMessageBox.showErrorBox("找不到该用户");
                         }
 
                     });
@@ -142,7 +144,6 @@ public class NavigationController implements NavigationCloseListener {
                 SwingUtilities.invokeLater(() -> {
                     view.renderRouterView(scheduleController.getView());
                 });
-
             }
         });
     }

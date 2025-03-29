@@ -29,7 +29,7 @@ public class UpdateDataController {
      * @param updateWeChatNicknameRequest 请求体
      * @return NicknameResponse
      */
-    @PostMapping("/nickname")
+    @PutMapping("/nickname")
     public UpdateWeChatNicknameResponse upload(@RequestBody UpdateWeChatNicknameRequest updateWeChatNicknameRequest) {
         UpdateWeChatNicknameResponse updateWeChatNicknameResponse = new UpdateWeChatNicknameResponse();
 
@@ -109,7 +109,7 @@ public class UpdateDataController {
      * @param markRemindedScheduleForClientRequest 已显示提示框的日程信息
      * @return MarkRemindedScheduleForClientResponse
      */
-    @PostMapping("/schedule/mark-reminder-for-client")
+    @PutMapping("/schedule/mark-reminder-for-client")
     public MarkRemindedScheduleForClientResponse markRemindedScheduleForClient(
             @RequestBody MarkRemindedScheduleForClientRequest markRemindedScheduleForClientRequest) {
 

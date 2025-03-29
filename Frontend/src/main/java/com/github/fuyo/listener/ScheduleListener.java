@@ -39,7 +39,7 @@ public final class ScheduleListener {
             try {
                 checkAndTriggerSchedules();
             } catch (Exception e) {
-                // log.error(e.getMessage());
+                log.error(e.getMessage());
             }
         }, 0, 1, TimeUnit.SECONDS);
 
@@ -51,7 +51,9 @@ public final class ScheduleListener {
      */
     private static void checkAndTriggerSchedules() {
         LocalDateTime now = LocalDateTime.now();
+        log.error("check running!");
         for (ScheduleEntity schedule : (UserEntity.getUserInformation().getSchedule())) {
+            log.info(String.valueOf(schedule));
             if (!schedule.getIsReminderInClient()) {
                 if (now.isAfter(schedule.getReminderDateTime())) {
 
@@ -60,6 +62,7 @@ public final class ScheduleListener {
 
                     schedule.setIsReminderInClient(Boolean.TRUE);
 
+                    ScheduleDialogView.showDialog(schedule);
                     taskExecutor.submit(() -> {
                         // 消息框弹出
                         ScheduleDialogView.showDialog(schedule);
@@ -83,7 +86,7 @@ public final class ScheduleListener {
             markRemindedScheduleForClientRequest.setUsername(UserEntity.getUserInformation().getUsername());
 
             MarkRemindedScheduleForClientResponse markRemindedScheduleForClientResponse
-                    = Https.post(url, markRemindedScheduleForClientRequest, null, MarkRemindedScheduleForClientResponse.class);
+                    = Https.put(url, markRemindedScheduleForClientRequest, null, MarkRemindedScheduleForClientResponse.class);
 
             if (markRemindedScheduleForClientResponse.getStatus() == 200) {
                 log.info("mark reminder for client success");

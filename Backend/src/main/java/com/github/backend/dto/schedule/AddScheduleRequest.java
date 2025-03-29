@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class AddScheduleRequest {
     private String username;
-    private String openid;
+    private String nickname;
     private Schedule schedule;
 
     @Data

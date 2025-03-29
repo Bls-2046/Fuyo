@@ -84,13 +84,13 @@ public class ScheduleController {
 
                 switch (addResult) {
                     case "添加成功" -> {
+                        ScheduleModel.fetchSchedule(UserEntity.getUserInformation().getUsername());
+
                         scheduleEntities.add(newScheduleEntity);
 
                         // 刷新渲染
                         view.setScheduleEntities(scheduleEntities);
                         view.repaintEDW();
-
-                        ScheduleModel.fetchSchedule(UserEntity.getUserInformation().getUsername());
 
                         // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
                         log.info("{}, unit: {}", newScheduleEntity, viewEntity.getRemindWidget().getType());

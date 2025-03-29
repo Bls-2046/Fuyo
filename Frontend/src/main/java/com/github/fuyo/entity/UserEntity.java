@@ -60,8 +60,8 @@ public class UserEntity {
             synchronized (UserEntity.class) {
                 if (userInformation == null) {
                     userInformation = new UserEntity();
-//                    userInformation.setTabletimeEntity(new ArrayList<TabletimeEntity>());
-                    userInformation.setSchedule(new ArrayList<ScheduleEntity>());
+                    userInformation.setTabletimeEntity(new ArrayList<>());
+                    userInformation.setSchedule(new ArrayList<>());
                     userInformation.setWechatUser(new WeChatEntity());
                 }
             }

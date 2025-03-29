@@ -32,7 +32,7 @@ public class ScheduleModel {
             // TODO 测试数据
             scheduleRequest.setOpenid("textUer");
 
-            ScheduleResponse scheduleResponse = HttpsTest.<ScheduleResponse>post(url, scheduleRequest, HttpHeaders.basic(), ScheduleResponse.class);
+            ScheduleResponse scheduleResponse = Https.<ScheduleResponse>post(url, scheduleRequest, null, ScheduleResponse.class);
             List<ScheduleEntity> scheduleEntity = scheduleResponse.getSchedule().stream()
                     .map(responseSchedule -> new ScheduleEntity(
                             responseSchedule.getId(),
@@ -50,7 +50,7 @@ public class ScheduleModel {
             synchronized (UserEntity.getUserInformation()) {
                 UserEntity.getUserInformation().setSchedule(scheduleEntity);
             }
-        } catch (HttpsException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -84,7 +84,7 @@ public class ScheduleModel {
             AddScheduleRequest.Schedule newSchedule = new AddScheduleRequest.Schedule();
 
             addScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
-            addScheduleRequest.setOpenid("testUser");
+            addScheduleRequest.setNickname(UserEntity.getUserInformation().getWechatUser().getNickname());
 
             newSchedule.setTitle(schedule.getTitle());
             newSchedule.setDateTime(schedule.getDateTime());

@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setDepartment(userEntity.getDepartment());
         userInfo.setEmail(userEntity.getEmail());
         userInfo.setPhone(userEntity.getPhone());
+        userInfo.setNickname(userEntity.getNickname());
 
         return userInfo;
     }
