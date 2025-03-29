@@ -88,7 +88,6 @@ public class NavigationController implements NavigationCloseListener {
                 scheduleEntities = new ArrayList<>();
             }
 
-            System.out.println(user.getWechatUser().getNickname());
             // TODO
             if (user.getWechatUser().getNickname() == null) {
                 log.warn("user.getWechatUser() is null, goto GuideView");

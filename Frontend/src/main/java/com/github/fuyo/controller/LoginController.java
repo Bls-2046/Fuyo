@@ -99,9 +99,11 @@ public class LoginController {
     }
 
     private void isSuccessfulLogin(String username, String password) throws Exception {
+        log.warn("开始登录验证");
         String message = model.loginVerification(username, password);
         // 验证
         if (Objects.equals(message, "登录成功")) {
+            log.info("用户: {} 登录成功", username);
             model.saveCredentials(username, password);
 
             // 使用 Timer 延迟 5 秒后关闭窗口

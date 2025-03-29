@@ -3,10 +3,7 @@ package com.github.fuyo.model;
 import com.github.fuyo.dto.schedule.*;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
-import com.github.fuyo.utils.https.HttpHeaders;
 import com.github.fuyo.utils.https.Https;
-import com.github.fuyo.utils.https.HttpsException;
-import com.github.fuyo.utils.https.HttpsTest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -24,16 +21,12 @@ public class ScheduleModel {
      */
     public static void fetchSchedule(String username) {
         String url = "http://localhost:8080/api/fetch/schedule";
-        ScheduleRequest scheduleRequest = new ScheduleRequest();
+        FetchScheduleRequest fetchScheduleRequest = new FetchScheduleRequest();
         try {
-            scheduleRequest.setUsername(username);
-//            scheduleRequest.setOpenid(openid);
+            fetchScheduleRequest.setUsername(username);
 
-            // TODO 测试数据
-            scheduleRequest.setOpenid("textUer");
-
-            ScheduleResponse scheduleResponse = Https.<ScheduleResponse>post(url, scheduleRequest, null, ScheduleResponse.class);
-            List<ScheduleEntity> scheduleEntity = scheduleResponse.getSchedule().stream()
+            FetchScheduleResponse fetchScheduleResponse = Https.post(url, fetchScheduleRequest, null, FetchScheduleResponse.class);
+            List<ScheduleEntity> scheduleEntity = fetchScheduleResponse.getSchedule().stream()
                     .map(responseSchedule -> new ScheduleEntity(
                             responseSchedule.getId(),
                             responseSchedule.getTitle(),
@@ -50,8 +43,8 @@ public class ScheduleModel {
             synchronized (UserEntity.getUserInformation()) {
                 UserEntity.getUserInformation().setSchedule(scheduleEntity);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
     }
 
@@ -93,13 +86,13 @@ public class ScheduleModel {
 
             addScheduleRequest.setSchedule(newSchedule);
 
-            AddScheduleResponse addResult = Https.<AddScheduleResponse>post(url, addScheduleRequest, null, AddScheduleResponse.class);
+            AddScheduleResponse addResult = Https.post(url, addScheduleRequest, null, AddScheduleResponse.class);
 
             if (addResult.getStatus() == 200) {
                 result = "添加成功";
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }  catch (Exception e) {
+            log.error(e.getMessage());
         }
         return result;
     }
@@ -117,7 +110,7 @@ public class ScheduleModel {
         deleteScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
 
         try {
-            DeleteScheduleResponse deleteResult = Https.<DeleteScheduleResponse>delete(url, deleteScheduleRequest, null, DeleteScheduleResponse.class);
+            DeleteScheduleResponse deleteResult = Https.delete(url, deleteScheduleRequest, null, DeleteScheduleResponse.class);
 
             if (deleteResult.getStatus() == 200) {
                 return "删除成功";

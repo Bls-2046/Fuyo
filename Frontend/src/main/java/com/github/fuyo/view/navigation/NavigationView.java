@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +142,7 @@ public class NavigationView extends JFrame {
 
     // Render NaviBar
     private void actionPerformed(ActionEvent e, NaviFunctionEntity navi) {
-        log.info("Button {} Pressed and set to activate", navi.getFunctionName());
+        log.info("进入“{}”界面", navi.getFunctionName());
 
         // Initialization
         naviFuncObjs.forEach(naviFuncObj -> {

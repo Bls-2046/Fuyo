@@ -8,8 +8,8 @@ public class StartupTasks {
     private StartupTasks() {}
 
     public static void 	scheduler() {
-        log.info("监听器启动中");
+        log.info("Schedule Listener 日程监听器启动中...");
         ScheduleListener.start();
-        log.info("监听器启动完成");
+        log.info("Schedule Listener 日程监听开始运行!");
     }
 }

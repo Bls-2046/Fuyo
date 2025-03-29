@@ -20,6 +20,7 @@ import java.util.List;
 public class ScheduleController {
     @Getter
     private final ScheduleView view;
+    @Getter
     private final ScheduleModel model;
 
     private ScheduleViewEntity viewEntity;
@@ -94,11 +95,6 @@ public class ScheduleController {
 
                         // 显示目前添加的Entity信息 (getType: 1:Day, 2:Hrs, 3:Min)
                         log.info("{}, unit: {}", newScheduleEntity, viewEntity.getRemindWidget().getType());
-                        // 清空全部输入框
-                        view.clearInput();
-
-                        // 将时间设置设为默认值
-                        view.getViewEntity().getRemindTime().setText("0");
 
                         updateNowDateTime(this.view); // 更新时间输入框为当前时间
                     }
@@ -107,10 +103,11 @@ public class ScheduleController {
             }
             catch (DateTimeException dtex) {
                 view.clearInput();
-                ErrorMessageBox.showErrorBox("非法输入，请重新输入");
+                ErrorMessageBox.showErrorBox("标题及日期不能为空, 请重新输入");
             }
             catch (Exception ex) {
-                ex.printStackTrace();
+                updateNowDateTime(this.view);
+                ErrorMessageBox.showErrorBox("添加失败");
                 log.error(ex.getMessage());
             }
         });
@@ -121,6 +118,12 @@ public class ScheduleController {
      * @param view 日程视图
      */
     public void updateNowDateTime(ScheduleView view) {
+        // 设置默认标题
+        view.getViewEntity().getTitle().setText("我的日程");
+        // 设置默认内容
+        view.getViewEntity().getContent().setText("好像有什么重要的事...");
+        // 将时间设置设为默认值
+        view.getViewEntity().getRemindTime().setText("0");
         LocalDateTime now = LocalDateTime.now();
         view.getViewEntity().getScheduleYear().setText(String.valueOf(now.getYear()));
         view.getViewEntity().getScheduleMonth().setText(String.valueOf(now.getMonthValue()));
@@ -129,23 +132,28 @@ public class ScheduleController {
         view.getViewEntity().getScheduleMinute().setText(String.valueOf(now.getMinute()));
     }
 
-    // 删除事件按钮执行器
+    /**
+     * 删除事件按钮执行器
+     * @param schedule 用户指定日程信息
+     */
     public static void deleteScheduleEventClicked(ScheduleEntity schedule) {
 
         ScheduleModel.deleteSchedule(schedule);
 
         // 删除Schedule按钮点击后触发
-        log.info("Delete Schedule for {} Clicked" , schedule.getTitle());
+        log.info("删除日程标题为: “{}”的日程信息" , schedule.getTitle());
     }
 
-    // 点击添加按钮后刷新
+    /**
+     * 点击添加按钮后刷新
+     */
     private void monitorAndRepaint() {
-            List<ScheduleEntity> schedule = UserEntity.getUserInformation().getSchedule();
+        List<ScheduleEntity> schedule = UserEntity.getUserInformation().getSchedule();
 
-            if (!schedule.isEmpty()) {
-                scheduleEntities = schedule;
-                view.setScheduleEntities(scheduleEntities);
-                view.repaintEDW();
-            }
+        if (!schedule.isEmpty()) {
+            scheduleEntities = schedule;
+            view.setScheduleEntities(scheduleEntities);
+            view.repaintEDW();
+        }
     }
 }
