@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
+/**
+ * 用户的各种操作（如：登录、认证等）
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/operation")

@@ -47,12 +47,12 @@ public class ScheduleServiceImpl implements ScheduleService {
             if (schedule.getIsReminderInClient() == Boolean.FALSE) {
                 FetchScheduleResponse.Schedule scheduleResponseSchedule = new FetchScheduleResponse.Schedule();
 
-                scheduleResponseSchedule.setId(schedule.getId());
-                scheduleResponseSchedule.setTitle(schedule.getTitle());
-                scheduleResponseSchedule.setDateTime(schedule.getDateTime());
-                scheduleResponseSchedule.setReminderDateTime(schedule.getReminderDateTime());
-                scheduleResponseSchedule.setDescription(schedule.getDescription());
-                scheduleResponseSchedule.setIsReminderInClient(schedule.getIsReminderInClient());
+                scheduleResponseSchedule.setId(schedule.getId())
+                                        .setTitle(schedule.getTitle())
+                                        .setDateTime(schedule.getDateTime())
+                                        .setReminderDateTime(schedule.getReminderDateTime())
+                                        .setDescription(schedule.getDescription())
+                                        .setIsReminderInClient(schedule.getIsReminderInClient());
 
                 scheduleList.add(scheduleResponseSchedule);
             }

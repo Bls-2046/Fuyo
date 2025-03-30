@@ -63,16 +63,16 @@ public class TabletimeServiceImpl implements TabletimeService {
             }
             if (tabletime.getStartWeek() <= currentWeek && tabletime.getFinishWeek() >= currentWeek) {
 
-                tabletimeResponseTabletime.setKeyID(tabletime.getId());
-                tabletimeResponseTabletime.setClazz(tabletime.getClazz());
-                tabletimeResponseTabletime.setX(tabletime.getX());
-                tabletimeResponseTabletime.setY(tabletime.getY());
-                tabletimeResponseTabletime.setBeginDay(tabletime.getBeginDay());
-                tabletimeResponseTabletime.setEndDay(tabletime.getEndDay());
-                tabletimeResponseTabletime.setWeekType(tabletime.getWeekType());
-                tabletimeResponseTabletime.setPlace(tabletime.getPlace());
-                tabletimeResponseTabletime.setStartWeek(tabletime.getStartWeek());
-                tabletimeResponseTabletime.setFinishWeek(tabletime.getFinishWeek());
+                tabletimeResponseTabletime.setKeyID(tabletime.getId())
+                                            .setClazz(tabletime.getClazz())
+                                            .setX(tabletime.getX())
+                                            .setY(tabletime.getY())
+                                            .setBeginDay(tabletime.getBeginDay())
+                                            .setEndDay(tabletime.getEndDay())
+                                            .setWeekType(tabletime.getWeekType())
+                                            .setPlace(tabletime.getPlace())
+                                            .setStartWeek(tabletime.getStartWeek())
+                                            .setFinishWeek(tabletime.getFinishWeek());
 
                 // 添加到 tabletime 列表
                 tabletimeList.add(tabletimeResponseTabletime);

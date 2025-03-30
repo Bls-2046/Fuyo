@@ -58,12 +58,12 @@ public class UserServiceImpl implements UserService {
         }
         FetchUserBaseInformationResponse.UserInformation userInfo = new FetchUserBaseInformationResponse.UserInformation();
 
-        userInfo.setUsername(userEntity.getUsername());
-        userInfo.setName(userEntity.getName());
-        userInfo.setDepartment(userEntity.getDepartment());
-        userInfo.setEmail(userEntity.getEmail());
-        userInfo.setPhone(userEntity.getPhone());
-        userInfo.setNickname(userEntity.getNickname());
+        userInfo.setUsername(userEntity.getUsername())
+                .setName(userEntity.getName())
+                .setDepartment(userEntity.getDepartment())
+                .setEmail(userEntity.getEmail())
+                .setPhone(userEntity.getPhone())
+                .setNickname(userEntity.getNickname());
 
         return userInfo;
     }
