@@ -2,6 +2,7 @@ package com.github.fuyo.view;
 
 import com.github.fuyo.entity.LoginViewEntity;
 import com.github.fuyo.utils.layout.RUILabel;
+import com.github.fuyo.view.messagebox.ErrorMessageBox;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Data;
@@ -96,9 +97,13 @@ public class LoginView extends JFrame {
         // 替换文本有问题
         JLabel errorFrameTarget = loginEntity.getErrorFrameDisp()[0];
         JLabel messageTarget = loginEntity.getErrorFrameDisp()[1];
-        messageTarget.setText(message);
-        errorFrameTarget.setVisible(true);
-        messageTarget.setVisible(true);
+        if (message.length() > 12) {
+            ErrorMessageBox.showErrorBox((message.length() > 20) ? message.substring(0, 18) + "..." : message);
+        } else {
+            messageTarget.setText(message);
+            errorFrameTarget.setVisible(true);
+            messageTarget.setVisible(true);
+        }
     }
 
     public JTextField getUsernameInput() {

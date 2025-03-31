@@ -11,6 +11,7 @@ import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.messagebox.ErrorMessageBox;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
+import com.github.fuyo.view.navigation.index.HomeView;
 import com.github.fuyo.view.navigation.schedule.GuideView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
 import com.github.fuyo.view.navigation.user.UserView;
@@ -45,11 +46,9 @@ public class NavigationController implements NavigationCloseListener {
         // Index层
         JButton indexButton  = naviButtonList.get(NaviFunctionButtonEnum.INDEX.ordinal());
         indexButton.addActionListener(e -> {
-            List<TabletimeEntity> tabletimeEntity = user.getTabletimeEntity();
-
             // 按图层顺序渲染，优先渲染导航栏。
             SwingUtilities.invokeLater(() -> {
-                view.renderRouterView(new ClazzView(tabletimeEntity));
+                view.renderRouterView(new HomeView());
             });
         });
 

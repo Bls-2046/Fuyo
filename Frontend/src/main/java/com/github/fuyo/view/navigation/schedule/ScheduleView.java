@@ -65,7 +65,7 @@ public class ScheduleView extends JLayeredPane {
         add(minInput, POPUP_LAYER);
 
         // 4*6,6 (24,6) per line words, word, Microsoft YaHei, 18, Regular
-        JTextArea reminderTextArea = RUILabel.getEmptyTextArea(88, 215, 454, 155, 24, 6, Color.GRAY, 18, "微软雅黑", Font.PLAIN);
+        JTextArea reminderTextArea = RUILabel.getEmptyTextArea(88, 215, 454, 130, 24, 6, Color.GRAY, 18, "微软雅黑", Font.PLAIN);
         add(reminderTextArea, POPUP_LAYER);
 
         // Buttons

@@ -43,12 +43,7 @@ public class NavigationView extends JFrame {
         setSize(1360, 768);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setBackground(new Color(0, 0, 0, 0));
-
-        // IME?
-        setUndecorated(true);
-        setBackground(new Color(0,0,0,1));
-        setOpacity(0.99f);
+        setBackground(new Color(0, 0, 0, 0));
 
         // JLayeredPane
         lp = getLayeredPane();
