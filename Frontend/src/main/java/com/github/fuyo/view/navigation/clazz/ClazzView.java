@@ -70,7 +70,7 @@ public class ClazzView extends JLayeredPane {
         String currentClazzPlace = currentClazz != null ? currentClazz.getPlace() : "";
 
         add(RUILabel.getEmptyTextLabel(102, 152 - posYFix, currentClazzTime, 30, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getEmptyTextLabel(102+30, 192 - posYFix, currentClazzName, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(100, 192 - posYFix, currentClazzName, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getEmptyTextLabel(148, 315 - posYFix, currentClazzPlace, 22, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Next Clazz
@@ -79,7 +79,7 @@ public class ClazzView extends JLayeredPane {
         String nextClazzPlace = nextClazz != null ? nextClazz.getPlace() : "";
 
         add(RUILabel.getEmptyTextLabel(102, 507 - posYFix, nextClazzTime, 30, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-        add(RUILabel.getEmptyTextLabel(102+30, 547 - posYFix, nextClazzName, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
+        add(RUILabel.getEmptyTextLabel(100, 547 - posYFix, nextClazzName, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getEmptyTextLabel(148, 670 - posYFix, nextClazzPlace, 22, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
 
         // Remaining
