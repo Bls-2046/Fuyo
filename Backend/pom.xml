@@ -104,6 +104,12 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
+        <!-- Spring WebFlux (包含 WebClient) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
         <!-- org.json 依赖 -->
         <dependency>
             <groupId>org.json</groupId>

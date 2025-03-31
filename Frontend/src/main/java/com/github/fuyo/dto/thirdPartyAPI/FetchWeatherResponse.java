@@ -1,10 +1,11 @@
-package com.github.fuyo.dto;
+package com.github.fuyo.dto.thirdPartyAPI;
 
 import lombok.Data;
 
 @Data
 public class FetchWeatherResponse {
     private int status;
+    private String message;
     private Live live;
 
     @Data

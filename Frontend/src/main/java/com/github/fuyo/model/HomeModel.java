@@ -1,6 +1,6 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.FetchWeatherResponse;
+import com.github.fuyo.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.fuyo.dto.thirdPartyAPI.FetchYiYanResponse;
 import com.github.fuyo.utils.https.Https;
 
@@ -13,7 +13,7 @@ public class HomeModel {
         FetchWeatherResponse fetchWeatherResponse = new FetchWeatherResponse();
         fetchWeatherResponse.setLive(new FetchWeatherResponse.Live());
 
-        String url = "http://127.0.0.1:8080/api/weather";
+        String url = "http://127.0.0.1:8080/api/fetch/weather";
 
         FetchWeatherResponse weather = Https.get(url, null, null, FetchWeatherResponse.class);
 
@@ -29,7 +29,7 @@ public class HomeModel {
      * @return String
      */
     public static String fetchYiYan() throws IOException {
-        String url = "http://127.0.0.1:8080/api/yiyan";
+        String url = "http://127.0.0.1:8080/api/fetch/yiyan";
 
         FetchYiYanResponse response = Https.get(url, null, null, FetchYiYanResponse.class);
 

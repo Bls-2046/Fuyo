@@ -175,12 +175,14 @@ public class UserServiceImpl implements UserService {
             JSONArray mergedResponse = new JSONArray();
 
             for (int zc = 0; zc <= 20; zc++) {
+                String url = "https://s.bitzh.edu.cn/manage/protal/gettabletime";
                 // 构造表单数据
                 Map<String, String> formData = new HashMap<>();
                 formData.put("zc", String.valueOf(zc));
 
                 // 发送 POST 请求
-                JSONArray response = (JSONArray) Https.post("https://s.bitzh.edu.cn/manage/protal/gettabletime", formData, headers);
+//                JSONArray response = (JSONArray) Https.post(url, formData, headers);
+                JSONArray response = Https.post(url, formData, headers);
 
                 // 将响应数据合并到 mergedResponse
                 if (response != null) {

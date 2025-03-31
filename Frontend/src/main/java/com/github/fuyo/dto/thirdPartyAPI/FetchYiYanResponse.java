@@ -1,8 +1,11 @@
 package com.github.fuyo.dto.thirdPartyAPI;
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class FetchYiYanResponse {
-    String sentence;
+    private int status;
+    private String message;
+    private String sentence;
 }
