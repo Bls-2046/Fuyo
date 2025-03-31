@@ -80,6 +80,24 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Java FX -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.5</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -91,6 +109,19 @@
                 <configuration>
                     <source>23</source>
                     <target>23</target>
+                </configuration>
+            </plugin>
+
+            <!-- Java FX -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--add-modules</arg>
+                        <arg>javafx.controls,javafx.web,javafx.swing</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

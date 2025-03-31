@@ -11,6 +11,7 @@ import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.messagebox.ErrorMessageBox;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
+import com.github.fuyo.view.navigation.deepseek.WebRenderView;
 import com.github.fuyo.view.navigation.index.HomeView;
 import com.github.fuyo.view.navigation.schedule.GuideView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
@@ -42,6 +43,11 @@ public class NavigationController implements NavigationCloseListener {
         JButton exitButton = naviButtonList.get(NaviFunctionButtonEnum.EXIT.ordinal());
         // 添加监听
         exitButton.addActionListener(e -> System.exit(0));
+
+        // 首次渲染首页
+        SwingUtilities.invokeLater(() -> {
+            view.renderRouterView(new HomeView());
+        });
 
         // Index层
         JButton indexButton  = naviButtonList.get(NaviFunctionButtonEnum.INDEX.ordinal());
@@ -143,6 +149,22 @@ public class NavigationController implements NavigationCloseListener {
                     view.renderRouterView(scheduleController.getView());
                 });
             }
+        });
+
+        // DeepSeek
+        JButton deepseekButton = naviButtonList.get(NaviFunctionButtonEnum.DEEPSEEK.ordinal());
+        deepseekButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+
+                WebRenderView deepseekView = new WebRenderView();
+
+                // URL
+                SwingUtilities.invokeLater(() -> {
+                    view.renderRouterView(deepseekView);
+                    deepseekView.loadURL("https://www.cn.bing.com/");
+                });
+
+            });
         });
     }
 

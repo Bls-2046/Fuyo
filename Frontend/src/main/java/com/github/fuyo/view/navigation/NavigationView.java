@@ -3,6 +3,7 @@ package com.github.fuyo.view.navigation;
 import com.github.fuyo.entity.NaviFunctionEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.layout.RUILabel;
+import com.github.fuyo.view.navigation.deepseek.WebRenderView;
 import com.github.fuyo.view.navigation.index.HomeView;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,7 @@ public class NavigationView extends JFrame {
 
         // Function Navi Fixed
 
-        NaviFunctionEntity navi0 = new NaviFunctionEntity("首页",false,lp,new int[]{17,101}, "index.png");
+        NaviFunctionEntity navi0 = new NaviFunctionEntity("首页",true,lp,new int[]{17,101}, "index.png");
         naviFuncObjs.add(navi0);
         navi0.addToPanel();
         navi0.addActionListener(e -> actionPerformed(e,navi0));
@@ -128,6 +129,12 @@ public class NavigationView extends JFrame {
         });
 
         if (viewLayerPanel != null) {
+
+            // Clear for webEngine
+            if (viewLayerPanel instanceof WebRenderView webRenderView) {
+                webRenderView.removeNotify();
+            }
+
             lp.remove(viewLayerPanel);
         }
         lp.revalidate();
