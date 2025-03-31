@@ -3,9 +3,11 @@ package com.github.fuyo.model;
 import com.github.fuyo.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.fuyo.dto.thirdPartyAPI.FetchYiYanResponse;
 import com.github.fuyo.utils.https.Https;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+@Slf4j
 public class HomeModel {
     public HomeModel() {}
 
@@ -17,11 +19,12 @@ public class HomeModel {
 
         FetchWeatherResponse weather = Https.get(url, null, null, FetchWeatherResponse.class);
 
+        log.info("HomeModel Fetch weather: {}", weather);
         if (fetchWeatherResponse.getStatus() == 200) {
             return weather;
         }
 
-        return null;
+        return weather;
     }
 
     /**

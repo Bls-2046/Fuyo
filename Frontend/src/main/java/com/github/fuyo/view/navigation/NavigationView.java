@@ -53,7 +53,7 @@ public class NavigationView extends JFrame {
 
         if ( LocalTime.now().isAfter(LocalTime.of(18,0)) ||
                 LocalTime.now().isBefore(LocalTime.of(6,0)) ) {
-            time = HomeView.Time.NIGHT;
+            time = HomeView.Time.MORNING;
         }
 
         // BaseFrame Implement
