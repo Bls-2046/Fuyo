@@ -2,9 +2,12 @@ package com.github.fuyo.view.navigation.deepseek;
 
 import javax.swing.*;
 
+import com.sun.javafx.webkit.Accessor;
+import com.sun.webkit.WebPage;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 public class WebRenderView extends JLayeredPane {
@@ -29,6 +32,15 @@ public class WebRenderView extends JLayeredPane {
         SwingUtilities.invokeLater(() -> {
             Platform.runLater(() -> {
                 webView = new WebView();
+
+                // Engine args setting
+                WebEngine engine = webView.getEngine();
+                WebPage webPage = Accessor.getPageFor(engine);
+                // Java FX UA
+                webPage.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                webPage.setLocalStorageEnabled(true);
+                webPage.setJavaScriptEnabled(true);
+
                 jfxPanel.setScene(new Scene(webView));
             });
         });
