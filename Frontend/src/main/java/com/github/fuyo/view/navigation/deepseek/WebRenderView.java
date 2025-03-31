@@ -36,8 +36,9 @@ public class WebRenderView extends JLayeredPane {
                 // Engine args setting
                 WebEngine engine = webView.getEngine();
                 WebPage webPage = Accessor.getPageFor(engine);
-                // Java FX UA
-                webPage.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+
+                // Java FX: Use modern UA may got errors
+                // webPage.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
                 webPage.setLocalStorageEnabled(true);
                 webPage.setJavaScriptEnabled(true);
 

@@ -29,7 +29,7 @@ public class HomeView extends JLayeredPane {
 
         if ( LocalTime.now().isAfter(LocalTime.of(18,0)) ||
                 LocalTime.now().isBefore(LocalTime.of(6,0)) ) {
-            time = Time.MORNING;
+            time = Time.NIGHT;
         }
 
         // Fixed
@@ -38,20 +38,25 @@ public class HomeView extends JLayeredPane {
         RUILabel bg = new RUILabel("mainFrame", (time == Time.NIGHT) ? "indexLayer.png" : "indexLayerDay.png");
         add(bg.imageLabel(0,0), DEFAULT_LAYER);
 
+        int retryCount = 0;
+
         //YiYan
         String sentence = "";
         try {
             sentence = HomeModel.fetchYiYan();
             log.info(sentence);
-            while(sentence.length() > 30 && !sentence.isEmpty()) {
+            while(sentence.length() > 30 && !sentence.isEmpty() && retryCount < 5) {
                 // YiYan ReAcquired
                 try {
                     sentence = HomeModel.fetchYiYan();
                     Thread.sleep(500);
+                    retryCount++;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
+            if (sentence.isEmpty()) throw new Exception("YiYan API Re-Fetch Retry Count Reached Maximum(5)");
         } catch (Exception e) {
             e.printStackTrace();
             ErrorMessageBox.showErrorBox("YiYan API Fetch Failed");
