@@ -79,7 +79,7 @@ const openNewBrowserWindow = () => {
   display: flex;
   justify-content: center;
   width: 100%;
-  top:46%;
+  top:42%;
   font-size: 45px;
   font-weight: 550;
   color: rgb(70, 84, 104);
@@ -95,16 +95,16 @@ const openNewBrowserWindow = () => {
 }
 
 .cta button {
-  font-size: 25px;
+  font-size: 18px;
   font-weight: 550;
-  letter-spacing: 5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: rgb(255, 255, 255);
-  border: 3px solid rgb(52, 135, 253);
-  background-color: rgb(52, 135, 253);
+  border: 3px solid rgb(58, 141, 253);
+  background-color: rgb(58, 141, 253);
   border-radius: 30px;
-  height: 60px;
-  width: 350px;
+  height: 61px;
+  width: 260px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,8 +114,10 @@ const openNewBrowserWindow = () => {
 }
 
 .cta button:hover {
-  font-size: 26px;
-  width: 355px;
-  height: 61px;
+  font-size: 19px;
+  width: 265px;
+  height: 62px;
+  border: 3px solid rgb(52, 135, 253);
+  background-color: rgb(52, 135, 253);
 }
 </style>
