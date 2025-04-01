@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Backend</artifactId>
+    <artifactId>fuyo-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Backend</name>
     <description>Backend</description>

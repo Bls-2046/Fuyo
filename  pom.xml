@@ -23,8 +23,8 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>Frontend</module>
-        <module>Backend</module>
+        <module>fuyo-frontend</module>
+        <module>fuyo-backend</module>
         <module>fuyo-pojo</module>
     </modules>
 

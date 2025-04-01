@@ -14,8 +14,8 @@ public class PluginsConfig {
     @PostConstruct
     private void loadingScript() {
         PythonScript.startPythonProcess(
-                "Backend/.venv/Scripts/python.exe",
-                "Backend/src/main/resources/script/login_bitzh.py"
+                "fuyo-backend/.venv/Scripts/python.exe",
+                "fuyo-backend/src/main/resources/script/login_bitzh.py"
         );
     }
 }
