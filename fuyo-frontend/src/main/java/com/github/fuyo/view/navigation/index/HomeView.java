@@ -73,8 +73,8 @@ public class HomeView extends JLayeredPane {
         }
 
         // Render Shadow
-        add(RUILabel.getCenterEmptyTextLabel(49,487,1000,55, sentence,30,"青鸟华光行草", Color.WHITE,Font.BOLD),POPUP_LAYER);
-        add(RUILabel.getCenterEmptyTextLabel(51,489,1000,55, sentence,30,"青鸟华光行草",new Color(203,203,203),Font.BOLD),POPUP_LAYER);
+        add(RUILabel.getCenterEmptyTextLabel(49,487,1000,55, sentence,35,"青鸟华光行草", Color.WHITE,Font.BOLD),POPUP_LAYER);
+        add(RUILabel.getCenterEmptyTextLabel(51,489,1000,55, sentence,35,"青鸟华光行草",new Color(203,203,203),Font.BOLD),POPUP_LAYER);
 
         add(RUILabel.getCenterEmptyTextLabel(62,357,977,54,
                 date.getMonthValue() + "月" + date.getDayOfMonth() + "日  "
