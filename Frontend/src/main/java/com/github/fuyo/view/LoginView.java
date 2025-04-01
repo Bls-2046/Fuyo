@@ -74,6 +74,7 @@ public class LoginView extends JFrame {
         errorFrameDisp[1].setVisible(false);
 
         loginEntity = new LoginViewEntity(usernameInput, passwordInput, loginButton, exitProgramButton, errorFrameDisp);
+
     }
 
     public String getUsername() {

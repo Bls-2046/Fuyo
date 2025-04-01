@@ -4,7 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github</groupId>
+    <parent>
+        <groupId>com.github</groupId>
+        <artifactId>fuyo</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
     <artifactId>Frontend</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -15,13 +20,6 @@
     </properties>
 
     <dependencies>
-
-        <!-- lombok 依赖 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.36</version>
-        </dependency>
 
         <!-- OkHttp -->
         <dependency>
@@ -97,6 +95,11 @@
             <version>21.0.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>fuyo-pojo</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
@@ -109,19 +112,6 @@
                 <configuration>
                     <source>23</source>
                     <target>23</target>
-                </configuration>
-            </plugin>
-
-            <!-- Java FX -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>--add-modules</arg>
-                        <arg>javafx.controls,javafx.web,javafx.swing</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

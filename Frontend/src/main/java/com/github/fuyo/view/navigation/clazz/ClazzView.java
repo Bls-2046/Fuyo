@@ -1,5 +1,6 @@
 package com.github.fuyo.view.navigation.clazz;
 
+import com.github.fuyo.dto.schedule.AddScheduleRequest;
 import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.extern.slf4j.Slf4j;
@@ -85,7 +86,6 @@ public class ClazzView extends JLayeredPane {
         // Remaining
         add(RUILabel.getEmptyTextLabel(629, 540, ""+remainingClazzCount, 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
         add(RUILabel.getEmptyTextLabel(629+40, 540, "节课", 48, "微软雅黑", Color.GRAY, Font.PLAIN), POPUP_LAYER);
-
     }
 
     // Stupid way
