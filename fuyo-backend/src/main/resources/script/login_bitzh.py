@@ -135,7 +135,7 @@ def process_captcha(image_path):
     enhancer = ImageEnhance.Contrast(image) # 增强对比度
     image = enhancer.enhance(2.0)
 
-    processed_image_path = "Backend/src/main/resources/script/processed_captcha.png"
+    processed_image_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "processed_captcha.png")
     # 创建目录（如果不存在）
     os.makedirs(os.path.dirname(processed_image_path), exist_ok=True)
 
@@ -155,7 +155,7 @@ def process_captcha(image_path):
 # region # 验证码截图并进行识别
 def retry_captcha(driver):
     """ 截取并识别验证码 """
-    captcha_raw_path = "Backend/src/main/resources/script/captcha_raw.png"
+    captcha_raw_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "captcha_raw.png")
 
     captcha_element = driver.find_element(By.ID, 'verifycode')
     captcha_element.screenshot(captcha_raw_path)  # 截取验证码图片
@@ -320,6 +320,7 @@ def check_username():
 def create_browser_with_timeout(timeout_seconds=900):
     # 配置浏览器选项
     edge_options = Options()
+    edge_options.add_argument("--headless=new")  # 更新的无头模式（推荐）
     edge_options.add_argument("--disable-blink-features=AutomationControlled")
     edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
     edge_options.add_argument("--log-level=3")
