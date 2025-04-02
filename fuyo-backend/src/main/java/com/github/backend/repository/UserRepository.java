@@ -1,6 +1,6 @@
 package com.github.backend.repository;
 
-import com.github.backend.entity.UserEntity;
+import com.github.backend.entity.mysql.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

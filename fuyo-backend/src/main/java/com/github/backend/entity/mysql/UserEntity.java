@@ -1,4 +1,4 @@
-package com.github.backend.entity;
+package com.github.backend.entity.mysql;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

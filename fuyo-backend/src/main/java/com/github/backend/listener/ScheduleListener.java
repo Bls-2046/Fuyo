@@ -1,6 +1,6 @@
 package com.github.backend.listener;
 
-import com.github.backend.entity.ScheduleEntity;
+import com.github.backend.entity.mysql.ScheduleEntity;
 import com.github.backend.repository.ScheduleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

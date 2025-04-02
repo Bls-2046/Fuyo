@@ -1,8 +1,7 @@
 package com.github.backend.repository;
 
-import com.github.backend.entity.WeChatUserEntity;
+import com.github.backend.entity.mysql.WeChatUserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
