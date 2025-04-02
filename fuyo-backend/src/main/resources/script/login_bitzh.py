@@ -320,7 +320,7 @@ def check_username():
 def create_browser_with_timeout(timeout_seconds=900):
     # 配置浏览器选项
     edge_options = Options()
-    #edge_options.add_argument("--headless=new")  # 更新的无头模式（推荐）
+    edge_options.add_argument("--headless=new")  # 更新的无头模式（推荐）
     edge_options.add_argument("--disable-blink-features=AutomationControlled")
     edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
     edge_options.add_argument("--log-level=3")
