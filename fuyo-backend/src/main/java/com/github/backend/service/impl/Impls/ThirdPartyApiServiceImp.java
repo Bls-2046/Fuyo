@@ -1,12 +1,14 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
+import com.github.backend.repository.YiyanRepository;
+import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.backend.service.ThirdPartyApiService;
 import com.github.backend.utils.Https;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,13 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
+    private final YiyanRepository yiyanRepository;
+
+    @Autowired
+    private ThirdPartyApiServiceImp(YiyanRepository yiyanRepository) {
+        this.yiyanRepository = yiyanRepository;
+    }
+
 // =================================================================================================
 // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 高德天气 API ////////////////////////////////////////////
     /**
@@ -82,16 +91,8 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
      */
     @Override
     public String fetchOneSentence() {
-        int randomNumber = (int) (Math.random() * 10000) % 2 + 1;
-
-        String sentence = "";
-
-        if (randomNumber == 1) {
-            sentence = getChineseSentence(); // 每日一言
-        } else if (randomNumber == 2) {
-            sentence = getEnglishSentence(); // 每日英语
-        }
-        return sentence;
+        return yiyanRepository.findRandomSentence()
+                .orElse("暂无数据");
     }
 
     /**
@@ -123,8 +124,6 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
         return ontSentence.getJSONObject("result").getString("content");
     }
 // =================================================================================================
-
-    private ThirdPartyApiServiceImp() {}
 
     @PostConstruct
     public void init() {
