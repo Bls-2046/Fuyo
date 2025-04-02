@@ -16,8 +16,11 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-# IDEA 缓存
+# IDEA
+# 缓存
 .idea
+# 配置文件
+.iml
 
 # 虚拟环境
 .venv
