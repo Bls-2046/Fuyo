@@ -16,7 +16,7 @@
 
 <h2>很随意的使用说明</h2>
 
-```python
+```bush
 git clone https://github.com/Bls-2046/Fuyo.git
 ```
 
