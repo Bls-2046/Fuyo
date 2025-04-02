@@ -1,10 +1,9 @@
 package com.github.fuyo.listener;
 
-import com.github.fuyo.dto.schedule.MarkRemindedScheduleForClientRequest;
-import com.github.fuyo.dto.schedule.MarkRemindedScheduleForClientResponse;
+import com.github.dto.schedule.MarkRemindedScheduleForClientRequest;
+import com.github.dto.schedule.MarkRemindedScheduleForClientResponse;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
-import com.github.fuyo.model.ScheduleModel;
 import com.github.fuyo.utils.https.Https;
 import com.github.fuyo.view.navigation.schedule.ScheduleDialogView;
 import lombok.extern.slf4j.Slf4j;

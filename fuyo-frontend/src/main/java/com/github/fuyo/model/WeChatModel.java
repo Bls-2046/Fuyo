@@ -1,7 +1,7 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.wechat.UpdateWeChatNicknameRequest;
-import com.github.fuyo.dto.wechat.UpdateWeChatNicknameResponse;
+import com.github.dto.wechat.UpdateWeChatNicknameRequest;
+import com.github.dto.wechat.UpdateWeChatNicknameResponse;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.https.Https;
 import lombok.extern.slf4j.Slf4j;

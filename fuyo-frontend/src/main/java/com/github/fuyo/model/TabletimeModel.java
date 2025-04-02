@@ -1,7 +1,7 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.TableTimeResponse;
-import com.github.fuyo.dto.TabletimeRequest;
+import com.github.dto.tabletime.FetchTabletimeRequest;
+import com.github.dto.tabletime.FetchTabletimeResponse;
 import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.https.Https;
@@ -16,11 +16,11 @@ public class TabletimeModel {
 
     public static void fetchTabletime(String username) {
         String url = "http://localhost:8080/api/fetch/tabletime";
-        TabletimeRequest tabletimeRequest = new TabletimeRequest();
-        tabletimeRequest.setUsername(username);
+        FetchTabletimeRequest fetchTabletimeRequest = new FetchTabletimeRequest();
+        fetchTabletimeRequest.setUsername(username);
 
         try {
-            TableTimeResponse tableTimeResponse = Https.post(url, tabletimeRequest, null, TableTimeResponse.class);
+            FetchTabletimeResponse tableTimeResponse = Https.post(url, fetchTabletimeRequest, null, FetchTabletimeResponse.class);
 
             List<TabletimeEntity> tabletimeEntity = tableTimeResponse.getTabletime().stream()
                     .map(responseTabletime -> new TabletimeEntity(

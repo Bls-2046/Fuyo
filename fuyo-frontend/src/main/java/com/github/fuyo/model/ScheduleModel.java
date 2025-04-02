@@ -1,6 +1,6 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.schedule.*;
+import com.github.dto.schedule.*;
 import com.github.fuyo.entity.ScheduleEntity;
 import com.github.fuyo.entity.UserEntity;
 import com.github.fuyo.utils.https.Https;
@@ -74,7 +74,7 @@ public class ScheduleModel {
         try {
             String url = "http://127.0.0.1:8080/api/update/schedule/add";
             AddScheduleRequest addScheduleRequest = new AddScheduleRequest();
-            AddScheduleRequest.Schedule newSchedule = new AddScheduleRequest.Schedule();
+            AddScheduleRequest.RequestSchedule newSchedule = new AddScheduleRequest.RequestSchedule();
 
             addScheduleRequest.setUsername(UserEntity.getUserInformation().getUsername());
             addScheduleRequest.setNickname(UserEntity.getUserInformation().getWechatUser().getNickname());

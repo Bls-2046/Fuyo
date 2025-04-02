@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.user.LoginRequest;
+import com.github.dto.user.LoginRequest;
 
 public interface OperationService {
     /**

@@ -1,6 +1,6 @@
 package com.github.fuyo.view.navigation.index;
 
-import com.github.fuyo.dto.thirdPartyAPI.FetchWeatherResponse;
+import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.fuyo.model.HomeModel;
 import com.github.fuyo.utils.layout.RUILabel;
 import com.github.fuyo.view.messagebox.ErrorMessageBox;
@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;

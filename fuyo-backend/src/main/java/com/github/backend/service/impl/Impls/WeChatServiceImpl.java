@@ -1,8 +1,8 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
-import com.github.backend.entity.UserEntity;
-import com.github.backend.entity.WeChatUserEntity;
+import com.github.dto.wechat.UpdateWeChatNicknameRequest;
+import com.github.backend.entity.mysql.UserEntity;
+import com.github.backend.entity.mysql.WeChatUserEntity;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.repository.WeChatUserRepository;
 import com.github.backend.service.WeChatService;

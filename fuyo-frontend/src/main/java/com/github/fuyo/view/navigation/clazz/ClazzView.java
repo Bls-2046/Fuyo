@@ -1,6 +1,5 @@
 package com.github.fuyo.view.navigation.clazz;
 
-import com.github.fuyo.dto.schedule.AddScheduleRequest;
 import com.github.fuyo.entity.TabletimeEntity;
 import com.github.fuyo.utils.layout.RUILabel;
 import lombok.extern.slf4j.Slf4j;

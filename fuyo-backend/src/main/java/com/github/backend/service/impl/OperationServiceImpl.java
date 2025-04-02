@@ -1,6 +1,6 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.user.LoginRequest;
+import com.github.dto.user.LoginRequest;
 import com.github.backend.service.OperationService;
 import com.github.backend.service.UserService;
 import org.springframework.stereotype.Service;

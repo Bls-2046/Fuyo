@@ -1,7 +1,7 @@
 package com.github.fuyo.model;
 
-import com.github.fuyo.dto.thirdPartyAPI.FetchWeatherResponse;
-import com.github.fuyo.dto.thirdPartyAPI.FetchYiYanResponse;
+import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
+import com.github.dto.thirdPartyAPI.FetchYiYanResponse;
 import com.github.fuyo.utils.https.Https;
 import lombok.extern.slf4j.Slf4j;
 

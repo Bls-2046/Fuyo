@@ -1,7 +1,7 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.tabletime.FetchTabletimeRequest;
-import com.github.backend.dto.tabletime.FetchTabletimeResponse;
+import com.github.dto.tabletime.FetchTabletimeRequest;
+import com.github.dto.tabletime.FetchTabletimeResponse;
 
 import java.util.List;
 

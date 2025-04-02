@@ -1,9 +1,9 @@
 package com.github.backend.service.impl;
 
-import com.github.backend.dto.schedule.AddScheduleRequest;
-import com.github.backend.dto.schedule.DeleteScheduleRequest;
-import com.github.backend.dto.schedule.MarkRemindedScheduleForClientRequest;
-import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
+import com.github.dto.schedule.AddScheduleRequest;
+import com.github.dto.schedule.DeleteScheduleRequest;
+import com.github.dto.schedule.MarkRemindedScheduleForClientRequest;
+import com.github.dto.wechat.UpdateWeChatNicknameRequest;
 import com.github.backend.service.ScheduleService;
 import com.github.backend.service.UpdateDataService;
 import com.github.backend.service.WeChatService;

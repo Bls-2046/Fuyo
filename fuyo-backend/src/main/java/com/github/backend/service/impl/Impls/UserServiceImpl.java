@@ -1,10 +1,10 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.user.LoginRequest;
-import com.github.backend.dto.user.FetchUserBaseInformationRequest;
-import com.github.backend.dto.user.FetchUserBaseInformationResponse;
-import com.github.backend.entity.TabletimeEntity;
-import com.github.backend.entity.UserEntity;
+import com.github.dto.user.LoginRequest;
+import com.github.dto.user.FetchUserBaseInformationRequest;
+import com.github.dto.user.FetchUserBaseInformationResponse;
+import com.github.backend.entity.mysql.TabletimeEntity;
+import com.github.backend.entity.mysql.UserEntity;
 import com.github.backend.repository.ScheduleRepository;
 import com.github.backend.repository.TabletimeRepository;
 import com.github.backend.repository.UserRepository;

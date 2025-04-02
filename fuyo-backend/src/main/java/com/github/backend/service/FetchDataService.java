@@ -1,12 +1,12 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.thirdPartyAPI.FetchWeatherResponse;
-import com.github.backend.dto.schedule.FetchScheduleRequest;
-import com.github.backend.dto.schedule.FetchScheduleResponse;
-import com.github.backend.dto.tabletime.FetchTabletimeRequest;
-import com.github.backend.dto.tabletime.FetchTabletimeResponse;
-import com.github.backend.dto.user.FetchUserBaseInformationRequest;
-import com.github.backend.dto.user.FetchUserBaseInformationResponse;
+import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
+import com.github.dto.schedule.FetchScheduleRequest;
+import com.github.dto.schedule.FetchScheduleResponse;
+import com.github.dto.tabletime.FetchTabletimeRequest;
+import com.github.dto.tabletime.FetchTabletimeResponse;
+import com.github.dto.user.FetchUserBaseInformationRequest;
+import com.github.dto.user.FetchUserBaseInformationResponse;
 
 import java.util.List;
 

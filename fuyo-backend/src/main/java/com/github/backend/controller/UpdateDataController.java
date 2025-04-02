@@ -1,8 +1,8 @@
 package com.github.backend.controller;
 
-import com.github.backend.dto.schedule.*;
-import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
-import com.github.backend.dto.wechat.UpdateWeChatNicknameResponse;
+import com.github.dto.schedule.*;
+import com.github.dto.wechat.UpdateWeChatNicknameRequest;
+import com.github.dto.wechat.UpdateWeChatNicknameResponse;
 import com.github.backend.service.UpdateDataService;
 import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;

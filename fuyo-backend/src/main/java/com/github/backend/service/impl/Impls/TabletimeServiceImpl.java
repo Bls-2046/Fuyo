@@ -1,8 +1,8 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.tabletime.FetchTabletimeRequest;
-import com.github.backend.dto.tabletime.FetchTabletimeResponse;
-import com.github.backend.entity.TabletimeEntity;
+import com.github.dto.tabletime.FetchTabletimeRequest;
+import com.github.dto.tabletime.FetchTabletimeResponse;
+import com.github.backend.entity.mysql.TabletimeEntity;
 import com.github.backend.repository.TabletimeRepository;
 import com.github.backend.service.TabletimeService;
 import lombok.extern.slf4j.Slf4j;

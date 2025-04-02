@@ -1,7 +1,7 @@
 package com.github.backend.controller;
 
-import com.github.backend.dto.user.LoginRequest;
-import com.github.backend.dto.user.LoginResponse;
+import com.github.dto.user.LoginRequest;
+import com.github.dto.user.LoginResponse;
 import com.github.backend.service.OperationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.user.LoginRequest;
-import com.github.backend.dto.user.FetchUserBaseInformationRequest;
-import com.github.backend.dto.user.FetchUserBaseInformationResponse;
+import com.github.dto.user.LoginRequest;
+import com.github.dto.user.FetchUserBaseInformationRequest;
+import com.github.dto.user.FetchUserBaseInformationResponse;
 
 /**
  * 用户各类操作接口

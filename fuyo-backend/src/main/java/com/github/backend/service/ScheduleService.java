@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.schedule.*;
+import com.github.dto.schedule.*;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public interface ScheduleService {
     /**
      * 返回用户的日程安排信息
-     * @param username 用户名
+     * @param fetchScheduleRequest 用户名
      * @return List<ScheduleResponse.Schedule>
      */
     List<FetchScheduleResponse.Schedule> fetchSchedule(FetchScheduleRequest fetchScheduleRequest);

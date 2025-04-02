@@ -1,6 +1,6 @@
 package com.github.backend.service;
 
-import com.github.backend.dto.wechat.UpdateWeChatNicknameRequest;
+import com.github.dto.wechat.UpdateWeChatNicknameRequest;
 
 /**
  * 微信相关操作接口

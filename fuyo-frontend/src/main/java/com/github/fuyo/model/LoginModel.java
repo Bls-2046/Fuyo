@@ -1,8 +1,8 @@
 package com.github.fuyo.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fuyo.dto.*;
-import com.github.fuyo.entity.UserEntity;
+import com.github.dto.user.LoginRequest;
+import com.github.dto.user.LoginResponse;
 import com.github.fuyo.listener.StartupTasks;
 import com.github.fuyo.utils.AESUtil;
 import com.github.fuyo.utils.https.Https;

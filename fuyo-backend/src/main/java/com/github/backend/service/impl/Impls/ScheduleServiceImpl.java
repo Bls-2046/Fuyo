@@ -1,11 +1,11 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.dto.schedule.*;
-import com.github.backend.entity.ScheduleEntity;
-import com.github.backend.entity.UserEntity;
+import com.github.backend.entity.mysql.ScheduleEntity;
+import com.github.backend.entity.mysql.UserEntity;
 import com.github.backend.repository.ScheduleRepository;
 import com.github.backend.repository.UserRepository;
 import com.github.backend.service.ScheduleService;
+import com.github.dto.schedule.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
