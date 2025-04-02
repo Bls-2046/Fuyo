@@ -1,9 +1,0 @@
-package com.github.fuyo.dto.schedule;
-
-import lombok.Data;
-
-@Data
-public class DeleteScheduleRequest {
-    private String id;
-    private String username;
-}
