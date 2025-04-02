@@ -20,7 +20,7 @@ buildNumber.properties
 # 缓存
 .idea
 # 配置文件
-.iml
+*.iml
 
 # 虚拟环境
 .venv
@@ -30,8 +30,7 @@ logs
 .log
 
 # 脚本生成的图片
-captcha_raw.png
-processed_captcha.png
+fuyo-backend/src/main/resources/script/*.png
 
 # 忽略 application.yml
 application.yml
