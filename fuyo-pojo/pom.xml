@@ -2,26 +2,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 基础POM配置 -->
     <modelVersion>4.0.0</modelVersion>
+
+    <!-- 继承父项目 -->
     <parent>
         <groupId>com.github</groupId>
         <artifactId>fuyo</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../ pom.xml</relativePath>
+        <relativePath>../ pom.xml</relativePath> <!-- 指向父POM -->
     </parent>
 
+    <!-- 模块标识 -->
     <artifactId>fuyo-pojo</artifactId>
 
-    <properties>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <!-- 依赖声明 -->
     <dependencies>
+        <!-- Jakarta Bean Validation API -->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- 从父项目继承的Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
-
 </project>

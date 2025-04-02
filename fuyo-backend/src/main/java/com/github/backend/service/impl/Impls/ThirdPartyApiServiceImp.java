@@ -1,6 +1,6 @@
 package com.github.backend.service.impl.Impls;
 
-import com.github.backend.repository.YiyanRepository;
+import com.github.backend.repository.mysql.YiyanRepository;
 import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.backend.service.ThirdPartyApiService;
 import com.github.backend.utils.Https;
@@ -82,9 +82,6 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
 // =================================================================================================
 // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 一言 API //////////////////////////////////////////////
 
-    private static String MEI_RI_YI_YAN_KEY; // 每日一言 API KEY:
-    private static String MEI_RI_YING_YU_KEY; // 每日英语 API KEY
-
     /**
      * 随机获得一个句子
      * @return String
@@ -94,50 +91,13 @@ public class ThirdPartyApiServiceImp implements ThirdPartyApiService {
         return yiyanRepository.findRandomSentence()
                 .orElse("暂无数据");
     }
-
-    /**
-     * 每日一言
-     * @return String
-     */
-    private String getChineseSentence() {
-        String url = "https://whyta.cn/api/yiyan";
-        Map<String, String> params = new HashMap<>();
-
-        params.put("key", MEI_RI_YI_YAN_KEY);
-
-        JSONObject ontSentence = Https.get(url, params, null);
-
-        return ontSentence.getString("hitokoto");
-    }
-
-    /**
-     * 每日英语
-     * @return String
-     */
-    private String getEnglishSentence() {
-        String url = "https://whyta.cn/api/tx/everyday";
-        Map<String, String> params = new HashMap<>();
-
-        params.put("key", MEI_RI_YING_YU_KEY);
-        JSONObject ontSentence = Https.get(url, params, null);
-
-        return ontSentence.getJSONObject("result").getString("content");
-    }
 // =================================================================================================
 
     @PostConstruct
     public void init() {
         WEATHER_KEY = weatherKey;
-        MEI_RI_YI_YAN_KEY = meiRiYiYanKey;
-        MEI_RI_YING_YU_KEY = meiRiYingYuKey;
     }
 
     @Value("${weather.key:default_value}")
     private String weatherKey;
-
-    @Value("${yiyan.key.two:default_value}")
-    private String meiRiYiYanKey;
-
-    @Value("${yiyan.key.four:default_value}")
-    private String meiRiYingYuKey;
 }

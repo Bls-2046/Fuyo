@@ -1,4 +1,4 @@
-package com.github.backend.repository;
+package com.github.backend.repository.mysql;
 
 import com.github.backend.entity.mysql.YiyanEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

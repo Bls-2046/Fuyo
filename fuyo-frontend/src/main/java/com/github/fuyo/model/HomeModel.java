@@ -20,9 +20,6 @@ public class HomeModel {
         FetchWeatherResponse weather = Https.get(url, null, null, FetchWeatherResponse.class);
 
         log.info("HomeModel Fetch weather: {}", weather);
-        if (fetchWeatherResponse.getStatus() == 200) {
-            return weather;
-        }
 
         return weather;
     }

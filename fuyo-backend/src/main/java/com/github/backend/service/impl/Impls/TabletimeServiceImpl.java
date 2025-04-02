@@ -3,7 +3,7 @@ package com.github.backend.service.impl.Impls;
 import com.github.dto.tabletime.FetchTabletimeRequest;
 import com.github.dto.tabletime.FetchTabletimeResponse;
 import com.github.backend.entity.mysql.TabletimeEntity;
-import com.github.backend.repository.TabletimeRepository;
+import com.github.backend.repository.mysql.TabletimeRepository;
 import com.github.backend.service.TabletimeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

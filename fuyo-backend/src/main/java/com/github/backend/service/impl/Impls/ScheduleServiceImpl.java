@@ -2,8 +2,8 @@ package com.github.backend.service.impl.Impls;
 
 import com.github.backend.entity.mysql.ScheduleEntity;
 import com.github.backend.entity.mysql.UserEntity;
-import com.github.backend.repository.ScheduleRepository;
-import com.github.backend.repository.UserRepository;
+import com.github.backend.repository.mysql.ScheduleRepository;
+import com.github.backend.repository.mysql.UserRepository;
 import com.github.backend.service.ScheduleService;
 import com.github.dto.schedule.*;
 import lombok.extern.slf4j.Slf4j;

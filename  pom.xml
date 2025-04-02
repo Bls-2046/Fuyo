@@ -2,54 +2,62 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 基础POM配置 -->
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- 继承Spring Boot父POM -->
     <parent>
-        <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.3</version>
-        <relativePath/>
+        <relativePath/> <!-- 从仓库查找 -->
     </parent>
 
+    <!-- 项目基本信息 -->
+    <groupId>com.github</groupId>
+    <artifactId>fuyo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging> <!-- 多模块项目必须为pom类型 -->
+
+    <!-- 子模块声明 -->
+    <modules>
+        <module>fuyo-pojo</module> <!-- POJO实体模块 -->
+        <module>fuyo-backend</module> <!-- 后端服务模块 -->
+        <module>fuyo-frontend</module> <!-- 前端模块 -->
+    </modules>
+
+    <!-- 全局属性配置 -->
     <properties>
+        <!-- Java版本配置 -->
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
+        <!-- 项目编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <groupId>com.github</groupId>
-    <artifactId>fuyo</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <modules>
-        <module>fuyo-frontend</module>
-        <module>fuyo-backend</module>
-        <module>fuyo-pojo</module>
-    </modules>
-
+    <!-- 公共依赖管理 -->
     <dependencies>
-        <!-- lombok 依赖 -->
+        <!-- Lombok注解处理器 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.36</version>
+            <scope>provided</scope> <!-- 仅编译时需要 -->
         </dependency>
     </dependencies>
 
+    <!-- 构建配置 -->
     <build>
         <plugins>
+            <!-- Java编译器插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>23</release>
-                    <source>23</source>
-                    <target>23</target>
+                    <release>23</release> <!-- 使用JDK23特性 -->
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -1,30 +1,39 @@
 spring:
   application:
-    name:
-      Backend
+    name: fuyo-backend
 
-  # 数据库配置
+  # MySQL 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:mydatabase}
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/fuyo_mysql_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD}
+    password: ${DB_PASSWORD:}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 20
 
   # JPA 配置
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+  # MongoDB 配置
+  data:
+    mongodb:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
+      database: fuyo_mongo_db
+      username: ${MONGO_USERNAME:admin}
+      password: ${MONGO_PASSWORD:}
+      authentication-database: admin
+      auto-index-creation: true
 
 # 天气 API
 weather:
   key:
-
-# 一言 API
-yiyan:
-  key:
-    two:
-    four:
