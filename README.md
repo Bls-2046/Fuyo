@@ -15,9 +15,11 @@
 ❎ 密码箱
 
 <h2>很随意的使用说明</h2>
-```
+
+```python
 git clone https://github.com/Bls-2046/Fuyo.git
 ```
+
 前后端分离, C/S 架构
 
 前端: Swing + JavaFX + Vue: vite v6.2.0
