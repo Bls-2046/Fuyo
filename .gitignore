@@ -34,3 +34,6 @@ fuyo-backend/src/main/resources/script/*.png
 
 # 忽略 application.yml
 application.yml
+
+# 环境变量
+.env
