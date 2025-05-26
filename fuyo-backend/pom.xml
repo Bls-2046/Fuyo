@@ -46,12 +46,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- MongoDB支持 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-
         <!-- Spring Boot测试支持 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
