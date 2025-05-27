@@ -49,6 +49,7 @@ public class UserEntity {
 
     private List<TabletimeEntity> tabletimeEntity;      // 课表
     private List<ScheduleEntity> schedule;              // 日程安排
+    private DormitoryEntity dormitory;                  // 宿舍信息
     private WeChatEntity wechatUser;                    // 微信用户基本信息
 
     /**

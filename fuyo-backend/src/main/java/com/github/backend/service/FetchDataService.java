@@ -1,5 +1,7 @@
 package com.github.backend.service;
 
+import com.github.dto.dormitory.FetchDormitoryRequest;
+import com.github.dto.dormitory.FetchDormitoryResponse;
 import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.dto.schedule.FetchScheduleRequest;
 import com.github.dto.schedule.FetchScheduleResponse;
@@ -44,6 +46,11 @@ public interface FetchDataService {
     List<FetchScheduleResponse.Schedule> fetchSchedule(FetchScheduleRequest fetchScheduleRequest);
 
     // WeChat
+
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Schedule /////////////////////////////////////////////
+
+    FetchDormitoryResponse.Dormitory fetchDormitory(FetchDormitoryRequest fetchDormitoryRequest);
 
 
 // =================================================================================================

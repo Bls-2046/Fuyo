@@ -1,5 +1,7 @@
 package com.github.backend.service.impl;
 
+import com.github.dto.dormitory.FetchDormitoryRequest;
+import com.github.dto.dormitory.FetchDormitoryResponse;
 import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.dto.schedule.FetchScheduleRequest;
 import com.github.dto.schedule.FetchScheduleResponse;
@@ -19,13 +21,15 @@ public class FetchDataServiceImpl implements FetchDataService {
     private final UserService userService;
     private final TabletimeService tabletimeService;
     private final ThirdPartyApiService thirdPartyApiService;
+    private final DormitoryService dormitoryService;
 
     @Autowired
-    public FetchDataServiceImpl(ScheduleService scheduleService, UserService userService, TabletimeService tabletimeService, ThirdPartyApiService thirdPartyApiService) {
+    public FetchDataServiceImpl(ScheduleService scheduleService, UserService userService, TabletimeService tabletimeService, ThirdPartyApiService thirdPartyApiService, DormitoryService dormitoryService) {
         this.scheduleService = scheduleService;
         this.userService = userService;
         this.tabletimeService = tabletimeService;
         this.thirdPartyApiService = thirdPartyApiService;
+        this.dormitoryService = dormitoryService;
     }
 
     /**
@@ -56,6 +60,11 @@ public class FetchDataServiceImpl implements FetchDataService {
     @Override
     public List<FetchScheduleResponse.Schedule> fetchSchedule(FetchScheduleRequest fetchScheduleRequest) {
         return scheduleService.fetchSchedule(fetchScheduleRequest);
+    }
+
+    @Override
+    public FetchDormitoryResponse.Dormitory fetchDormitory(FetchDormitoryRequest fetchDormitoryRequest) {
+        return dormitoryService.fetchDormitory(fetchDormitoryRequest);
     }
 
     /**

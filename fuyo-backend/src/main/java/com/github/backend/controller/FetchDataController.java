@@ -1,5 +1,7 @@
 package com.github.backend.controller;
 
+import com.github.dto.dormitory.FetchDormitoryRequest;
+import com.github.dto.dormitory.FetchDormitoryResponse;
 import com.github.dto.thirdPartyAPI.FetchYiYanResponse;
 import com.github.dto.thirdPartyAPI.FetchWeatherResponse;
 import com.github.dto.schedule.FetchScheduleRequest;
@@ -184,6 +186,49 @@ public class FetchDataController {
         } catch (Exception e) {
             // 系统异常
             log.error("获取日程系统异常: username={}", username, e);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .setMessage("系统繁忙，请稍后重试");
+
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+// =================================================================================================
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Dormitory //////////////////////////////////////////
+    @PostMapping("/dormitory")
+    public ResponseEntity<FetchDormitoryResponse> fetchDormitory(
+            @RequestBody FetchDormitoryRequest fetchDormitoryRequest) {
+
+        FetchDormitoryResponse response = new FetchDormitoryResponse();
+        String username = fetchDormitoryRequest.getUsername();
+
+        try {
+            // 参数校验
+            if (username == null || username.trim().isEmpty()) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value())
+                        .setMessage("用户名不能为空");
+
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 业务逻辑
+            FetchDormitoryResponse.Dormitory dormitory =
+                    fetchDataService.fetchDormitory(fetchDormitoryRequest);
+
+            if (dormitory != null) {
+                response.setStatus(HttpStatus.OK.value())
+                        .setMessage("获取宿舍信息成功")
+                        .setDormitory(dormitory);
+                return ResponseEntity.ok(response);
+            } else {
+                response.setStatus(HttpStatus.NOT_FOUND.value())
+                        .setMessage("暂无数据");
+
+                log.info(String.valueOf(response));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } catch (Exception e) {
+            // 系统异常
+            log.error("获取宿舍信息异常: username={}", username, e);
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .setMessage("系统繁忙，请稍后重试");
 
