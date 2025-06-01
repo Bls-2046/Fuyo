@@ -1,5 +1,6 @@
 package com.github.backend.service;
 
+import com.github.dto.deepseek.DeepseekChatRequest;
 import com.github.dto.user.LoginRequest;
 
 public interface OperationService {
@@ -9,4 +10,6 @@ public interface OperationService {
      * @param loginRequest 登录请求体
      */
     String loginVerification(LoginRequest loginRequest);
+
+    String deepseekChat(DeepseekChatRequest deepseekChatRequest);
 }

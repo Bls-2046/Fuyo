@@ -1,5 +1,7 @@
 package com.github.backend.controller;
 
+import com.github.dto.deepseek.DeepseekChatRequest;
+import com.github.dto.deepseek.DeepseekChatResponse;
 import com.github.dto.user.LoginRequest;
 import com.github.dto.user.LoginResponse;
 import com.github.backend.service.OperationService;
@@ -76,5 +78,23 @@ public class OperationController {
 
             return ResponseEntity.internalServerError().body(loginResponse);
         }
+    }
+
+    @PostMapping("/deepseek/chat")
+    public ResponseEntity<DeepseekChatResponse> deepseekChat(@RequestBody DeepseekChatRequest deepseekChatRequest) {
+        DeepseekChatResponse deepseekChatResponse = new DeepseekChatResponse();
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            deepseekChatResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .setMessage("系统繁忙，请稍后重试");
+
+            log.error(String.valueOf(deepseekChatResponse));
+
+            return ResponseEntity.internalServerError().body(deepseekChatResponse);
+        }
+        return null;
     }
 }
