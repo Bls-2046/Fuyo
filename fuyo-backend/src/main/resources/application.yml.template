@@ -23,17 +23,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
 
-  # MongoDB 配置
-  data:
-    mongodb:
-      host: ${MONGO_HOST:localhost}
-      port: ${MONGO_PORT:27017}
-      database: fuyo_mongo_db
-      username: ${MONGO_USERNAME:admin}
-      password: ${MONGO_PASSWORD:}
-      authentication-database: admin
-      auto-index-creation: true
-
 # 天气 API
 weather:
   key:
