@@ -1,5 +1,6 @@
 package com.github.backend.service.impl.Impls;
 
+import com.github.backend.entity.mysql.DormitoryEntity;
 import com.github.backend.repository.mysql.DormitoryRepository;
 import com.github.backend.service.DormitoryService;
 import com.github.dto.dormitory.FetchDormitoryRequest;
@@ -19,6 +20,11 @@ public class DormitoryServiceImpl implements DormitoryService {
     @Override
     public FetchDormitoryResponse.Dormitory fetchDormitory(FetchDormitoryRequest fetchDormitoryRequest) {
         String username = fetchDormitoryRequest.getUsername();
-        return dormitoryRepository.findByUsername(username);
+        DormitoryEntity entity = dormitoryRepository.findByUsername(username);
+        return new FetchDormitoryResponse.Dormitory()
+                .setDormitoryId(entity.getDormitoryId())
+                .setDormNo(entity.getDormNo())
+                .setWaterFee(entity.getWaterFee())
+                .setElectricityFee(entity.getElectricityFee());
     }
 }
