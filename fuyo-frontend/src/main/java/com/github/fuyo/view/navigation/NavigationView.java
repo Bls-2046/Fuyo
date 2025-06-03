@@ -100,6 +100,12 @@ public class NavigationView extends JFrame {
         navi3.addActionListener(e -> actionPerformed(e,navi3));
         naviButtonList.add(navi3.getFunctionButton());
 
+        NaviFunctionEntity navi4 = new NaviFunctionEntity("宿舍信息",false,lp,new int[]{17,101 + 60 * 4}, "domo.png");
+        naviFuncObjs.add(navi4);
+        navi4.addToPanel();
+        navi4.addActionListener(e -> actionPerformed(e,navi4));
+        naviButtonList.add(navi4.getFunctionButton());
+
         // EXIT
         NaviFunctionEntity exitNavi = new NaviFunctionEntity("退出程序",false,lp,new int[]{17,101 + 60 * 9}, "exit.png");
         naviFuncObjs.add(exitNavi);

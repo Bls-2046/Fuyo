@@ -21,8 +21,8 @@ public class DormitoryModel {
             DormitoryEntity dormitoryEntity = new DormitoryEntity();
 
             dormitoryEntity.setDormNo(fetchDormitoryResponse.getDormitory().getDormNo());
-            dormitoryEntity.setWaterFee(fetchDormitoryResponse.getDormitory().getWaterFee());
-            dormitoryEntity.setElectricityFee(fetchDormitoryResponse.getDormitory().getElectricityFee());
+            dormitoryEntity.setWaterFee(fetchDormitoryResponse.getDormitory().getWaterFee().doubleValue());
+            dormitoryEntity.setElectricityFee(fetchDormitoryResponse.getDormitory().getElectricityFee().doubleValue());
 
             synchronized (UserEntity.getUserInformation()) {
                 UserEntity.getUserInformation().setDormitory(dormitoryEntity);

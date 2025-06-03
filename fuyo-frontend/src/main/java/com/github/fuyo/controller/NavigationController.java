@@ -2,16 +2,14 @@ package com.github.fuyo.controller;
 
 import com.github.fuyo.entity.*;
 import com.github.fuyo.listener.NavigationCloseListener;
-import com.github.fuyo.model.LoginModel;
-import com.github.fuyo.model.WeChatModel;
+import com.github.fuyo.model.*;
 import com.github.fuyo.model.layout.NavigationModel;
-import com.github.fuyo.model.ScheduleModel;
-import com.github.fuyo.model.UserViewModel;
 import com.github.fuyo.view.LoginView;
 import com.github.fuyo.view.messagebox.ErrorMessageBox;
 import com.github.fuyo.view.navigation.NavigationView;
 import com.github.fuyo.view.navigation.clazz.ClazzView;
 import com.github.fuyo.view.navigation.deepseek.WebRenderView;
+import com.github.fuyo.view.navigation.dorm.DormView;
 import com.github.fuyo.view.navigation.index.HomeView;
 import com.github.fuyo.view.navigation.schedule.GuideView;
 import com.github.fuyo.view.navigation.schedule.ScheduleView;
@@ -161,10 +159,34 @@ public class NavigationController implements NavigationCloseListener {
                 // URL
                 SwingUtilities.invokeLater(() -> {
                     view.renderRouterView(deepseekView);
-                    deepseekView.loadURL("http://localhost/");
+                    deepseekView.loadURL("http://chat.deepseek.com/");
                 });
 
             });
+        });
+
+        // 宿舍
+        JButton dormButton = naviButtonList.get(NaviFunctionButtonEnum.DORMITORY.ordinal());
+        dormButton.addActionListener(e -> {
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    // 在后台线程执行（不会阻塞 EDT）
+                    DormitoryModel.fetchDormitory(UserEntity.getUserInformation().getUsername());
+                    return null;
+                }
+
+                // 任务完成后自动在 EDT 执行
+                @Override
+                protected void done() {
+                    DormitoryEntity dormitory = UserEntity.getUserInformation().getDormitory();
+                    if (dormitory != null) {
+                        view.renderRouterView(new DormView(dormitory));
+                    } else {
+                        ErrorMessageBox.showErrorBox("宿舍信息获取失败");
+                    }
+                }
+            }.execute();
         });
     }
 

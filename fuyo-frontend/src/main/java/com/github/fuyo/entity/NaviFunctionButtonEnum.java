@@ -5,6 +5,7 @@ public enum NaviFunctionButtonEnum {
     CLAZZ,
     NOTIFY,
     DEEPSEEK,
+    DORMITORY,
     EXIT,
     USERLAYER
 }
