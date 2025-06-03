@@ -159,7 +159,7 @@ public class NavigationController implements NavigationCloseListener {
                 // URL
                 SwingUtilities.invokeLater(() -> {
                     view.renderRouterView(deepseekView);
-                    deepseekView.loadURL("http://chat.deepseek.com/");
+                    deepseekView.loadURL("http://175.178.88.201/");
                 });
 
             });
